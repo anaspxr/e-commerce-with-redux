@@ -1,0 +1,597 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "comfortcraftadmin@gmail.com",
+      "password": "comfortcraft",
+      "name": "Admin",
+      "address": {
+        "name": "Admin",
+        "address": "",
+        "city": "",
+        "state": "",
+        "pincode": "",
+        "phone": ""
+      },
+      "cart": {
+        "2": 2,
+        "6": 2,
+        "24": 1
+      },
+      "orders": {},
+      "isAdmin": true
+    },
+    {
+      "id": "2",
+      "email": "anaspappadan@gmail.com",
+      "password": "anas",
+      "name": "Anas",
+      "address": {
+        "name": "ANAS P",
+        "address": "pappadan house",
+        "city": "manjeri",
+        "state": "kerala",
+        "pincode": "626242",
+        "phone": "9909837987"
+      },
+      "cart": {},
+      "orders": {},
+      "isAdmin": true
+    },
+    {
+      "id": "3",
+      "email": "rafnas@gmail.com",
+      "password": "rafnas",
+      "name": "Rafnas",
+      "address": {
+        "name": "Rafnas",
+        "address": "",
+        "city": "",
+        "state": "",
+        "pincode": "",
+        "phone": ""
+      },
+      "cart": {
+        "1": 2,
+        "4": 5,
+        "25": 1
+      },
+      "orders": {},
+      "isAdmin": false
+    },
+    {
+      "id": "4",
+      "email": "sahadzanu@gmail.com",
+      "password": "sahadzanu",
+      "name": "Sahad Zanu",
+      "address": {
+        "name": "Sahad Zanu",
+        "address": "zanu house",
+        "city": "kozhikode",
+        "state": "kerala",
+        "pincode": "673001",
+        "phone": "9947632387"
+      },
+      "cart": {},
+      "orders": {
+        "6": {
+          "quantity": 1,
+          "status": "Delivered"
+        },
+        "19": {
+          "quantity": 2,
+          "status": "Processing"
+        }
+      },
+      "isAdmin": false
+    },
+    {
+      "id": "5",
+      "email": "arunkumar@gmail.com",
+      "password": "arun123",
+      "name": "Arun Kumar",
+      "address": {
+        "name": "Arun Kumar",
+        "address": "",
+        "city": "",
+        "state": "",
+        "pincode": "",
+        "phone": ""
+      },
+      "cart": {
+        "3": 2,
+        "7": 1
+      },
+      "orders": {},
+      "isAdmin": false
+    },
+    {
+      "id": "6",
+      "email": "mariyajohn@gmail.com",
+      "password": "mariya123",
+      "name": "Mariya John",
+      "address": {
+        "name": "Mariya John",
+        "address": "john villa",
+        "city": "trivandrum",
+        "state": "kerala",
+        "pincode": "695001",
+        "phone": "9845678932"
+      },
+      "cart": {},
+      "orders": {
+        "12": {
+          "quantity": 2,
+          "status": "Out For delivery"
+        },
+        "20": {
+          "quantity": 1,
+          "status": "Shipping"
+        }
+      },
+      "isAdmin": false
+    },
+    {
+      "id": "7",
+      "email": "rameshn@gmail.com",
+      "password": "ramesh123",
+      "name": "Ramesh Nair",
+      "address": {
+        "name": "Ramesh Nair",
+        "address": "",
+        "city": "",
+        "state": "",
+        "pincode": "",
+        "phone": ""
+      },
+      "cart": {
+        "5": 3
+      },
+      "orders": {
+        "8": 1
+      },
+      "isAdmin": false
+    },
+    {
+      "id": "8",
+      "email": "devi@gmail.com",
+      "password": "devi123",
+      "name": "Devi",
+      "address": {
+        "name": "Devi",
+        "address": "devi home",
+        "city": "thrissur",
+        "state": "kerala",
+        "pincode": "680001",
+        "phone": "9898765432"
+      },
+      "cart": {},
+      "orders": {
+        "15": {
+          "quantity": 1,
+          "status": "Delivered"
+        },
+        "22": {
+          "quantity": 2,
+          "status": "Processing"
+        }
+      },
+      "isAdmin": false
+    },
+    {
+      "id": "9",
+      "email": "vishnu@gmail.com",
+      "password": "vishnu123",
+      "name": "Vishnu",
+      "address": {
+        "name": "Vishnu",
+        "address": "",
+        "city": "",
+        "state": "",
+        "pincode": "",
+        "phone": ""
+      },
+      "cart": {
+        "10": 2
+      },
+      "orders": {},
+      "isAdmin": false
+    },
+    {
+      "id": "10",
+      "email": "anjali@gmail.com",
+      "password": "anjali123",
+      "name": "Anjali",
+      "address": {
+        "name": "Anjali",
+        "address": "anjali residence",
+        "city": "ernakulam",
+        "state": "kerala",
+        "pincode": "682001",
+        "phone": "9887766554"
+      },
+      "cart": {
+        "11": 1,
+        "14": 3
+      },
+      "orders": {},
+      "isAdmin": false
+    },
+    {
+      "id": "11",
+      "email": "ajith@gmail.com",
+      "password": "ajith123",
+      "name": "Ajith",
+      "address": {
+        "name": "Ajith",
+        "address": "",
+        "city": "",
+        "state": "",
+        "pincode": "",
+        "phone": ""
+      },
+      "cart": {},
+      "orders": {
+        "18": {
+          "quantity": 3,
+          "status": "Out For delivery"
+        }
+      },
+      "isAdmin": false
+    },
+    {
+      "id": "12",
+      "email": "sneha@gmail.com",
+      "password": "sneha123",
+      "name": "Sneha",
+      "address": {
+        "name": "Sneha",
+        "address": "sneha villa",
+        "city": "malappuram",
+        "state": "kerala",
+        "pincode": "676505",
+        "phone": "9876543210"
+      },
+      "cart": {
+        "21": 1,
+        "23": 2
+      },
+      "orders": {},
+      "isAdmin": false
+    },
+    {
+      "id": "13",
+      "email": "naveen@gmail.com",
+      "password": "naveen123",
+      "name": "Naveen",
+      "address": {
+        "name": "Naveen",
+        "address": "",
+        "city": "",
+        "state": "",
+        "pincode": "",
+        "phone": ""
+      },
+      "cart": {
+        "17": 3
+      },
+      "orders": {
+        "24": {
+          "quantity": 1,
+          "status": "Delivered"
+        }
+      },
+      "isAdmin": false
+    },
+    {
+      "id": "14",
+      "email": "keerthi@gmail.com",
+      "password": "keerthi123",
+      "name": "Keerthi",
+      "address": {
+        "name": "Keerthi",
+        "address": "keerthi cottage",
+        "city": "palakkad",
+        "state": "kerala",
+        "pincode": "678001",
+        "phone": "9865432109"
+      },
+      "cart": {},
+      "orders": {
+        "26": {
+          "quantity": 2,
+          "status": "Processing"
+        }
+      },
+      "isAdmin": false
+    },
+    {
+      "id": "1720179253177",
+      "name": "Anas1@gmail.com",
+      "email": "Anas1@gmail.com",
+      "password": "Anas1@gmail.com",
+      "address": {
+        "name": "anas",
+        "address": "afaf",
+        "city": "agaga",
+        "state": "aggag",
+        "pincode": "123455",
+        "phone": "151515590"
+      },
+      "cart": {
+        "2": 2,
+        "6": 2,
+        "24": 1
+      },
+      "orders": {},
+      "isAdmin": false
+    },
+    {
+      "id": "1720183156614",
+      "name": "Anas2@gmail.com",
+      "email": "Anas2@gmail.com",
+      "password": "Anas2@gmail.com",
+      "address": {
+        "name": "Anas2@gmail.com",
+        "address": "",
+        "city": "",
+        "state": "",
+        "pincode": "",
+        "phone": ""
+      },
+      "cart": {
+        "6": 1,
+        "10": 1,
+        "15": 1,
+        "23": 1
+      },
+      "orders": {},
+      "isAdmin": false
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Gray Sofa",
+      "oldPrice": 25999,
+      "discountPrice": 19999,
+      "image": "https://cdn.pixabay.com/photo/2018/03/29/09/29/furniture-3271762_1280.jpg",
+      "description": "A stylish and comfortable modern sofa perfect for any living room.",
+      "category": "sofas"
+    },
+    {
+      "id": "3",
+      "name": "Wooden Dining Table",
+      "oldPrice": 15999,
+      "discountPrice": 12999,
+      "image": "https://img.freepik.com/free-photo/japandi-dining-room-interior-design-with-wooden-table_53876-128650.jpg?t=st=1720249345~exp=1720252945~hmac=b2c84092076cb0cee3145297693c648458aed38960b31fda5cdbf996ae3418ee&w=900",
+      "description": "A large wooden dining table that brings a rustic charm to your dining area.",
+      "category": "dining"
+    },
+    {
+      "id": "4",
+      "name": "Office Chair",
+      "oldPrice": 1299,
+      "discountPrice": 999,
+      "image": "https://images.unsplash.com/photo-1688578735427-994ecdea3ea4?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8b2ZmaWNlJTIwY2hhaXJ8ZW58MHx8MHx8fDA%3D",
+      "description": "A comfortable ergonomic office chair designed to support your back during long hours of work.",
+      "category": "furnishings"
+    },
+    {
+      "id": "5",
+      "name": "Coffee Table",
+      "oldPrice": 5499,
+      "discountPrice": 4999,
+      "image": "https://img.freepik.com/free-photo/side-view-cup-coffee-small-round-table-horizontal_176474-2487.jpg?t=st=1720249574~exp=1720253174~hmac=1cd9b657e1fa641f5b0473a2aebe8e1f375161f6639c0fcdb411461350767880&w=900",
+      "description": "A sleek and minimalist coffee table that complements modern interiors.",
+      "category": "furnishings"
+    },
+    {
+      "id": "6",
+      "name": "Bed Frame",
+      "oldPrice": 1499,
+      "discountPrice": 1296,
+      "image": "https://img.freepik.com/free-photo/poster-mockup-with-vertical-frame-empty-dark-blue-wall-bedroom-interior_41470-5135.jpg?t=st=1720250016~exp=1720253616~hmac=34d8b14d43238bfacfd9a94f18683169be82df37b46eb8f92b3ebfc6dcd3fec4&w=740",
+      "description": "A luxurious bed frame that provides both comfort and style to your bedroom.",
+      "category": "mattresses"
+    },
+    {
+      "id": "8",
+      "name": "Outdoor Patio Set",
+      "oldPrice": 17999,
+      "discountPrice": 15999,
+      "image": "https://img.freepik.com/free-photo/outdoor-restaurant-with-tables-chairs-resort_1373-507.jpg?t=st=1720252392~exp=1720255992~hmac=05fa4fa66aafe036a95a9edb3e9d71de29779f618dd6a0b2b6a94c066546c5ef&w=360",
+      "description": "A durable outdoor patio set perfect for enjoying sunny days and outdoor gatherings.",
+      "category": "furnishings"
+    },
+    {
+      "id": "9",
+      "name": "Kids Bunk Bed",
+      "oldPrice": 8999,
+      "discountPrice": 7999,
+      "image": "https://img.freepik.com/premium-photo/bunk-bed-room-ai-generated_95397-1074.jpg?w=900",
+      "description": "A fun and functional bunk bed designed for kids' bedrooms with safety features.",
+      "category": "mattresses"
+    },
+    {
+      "id": "10",
+      "name": "Red Sofa",
+      "oldPrice": 29999,
+      "discountPrice": 25999,
+      "image": "https://img.freepik.com/free-vector/red-sofa-isolated_1284-4976.jpg?w=900&t=st=1720249105~exp=1720249705~hmac=e999281d8ed95428f805bc08fc15acc619a09ea62caa16230f29abcd0716675e",
+      "description": "A plush  sofa that offers ultimate comfort and relaxation with adjustable settings.",
+      "category": "sofas"
+    },
+    {
+      "id": "11",
+      "name": "Decorative Vase",
+      "oldPrice": 799,
+      "discountPrice": 699,
+      "image": "https://images.pexels.com/photos/6913841/pexels-photo-6913841.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "description": "A beautifully crafted decorative vase that adds elegance to any room.",
+      "category": "homedecor"
+    },
+    {
+      "id": "12",
+      "name": "Dining Chair Set",
+      "oldPrice": 4999,
+      "discountPrice": 4499,
+      "image": "https://img.freepik.com/free-photo/table-setting-dinner_74190-2126.jpg?t=st=1720250314~exp=1720253914~hmac=bfc84c0f5edf1b04eaab3a90eedca0dec91763eb25ec0fe883bdc583b24c0356&w=900",
+      "description": "A set of four comfortable dining chairs with a modern design.",
+      "category": "dining"
+    },
+    {
+      "id": "13",
+      "name": "Wooden TV Stand",
+      "oldPrice": 8999,
+      "discountPrice": 7999,
+      "image": "https://5.imimg.com/data5/BJ/BN/MY-26915162/wooden-tv-stand-1000x1000.jpg",
+      "description": "A Wooden TV stand with ample storage space and a charming design.",
+      "category": "furnishings"
+    },
+    {
+      "id": "14",
+      "name": "Elegant Floor Lamp",
+      "oldPrice": 2999,
+      "discountPrice": 2499,
+      "image": "https://belacasalighting.com/cdn/shop/products/Possini4.jpg?v=1664456774",
+      "description": "An elegant floor lamp that adds a warm glow to any room.",
+      "category": "lightings"
+    },
+    {
+      "id": "15",
+      "name": "Wall Arts x 8 combo",
+      "oldPrice": 7999,
+      "discountPrice": 6999,
+      "image": "https://images.pexels.com/photos/383568/pexels-photo-383568.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "description": "8 pieces of modern wall art that brings creativity and style to your walls.",
+      "category": "homedecor"
+    },
+    {
+      "id": "16",
+      "name": "Comfy Recliner Chair",
+      "oldPrice": 12996,
+      "discountPrice": 9999,
+      "image": "https://img.freepik.com/free-photo/modern-chair-table_1203-7231.jpg?t=st=1720249743~exp=1720253343~hmac=4e4b215f875611d0087d2de0c116c5896e9e0b4ffd7a7ffa2f3a93847f9bcc59&w=360",
+      "description": "A luxurious recliner chair that offers exceptional comfort and style.",
+      "category": "sofas"
+    },
+    {
+      "id": "17",
+      "name": "Glass Coffee Table",
+      "oldPrice": 6000,
+      "discountPrice": 5499,
+      "image": "https://img.freepik.com/premium-photo/ethereal-dance-light-metal-white-png-transparent-background_94628-70537.jpg?w=900",
+      "description": "A sleek glass coffee table that adds a modern touch to your living room.",
+      "category": "homedecor"
+    },
+    {
+      "id": "18",
+      "name": "Queen Size Mattress",
+      "oldPrice": 20999,
+      "discountPrice": 17999,
+      "image": "https://img.freepik.com/premium-photo/mattress-bed-bedroom-generative-ai_438099-14252.jpg?w=900",
+      "description": "A queen size mattress that provides superior comfort and support for a good night's sleep.",
+      "category": "mattresses"
+    },
+    {
+      "id": "19",
+      "name": "Leather Office Chair",
+      "oldPrice": 7999,
+      "discountPrice": 6999,
+      "image": "https://images.pexels.com/photos/6312042/pexels-photo-6312042.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "description": "A stylish leather office chair designed for maximum comfort during long work hours.",
+      "category": "furnishings"
+    },
+    {
+      "id": "20",
+      "name": "Dining Bench",
+      "oldPrice": 7999,
+      "discountPrice": 6999,
+      "image": "https://images.pexels.com/photos/10827373/pexels-photo-10827373.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "description": "A sturdy dining bench that offers additional seating for your dining area.",
+      "category": "dining"
+    },
+    {
+      "id": "21",
+      "name": "Artistic Table Lamp",
+      "oldPrice": 2499,
+      "discountPrice": 1999,
+      "image": "https://images.pexels.com/photos/1125137/pexels-photo-1125137.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "description": "An artistic table lamp that adds a unique touch to your workspace or bedside table.",
+      "category": "lightings"
+    },
+    {
+      "id": "23",
+      "name": "Small Bamboo Shelf",
+      "oldPrice": 2999,
+      "discountPrice": 1996,
+      "image": "https://img.freepik.com/free-photo/wooden-plant-stand-with-cactus-side_53876-126217.jpg?t=st=1720249959~exp=1720253559~hmac=c41654ffa45ce062c8d8460611db140d4b282f9718ab970a900effca03cf7c0a&w=360",
+      "description": "A sustainable bamboo shelf that offers both storage and a natural aesthetic.",
+      "category": "homedecor"
+    },
+    {
+      "id": "24",
+      "name": "Convertible Sofa Bed",
+      "oldPrice": 12998,
+      "discountPrice": 9999,
+      "image": "https://img.freepik.com/free-photo/lit-lamp-beside-couch_1203-616.jpg?t=st=1720249768~exp=1720253368~hmac=c6548be0318d0a61c3c98e56a4d74bb4937f8b34e3971678abc75a833bb838ad&w=900",
+      "description": "A versatile convertible sofa bed perfect for guests and small spaces.",
+      "category": "sofas"
+    },
+    {
+      "id": "25",
+      "name": "Crystal Chandelier",
+      "oldPrice": 15999,
+      "discountPrice": 13999,
+      "image": "https://images.pexels.com/photos/3965508/pexels-photo-3965508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "description": "A luxurious crystal chandelier that adds a touch of elegance to any room.",
+      "category": "lightings"
+    },
+    {
+      "id": "26",
+      "name": "Children's Toy Storage",
+      "oldPrice": 4999,
+      "discountPrice": 4499,
+      "image": "https://m.media-amazon.com/images/I/91ih2nJBOuL._SX679_.jpg",
+      "description": "A practical and fun toy storage unit for organizing children's play areas.",
+      "category": "furnishings"
+    },
+    {
+      "id": "27",
+      "name": "Wooden Bookshelf",
+      "oldPrice": 9999,
+      "discountPrice": 8999,
+      "image": "https://m.media-amazon.com/images/I/81x51AX8RCL._SX679_.jpg",
+      "description": "A vintage bookshelf that brings a classic look to your home library or living room.",
+      "category": "furnishings"
+    },
+    {
+      "id": "28",
+      "name": "Modern Pendant Light",
+      "oldPrice": 3499,
+      "discountPrice": 2999,
+      "image": "https://images.pexels.com/photos/6587848/pexels-photo-6587848.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "description": "A modern pendant light that enhances the style of your kitchen or dining area.",
+      "category": "lightings"
+    },
+    {
+      "id": "29",
+      "name": "Adjustable Desk Lamp",
+      "oldPrice": 1999,
+      "discountPrice": 1499,
+      "image": "https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "description": "A sleek and adjustable desk lamp perfect for studying or working late hours.",
+      "category": "lightings"
+    },
+    {
+      "id": "30",
+      "name": "Comfortable Rocking Chair",
+      "oldPrice": 11999,
+      "discountPrice": 9999,
+      "image": "https://woodentwist.com/cdn/shop/products/honey_1364x1400.jpg?v=1689860552",
+      "description": "A comfortable rocking chair that provides relaxation and a timeless look.",
+      "category": "furnishings"
+    }
+  ]
+}
