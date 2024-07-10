@@ -3,20 +3,23 @@ import { CartContext } from "../contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { ProductContext } from "../contexts/ProductContext";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart } from "../Store/cartSlice";
 
 export default function Cart() {
+  const cart = useSelector((state) => state.cart.value);
+  const dispatch = useDispatch();
   const { products, loading, error } = useContext(ProductContext);
   const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
-  const { cartItems, addToCart, removeFromCart, setBuyItems } =
-    useContext(CartContext);
-  const totalAmount = Object.keys(cartItems).reduce((acc, productID) => {
+  const { setBuyItems } = useContext(CartContext);
+  const totalAmount = Object.keys(cart).reduce((acc, productID) => {
     const product = products?.find((item) => item.id === productID);
-    return acc + Number(product?.discountPrice) * Number(cartItems[productID]);
+    return acc + Number(product?.discountPrice) * Number(cart[productID]);
   }, 0);
-  const oldAmount = Object.keys(cartItems).reduce((acc, productID) => {
+  const oldAmount = Object.keys(cart).reduce((acc, productID) => {
     const product = products?.find((item) => item.id === productID);
-    return acc + Number(product?.oldPrice) * Number(cartItems[productID]);
+    return acc + Number(product?.oldPrice) * Number(cart[productID]);
   }, 0);
 
   function handleCheckout() {
@@ -24,13 +27,13 @@ export default function Cart() {
       navigate("/login");
       return;
     }
-    setBuyItems(cartItems);
+    setBuyItems(cart);
     navigate("/checkout");
   }
 
   return (
     <div className="p-5">
-      {Object.keys(cartItems).length === 0 ? (
+      {Object.keys(cart).length === 0 ? (
         <h1 className="text-3xl text-orange-900 text-center mb-10">
           Your cart is empty
         </h1>
@@ -45,12 +48,12 @@ export default function Cart() {
               </h1>
 
               <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-5">
-                {Object.keys(cartItems).map((productID) => {
+                {Object.keys(cart).map((productID) => {
                   const product = products.find(
                     (item) => item.id === productID
                   );
-                  const total = product?.discountPrice * cartItems[productID];
-                  const oldTotal = product?.oldPrice * cartItems[productID];
+                  const total = product?.discountPrice * cart[productID];
+                  const oldTotal = product?.oldPrice * cart[productID];
                   return (
                     <div key={productID}>
                       {!product ? (
@@ -80,10 +83,10 @@ export default function Cart() {
                             </div>
                             <div>
                               <div className="flex gap-2 mt-2">
-                                <p>Quantity: {cartItems[productID]} </p>
+                                <p>Quantity: {cart[productID]} </p>
                                 <button
                                   onClick={() => {
-                                    addToCart(productID);
+                                    dispatch(addToCart(productID));
                                   }}
                                   className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300"
                                 >
@@ -91,7 +94,7 @@ export default function Cart() {
                                 </button>
                                 <button
                                   onClick={() => {
-                                    removeFromCart(productID);
+                                    dispatch(removeFromCart(productID));
                                   }}
                                   className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300"
                                 >
