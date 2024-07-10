@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../Store/cartSlice";
 
 export default function Cart() {
-  const cart = useSelector((state) => state.cart.value);
+  const cart = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
   const { products, loading, error } = useContext(ProductContext);
   const navigate = useNavigate();

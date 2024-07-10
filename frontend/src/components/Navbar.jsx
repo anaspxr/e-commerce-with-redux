@@ -43,7 +43,7 @@ const menuItems = [
 ];
 
 export default function Navbar() {
-  const cart = useSelector((state) => state.cart.value);
+  const cart = useSelector((state) => state.cart.cartItems);
   const { products } = useContext(ProductContext);
   const { currentUser, logout, isAdmin } = useContext(UserContext);
   const [menuOpen, setMenuOpen] = useState(false);

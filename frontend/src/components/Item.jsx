@@ -10,7 +10,7 @@ export default function Item({ product }) {
   const navigate = useNavigate();
   const { currentUser, setRedirectPath } = useContext(UserContext);
   const { setBuyItems } = useContext(CartContext);
-  const cart = useSelector((state) => state.cart.value);
+  const cart = useSelector((state) => state.cart.cartItems);
   const added = Object.keys(cart).includes(product.id);
 
   function calculateDiscountPrice(oldPrice, discountPrice) {
