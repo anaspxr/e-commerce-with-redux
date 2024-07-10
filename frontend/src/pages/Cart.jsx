@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ProductContext } from "../contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
 import { addToBuy, addToCart, removeFromCart } from "../Store/cartSlice";
+import NoItem from "../components/NoItem";
 
 export default function Cart() {
   const cart = useSelector((state) => state.cart.cartItems);
@@ -55,7 +56,7 @@ export default function Cart() {
                   return (
                     <div key={productID}>
                       {!product ? (
-                        ""
+                        <NoItem productID={productID} />
                       ) : (
                         <div
                           key={productID}
