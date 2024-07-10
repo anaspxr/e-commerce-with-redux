@@ -5,15 +5,15 @@ const initialState = {
   buyItems: {},
 };
 
-// const updateServerSide = async (newCart)=>{
-//   fetch(`http://localhost:3000/users/${currentUser.id}`, {
-//     method: "PATCH",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({ cart: newCartItems }),
-//   });
-// }
+const updateServerSide = async (newCart, userID) => {
+  fetch(`http://localhost:3000/users/${userID}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ cart: newCart }),
+  });
+};
 
 const cartSlice = createSlice({
   name: "cart",
@@ -23,21 +23,24 @@ const cartSlice = createSlice({
       state.cartItems = action.payload;
     },
     addToCart: (state, action) => {
-      if (state.cartItems[action.payload]) {
-        state.cartItems[action.payload] += 1;
+      if (state.cartItems[action.payload.cartID]) {
+        state.cartItems[action.payload.cartID] += 1;
       } else {
-        state.cartItems[action.payload] = 1;
+        state.cartItems[action.payload.cartID] = 1;
       }
+      updateServerSide(state.cartItems, action.payload.userID);
     },
     removeFromCart: (state, action) => {
-      if (state.cartItems[action.payload] > 1) {
-        state.cartItems[action.payload] -= 1;
+      if (state.cartItems[action.payload.cartID] > 1) {
+        state.cartItems[action.payload.cartID] -= 1;
       } else {
-        delete state.cartItems[action.payload];
+        delete state.cartItems[action.payload.cartID];
       }
+      updateServerSide(state.cartItems, action.payload.userID);
     },
     clearFromCart: (state, action) => {
-      delete state.cartItems[action.payload];
+      delete state.cartItems[action.payload.cartID];
+      updateServerSide(state.cartItems, action.payload.userID);
     },
     clearCart: (state) => {
       state.cartItems = {};

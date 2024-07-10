@@ -25,7 +25,9 @@ export default function Item({ product }) {
       return;
     }
     {
-      added ? navigate("/cart") : dispatch(addToCart(product.id));
+      added
+        ? navigate("/cart")
+        : dispatch(addToCart({ cartID: product.id, userID: currentUser.id }));
     }
   }
 

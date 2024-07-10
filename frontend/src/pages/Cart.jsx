@@ -85,7 +85,12 @@ export default function Cart() {
                                 <p>Quantity: {cart[productID]} </p>
                                 <button
                                   onClick={() => {
-                                    dispatch(addToCart(productID));
+                                    dispatch(
+                                      addToCart({
+                                        cartID: productID,
+                                        userID: currentUser.id,
+                                      })
+                                    );
                                   }}
                                   className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300"
                                 >
@@ -93,7 +98,12 @@ export default function Cart() {
                                 </button>
                                 <button
                                   onClick={() => {
-                                    dispatch(removeFromCart(productID));
+                                    dispatch(
+                                      removeFromCart({
+                                        cartID: productID,
+                                        userID: currentUser.id,
+                                      })
+                                    );
                                   }}
                                   className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300"
                                 >
