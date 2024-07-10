@@ -1,12 +1,17 @@
 import { useContext, useEffect, useState } from "react";
-import { CartContext } from "../contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Address from "../components/Address";
 import { ProductContext } from "../contexts/ProductContext";
 import useFetch from "../utils/useFetch";
 import { UserContext } from "../contexts/UserContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  buyQuantityMinus,
+  buyQuantityPlus,
+  clearBuy,
+  clearCart,
+} from "../Store/cartSlice";
 
 export default function Checkout() {
   useEffect(() => {
@@ -15,9 +20,9 @@ export default function Checkout() {
     }
   });
   const buyItems = useSelector((state) => state.cart.buyItems);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { products, loading, error } = useContext(ProductContext);
-  const { setBuyItems, setCartItems } = useContext(CartContext);
   const [progress, setProgress] = useState("items");
 
   const totalAmount = Object.keys(buyItems).reduce((acc, productID) => {
@@ -50,9 +55,7 @@ export default function Checkout() {
               }`}
             />
           </div>
-          {progress === "items" && (
-            <Items buyItems={buyItems} setBuyItems={setBuyItems} />
-          )}
+          {progress === "items" && <Items buyItems={buyItems} />}
           {progress === "address" && <Address />}
           {progress === "payment" && <Payment items={buyItems} />}
           <hr className="border-2 mx-16" />
@@ -95,8 +98,8 @@ export default function Checkout() {
                 <button
                   onClick={() => {
                     alert("Payment Successful");
-                    setCartItems({});
-                    setBuyItems({});
+                    dispatch(clearCart());
+                    dispatch(clearBuy());
                     navigate("/");
                   }}
                   className="disabled:bg-opacity-50 bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit md:text-base text-xs disabled:cursor-not-allowed"
@@ -112,7 +115,8 @@ export default function Checkout() {
   );
 }
 
-function Items({ buyItems, setBuyItems }) {
+function Items({ buyItems }) {
+  const dispatch = useDispatch();
   const { products } = useContext(ProductContext);
   return (
     <div className="m-auto max-w-3xl flex flex-wrap gap-3 p-2 justify-center">
@@ -136,10 +140,7 @@ function Items({ buyItems, setBuyItems }) {
                   Quantity: {buyItems[productID]}{" "}
                   <button
                     onClick={() => {
-                      setBuyItems({
-                        ...buyItems,
-                        [productID]: buyItems[productID] + 1,
-                      });
+                      dispatch(buyQuantityPlus(productID));
                     }}
                     className="bg-orange-200 h-7 w-7 rounded-md mr-1 hover:bg-orange-300"
                   >
@@ -147,16 +148,7 @@ function Items({ buyItems, setBuyItems }) {
                   </button>
                   <button
                     onClick={() => {
-                      if (buyItems[productID] === 1) {
-                        const newBuyItems = { ...buyItems };
-                        delete newBuyItems[productID];
-                        setBuyItems(newBuyItems);
-                        return;
-                      }
-                      setBuyItems({
-                        ...buyItems,
-                        [productID]: buyItems[productID] - 1,
-                      });
+                      dispatch(buyQuantityMinus(productID));
                     }}
                     className="bg-orange-200 h-7 w-7 rounded-md hover:bg-orange-300"
                   >

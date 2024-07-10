@@ -23,15 +23,40 @@ const cartSlice = createSlice({
         delete state.cartItems[action.payload];
       }
     },
-    clearFromCart: (state) => {
-      state.value = {};
+    clearFromCart: (state, action) => {
+      delete state.cartItems[action.payload];
+    },
+    clearCart: (state) => {
+      state.cartItems = {};
     },
     addToBuy: (state, action) => {
       state.buyItems = action.payload;
     },
+    buyQuantityPlus: (state, action) => {
+      state.buyItems[action.payload] += 1;
+    },
+    buyQuantityMinus: (state, action) => {
+      if (state.buyItems[action.payload] > 1) {
+        state.buyItems[action.payload] -= 1;
+      } else {
+        delete state.buyItems[action.payload];
+      }
+    },
+    clearBuy: (state) => {
+      state.buyItems = {};
+    },
   },
 });
 
-export const { addToCart, removeFromCart, addToBuy } = cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  addToBuy,
+  clearCart,
+  clearFromCart,
+  clearBuy,
+  buyQuantityMinus,
+  buyQuantityPlus,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;
