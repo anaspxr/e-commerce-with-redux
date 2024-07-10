@@ -7,9 +7,9 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import Button from "./Button";
 import { UserContext } from "../contexts/UserContext";
-import { CartContext } from "../contexts/CartContext";
 import SearchField from "./SearchField";
 import { ProductContext } from "../contexts/ProductContext";
+import { useSelector } from "react-redux";
 
 const menuItems = [
   {
@@ -43,7 +43,7 @@ const menuItems = [
 ];
 
 export default function Navbar() {
-  const { cartItems } = useContext(CartContext);
+  const cart = useSelector((state) => state.cart.value);
   const { products } = useContext(ProductContext);
   const { currentUser, logout, isAdmin } = useContext(UserContext);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -151,7 +151,7 @@ export default function Navbar() {
               <MdOutlineShoppingCart className="text-3xl text-orange-900 hover:text-orange-700" />
             </Link>
             <div className="w-4 h-4 flex justify-center items-center text-sm -ml-4 -mt-1 rounded-full bg-orange-600 text-white">
-              {Object.keys(cartItems).length}
+              {Object.keys(cart).length}
             </div>
           </div>
         )}

@@ -2,12 +2,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../contexts/CartContext";
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../Store/cartSlice";
 
 export default function Item({ product }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser, setRedirectPath } = useContext(UserContext);
-  const { addToCart, setBuyItems, cartItems } = useContext(CartContext);
-  const added = Object.keys(cartItems).includes(product.id);
+  const { setBuyItems } = useContext(CartContext);
+  const cart = useSelector((state) => state.cart.value);
+  const added = Object.keys(cart).includes(product.id);
 
   function calculateDiscountPrice(oldPrice, discountPrice) {
     return Math.floor(((oldPrice - discountPrice) / oldPrice) * 100);
@@ -24,7 +28,7 @@ export default function Item({ product }) {
       return;
     }
     {
-      added ? navigate("/cart") : addToCart(product.id);
+      added ? navigate("/cart") : dispatch(addToCart(product.id));
     }
   }
 
