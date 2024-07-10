@@ -26,7 +26,8 @@ import AdminContainer from "./Admin/AdminContainer";
 import ProductEditPage from "./Admin/ProductEditPage";
 import ProductContextProvider from "./contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
-import { setRedirectPath } from "./Store/userSlice";
+import { checkLocalUser, setRedirectPath } from "./Store/userSlice";
+import { setWholeCart } from "./Store/cartSlice";
 
 function App() {
   return (
@@ -43,6 +44,27 @@ function App() {
 function ContentsWrapper() {
   const location = useLocation();
   const isAdminPage = location.pathname.includes("/admin");
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
+
+  useEffect(() => {
+    dispatch(checkLocalUser());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (currentUser) {
+      const updateCart = async () => {
+        const response = await fetch(
+          `http://localhost:3000/users/${currentUser.id}`
+        );
+        const data = await response.json();
+        if (data.cart && Object.keys(data.cart).length > 0)
+          dispatch(setWholeCart(data.cart));
+      };
+      updateCart();
+    }
+  }, [currentUser, dispatch]);
+
   return (
     <>
       {!isAdminPage ? (

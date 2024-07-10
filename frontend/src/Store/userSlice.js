@@ -16,15 +16,22 @@ const userSlice = createSlice({
       state.currentUser = action.payload;
     },
     logout: (state) => {
-      localStorage.removeItem("currentItem");
+      localStorage.removeItem("currentUser");
       state.currentUser = null;
     },
     setRedirectPath: (state, action) => {
       state.redirectPath = action.payload;
     },
+    checkLocalUser: (state) => {
+      const userExists = JSON.parse(localStorage.getItem("currentUser"));
+      if (userExists) {
+        state.currentUser = userExists;
+      }
+    },
   },
 });
 
-export const { login, logout, setRedirectPath } = userSlice.actions;
+export const { login, logout, setRedirectPath, checkLocalUser } =
+  userSlice.actions;
 
 export default userSlice.reducer;
