@@ -6,6 +6,7 @@ import Address from "../components/Address";
 import { ProductContext } from "../contexts/ProductContext";
 import useFetch from "../utils/useFetch";
 import { UserContext } from "../contexts/UserContext";
+import { useSelector } from "react-redux";
 
 export default function Checkout() {
   useEffect(() => {
@@ -13,10 +14,10 @@ export default function Checkout() {
       navigate("/cart");
     }
   });
-
+  const buyItems = useSelector((state) => state.cart.buyItems);
   const navigate = useNavigate();
   const { products, loading, error } = useContext(ProductContext);
-  const { buyItems, setBuyItems, setCartItems } = useContext(CartContext);
+  const { setBuyItems, setCartItems } = useContext(CartContext);
   const [progress, setProgress] = useState("items");
 
   const totalAmount = Object.keys(buyItems).reduce((acc, productID) => {

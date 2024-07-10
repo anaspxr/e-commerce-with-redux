@@ -1,10 +1,9 @@
 import { useContext } from "react";
-import { CartContext } from "../contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { ProductContext } from "../contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart } from "../Store/cartSlice";
+import { addToBuy, addToCart, removeFromCart } from "../Store/cartSlice";
 
 export default function Cart() {
   const cart = useSelector((state) => state.cart.cartItems);
@@ -12,7 +11,6 @@ export default function Cart() {
   const { products, loading, error } = useContext(ProductContext);
   const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
-  const { setBuyItems } = useContext(CartContext);
   const totalAmount = Object.keys(cart).reduce((acc, productID) => {
     const product = products?.find((item) => item.id === productID);
     return acc + Number(product?.discountPrice) * Number(cart[productID]);
@@ -27,7 +25,7 @@ export default function Cart() {
       navigate("/login");
       return;
     }
-    setBuyItems(cart);
+    dispatch(addToBuy(cart));
     navigate("/checkout");
   }
 

@@ -1,15 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
-import { CartContext } from "../contexts/CartContext";
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../Store/cartSlice";
+import { addToBuy, addToCart } from "../Store/cartSlice";
 
 export default function Item({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser, setRedirectPath } = useContext(UserContext);
-  const { setBuyItems } = useContext(CartContext);
   const cart = useSelector((state) => state.cart.cartItems);
   const added = Object.keys(cart).includes(product.id);
 
@@ -18,7 +16,7 @@ export default function Item({ product }) {
   }
 
   function handleBuyNow(id) {
-    setBuyItems({ [id]: 1 });
+    dispatch(addToBuy({ [id]: 1 }));
     navigate("/checkout");
   }
   function handleAddToCart() {
