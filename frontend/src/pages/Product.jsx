@@ -1,15 +1,17 @@
 import { useParams } from "react-router-dom";
 import { RelatedProducts, Recommend } from "../components/Recommend";
-import { CartContext } from "../contexts/CartContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { ProductContext } from "../contexts/ProductContext";
+import { useDispatch, useSelector } from "react-redux";
+import { addToBuy, addToCart } from "../Store/cartSlice";
 
 export default function Product() {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const { products, loading, error } = useContext(ProductContext);
   const { currentUser, setRedirectPath } = useContext(UserContext);
-  const { setBuyItems, addToCart, cartItems } = useContext(CartContext);
   const { productID } = useParams();
   const navigate = useNavigate();
   const added = Object.keys(cartItems).includes(productID);
@@ -23,7 +25,7 @@ export default function Product() {
     return Math.floor(((oldPrice - discountPrice) / oldPrice) * 100);
   }
   function handleBuyNow(id) {
-    setBuyItems({ [id]: 1 });
+    dispatch(addToBuy({ [id]: 1 }));
     navigate("/checkout");
   }
   function handleAddToCart() {
@@ -33,7 +35,7 @@ export default function Product() {
       return;
     }
     {
-      added ? navigate("/cart") : addToCart(product.id);
+      added ? navigate("/cart") : dispatch(addToCart(product.id));
     }
   }
 

@@ -16,7 +16,6 @@ import Profile from "./pages/Profile";
 import { UserContext, UserProvider } from "./contexts/UserContext";
 import Product from "./pages/Product";
 import ScrollToTop from "./components/ScrollToTop";
-import { CartContextProvider } from "./contexts/CartContext";
 import SearchResults from "./pages/SearchResults";
 import Checkout from "./pages/Checkout";
 import { useContext, useEffect } from "react";
@@ -33,11 +32,9 @@ function App() {
     <div className="flex flex-col min-h-screen">
       <UserProvider>
         <ProductContextProvider>
-          <CartContextProvider>
-            <BrowserRouter>
-              <ContentsWrapper />
-            </BrowserRouter>
-          </CartContextProvider>
+          <BrowserRouter>
+            <ContentsWrapper />
+          </BrowserRouter>
         </ProductContextProvider>
       </UserProvider>
     </div>

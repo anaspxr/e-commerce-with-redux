@@ -9,6 +9,9 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    setWholeCart: (state, action) => {
+      state.cartItems = action.payload;
+    },
     addToCart: (state, action) => {
       if (state.cartItems[action.payload]) {
         state.cartItems[action.payload] += 1;
@@ -49,6 +52,7 @@ const cartSlice = createSlice({
 });
 
 export const {
+  setWholeCart,
   addToCart,
   removeFromCart,
   addToBuy,
