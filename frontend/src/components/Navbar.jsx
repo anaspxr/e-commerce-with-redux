@@ -6,10 +6,10 @@ import { HiMenuAlt1, HiX, HiChevronDown } from "react-icons/hi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import Button from "./Button";
-import { UserContext } from "../contexts/UserContext";
 import SearchField from "./SearchField";
 import { ProductContext } from "../contexts/ProductContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../Store/userSlice";
 
 const menuItems = [
   {
@@ -45,7 +45,9 @@ const menuItems = [
 export default function Navbar() {
   const cart = useSelector((state) => state.cart.cartItems);
   const { products } = useContext(ProductContext);
-  const { currentUser, logout, isAdmin } = useContext(UserContext);
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const isAdmin = useSelector((state) => state.user.isAdmin);
+  const dispatch = useDispatch();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -184,7 +186,7 @@ export default function Navbar() {
                     <Button>Profile</Button>
                   </Link>
                 )}
-                <div onClick={logout}>
+                <div onClick={() => dispatch(logout())}>
                   <Button>Logout</Button>
                 </div>
               </div>

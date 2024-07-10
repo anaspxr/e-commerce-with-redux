@@ -1,9 +1,10 @@
-import { useContext, useState } from "react";
-import { UserContext } from "../../contexts/UserContext";
+import { useState } from "react";
 import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+import { login } from "../../Store/userSlice";
 
 export default function Login({ setAlert, setNewUser }) {
-  const { login } = useContext(UserContext);
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const { values, handleChange, handleSubmit } = useFormik({
     initialValues: {
@@ -23,12 +24,14 @@ export default function Login({ setAlert, setNewUser }) {
             user.email === values.email && user.password === values.password
         );
         if (user) {
-          login({
-            email: user.email,
-            name: user.name,
-            isAdmin: user.isAdmin,
-            id: user.id,
-          });
+          dispatch(
+            login({
+              email: user.email,
+              name: user.name,
+              isAdmin: user.isAdmin,
+              id: user.id,
+            })
+          );
         } else {
           setAlert({ message: "Invalid credentials", type: "warning" });
         }
@@ -40,17 +43,6 @@ export default function Login({ setAlert, setNewUser }) {
         setLoading(false);
       }
       setLoading(false);
-
-      // const localData = JSON.parse(localStorage.getItem("users")) || {};
-      // const userExists =
-      //   localData[values.email]?.password === values.password ||
-      //   (values.email === "comfortcraftadmin@gmail.com" &&
-      //     values.password === "comfortcraft");
-      // if (userExists) {
-      //   login(values.email);
-      // } else {
-      //   setAlert({ message: "Invalid credentials", type: "warning" });
-      // }
     },
   });
 

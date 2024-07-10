@@ -1,15 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { UserContext } from "../contexts/UserContext";
 import { useDispatch, useSelector } from "react-redux";
 import { addToBuy, addToCart } from "../Store/cartSlice";
+import { setRedirectPath } from "../Store/userSlice";
 
 export default function Item({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { currentUser, setRedirectPath } = useContext(UserContext);
   const cart = useSelector((state) => state.cart.cartItems);
   const added = Object.keys(cart).includes(product.id);
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   function calculateDiscountPrice(oldPrice, discountPrice) {
     return Math.floor(((oldPrice - discountPrice) / oldPrice) * 100);
@@ -21,7 +20,7 @@ export default function Item({ product }) {
   }
   function handleAddToCart() {
     if (!currentUser) {
-      setRedirectPath("/");
+      dispatch(setRedirectPath("/"));
       navigate("/login");
       return;
     }

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import icon from "../components/assets/logo-small.png";
 import { Link, useLocation } from "react-router-dom";
 import { RiMenu2Line } from "react-icons/ri";
@@ -9,7 +9,8 @@ import {
   MdKeyboardDoubleArrowLeft,
 } from "react-icons/md";
 import { PiSignOutFill } from "react-icons/pi";
-import { UserContext } from "../contexts/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../Store/userSlice";
 
 export default function Admin({ children }) {
   const location = useLocation();
@@ -18,8 +19,9 @@ export default function Admin({ children }) {
     { name: "Users", icon: <FaUsers />, link: "admin/users" },
     { name: "Products", icon: <FaBagShopping />, link: "admin/products" },
   ];
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
   const [isOpen, setIsOpen] = useState(false);
-  const { logout, currentUser } = useContext(UserContext);
   const [rightIconOpen, setRightIconOpen] = useState(false);
 
   useEffect(() => {
@@ -80,7 +82,7 @@ export default function Admin({ children }) {
 
             <p
               className="cursor-pointer flex items-center p-2 text-slate-950 rounded-lg  hover:bg-slate-300  group"
-              onClick={logout}
+              onClick={() => dispatch(logout())}
             >
               <PiSignOutFill />
               <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
@@ -121,7 +123,7 @@ export default function Admin({ children }) {
             ))}
             <li
               className="cursor-pointer flex items-center p-2 text-slate-950 rounded-lg  hover:bg-slate-200  group"
-              onClick={logout}
+              onClick={() => dispatch(logout())}
             >
               <PiSignOutFill />
               <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>

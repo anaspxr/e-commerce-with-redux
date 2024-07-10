@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   currentUser: null,
   isAdmin: false,
+  redirectPath: "/",
 };
 
 const userSlice = createSlice({
@@ -18,9 +19,12 @@ const userSlice = createSlice({
       localStorage.removeItem("currentItem");
       state.currentUser = null;
     },
+    setRedirectPath: (state, action) => {
+      state.redirectPath = action.payload;
+    },
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, setRedirectPath } = userSlice.actions;
 
 export default userSlice.reducer;

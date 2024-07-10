@@ -5,6 +5,16 @@ const initialState = {
   buyItems: {},
 };
 
+// const updateServerSide = async (newCart)=>{
+//   fetch(`http://localhost:3000/users/${currentUser.id}`, {
+//     method: "PATCH",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ cart: newCartItems }),
+//   });
+// }
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,

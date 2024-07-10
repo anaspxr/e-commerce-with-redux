@@ -1,12 +1,11 @@
 import { useFormik } from "formik";
 import { addressSchema } from "../schemas/validationSchemas";
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../contexts/UserContext";
+import { useEffect, useState } from "react";
 import useFetch from "../utils/useFetch";
+import { useSelector } from "react-redux";
 
 export default function Address() {
-  const { currentUser } = useContext(UserContext);
-
+  const currentUser = useSelector((state) => state.user.currentUser);
   const { data, loading, error } = useFetch(
     `http://localhost:3000/users/${currentUser.id}`
   );

@@ -2,16 +2,16 @@ import { useParams } from "react-router-dom";
 import { RelatedProducts, Recommend } from "../components/Recommend";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
 import { ProductContext } from "../contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
 import { addToBuy, addToCart } from "../Store/cartSlice";
+import { setRedirectPath } from "../Store/userSlice";
 
 export default function Product() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
   const { products, loading, error } = useContext(ProductContext);
-  const { currentUser, setRedirectPath } = useContext(UserContext);
+  const currentUser = useSelector((state) => state.user.currentUser);
   const { productID } = useParams();
   const navigate = useNavigate();
   const added = Object.keys(cartItems).includes(productID);
@@ -30,7 +30,7 @@ export default function Product() {
   }
   function handleAddToCart() {
     if (!currentUser) {
-      setRedirectPath("/products/" + productID);
+      dispatch(setRedirectPath("/products/" + productID));
       navigate("/login");
       return;
     }

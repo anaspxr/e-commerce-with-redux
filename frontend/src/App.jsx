@@ -13,12 +13,11 @@ import LoginSignup from "./pages/LoginSignup";
 import Products from "./pages/Products";
 import Footer from "./components/Footer";
 import Profile from "./pages/Profile";
-import { UserContext, UserProvider } from "./contexts/UserContext";
 import Product from "./pages/Product";
 import ScrollToTop from "./components/ScrollToTop";
 import SearchResults from "./pages/SearchResults";
 import Checkout from "./pages/Checkout";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import ScrollToHashElement from "@cascadia-code/scroll-to-hash-element";
 import Admin from "./Admin/AdminHome";
 import ProductsPage from "./Admin/ProductsPage";
@@ -26,17 +25,17 @@ import UsersPage from "./Admin/UsersPage";
 import AdminContainer from "./Admin/AdminContainer";
 import ProductEditPage from "./Admin/ProductEditPage";
 import ProductContextProvider from "./contexts/ProductContext";
+import { useDispatch, useSelector } from "react-redux";
+import { setRedirectPath } from "./Store/userSlice";
 
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
-      <UserProvider>
-        <ProductContextProvider>
-          <BrowserRouter>
-            <ContentsWrapper />
-          </BrowserRouter>
-        </ProductContextProvider>
-      </UserProvider>
+      <ProductContextProvider>
+        <BrowserRouter>
+          <ContentsWrapper />
+        </BrowserRouter>
+      </ProductContextProvider>
     </div>
   );
 }
@@ -108,13 +107,16 @@ function ContentsWrapper() {
 }
 
 function PrivateRoutes({ adminOnly = false }) {
-  const { isAdmin, currentUser, setRedirectPath } = useContext(UserContext);
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const isAdmin = useSelector((state) => state.user.isAdmin);
+  const dispatch = useDispatch();
+
   const location = useLocation();
   useEffect(() => {
     if (!currentUser) {
-      setRedirectPath(location.pathname);
+      dispatch(setRedirectPath(location.pathname));
     }
-  }, [currentUser, location.pathname, setRedirectPath]);
+  }, [currentUser, dispatch, location.pathname]);
 
   if (!currentUser) {
     return <Navigate to="/login" />;

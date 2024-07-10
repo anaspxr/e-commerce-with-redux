@@ -4,7 +4,6 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import Address from "../components/Address";
 import { ProductContext } from "../contexts/ProductContext";
 import useFetch from "../utils/useFetch";
-import { UserContext } from "../contexts/UserContext";
 import { useDispatch, useSelector } from "react-redux";
 import {
   buyQuantityMinus,
@@ -167,7 +166,7 @@ function Items({ buyItems }) {
 
 function Payment({ items }) {
   const { products } = useContext(ProductContext);
-  const { currentUser } = useContext(UserContext);
+  const currentUser = useSelector((state) => state.user.currentUser);
   const { data, loading, error } = useFetch(
     `http://localhost:3000/users/${currentUser.id}`
   );
