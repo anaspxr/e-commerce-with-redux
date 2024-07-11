@@ -3,9 +3,11 @@ import { addressSchema } from "../schemas/validationSchemas";
 import { useEffect, useState } from "react";
 import useFetch from "../utils/useFetch";
 import { useSelector } from "react-redux";
+import PopUpAlert from "./PopUpAlert";
 
 export default function Address() {
   const currentUser = useSelector((state) => state.user.currentUser);
+  const [showAlert, setShowAlert] = useState(null);
   const { data, loading, error } = useFetch(
     `http://localhost:3000/users/${currentUser.id}`
   );
@@ -22,9 +24,9 @@ export default function Address() {
       }
     );
     if (response.ok) {
-      alert("Address updated successfully");
+      setShowAlert({ message: "Address Updated...!" });
     } else {
-      alert("Error updating address");
+      setShowAlert({ message: "Error..!" });
     }
   }
 
@@ -105,7 +107,7 @@ export default function Address() {
               disabled={!editOpen}
               type="submit"
               onClick={handleSubmit}
-              className="bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit disabled:bg-opacity-70 "
+              className="bg-orange-500 hover:opacity-90 text-white px-4 py-2 rounded-md mt-5 h-fit disabled:bg-opacity-70 "
             >
               Update
             </button>
@@ -116,12 +118,21 @@ export default function Address() {
                 }
                 setEditOpen(!editOpen);
               }}
-              className="bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit"
+              className="bg-orange-500 hover:opacity-90 text-white px-4 py-2 rounded-md mt-5 h-fit"
             >
               {editOpen ? "Cancel" : "Edit"}
             </button>
           </div>
         </div>
+      )}
+      {showAlert && (
+        <PopUpAlert
+          type="alert"
+          message={showAlert.message}
+          handleConfirm={() => {
+            setShowAlert(null);
+          }}
+        />
       )}
     </div>
   );

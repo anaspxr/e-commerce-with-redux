@@ -26,7 +26,7 @@ export default function PopUpAlert({
             </div>
           ) : (
             <div>
-              <button>Ok</button>
+              <button onClick={handleConfirm}>Ok</button>
             </div>
           )}
         </div>
