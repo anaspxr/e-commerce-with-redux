@@ -1,8 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   cartItems: {},
   buyItems: {},
+  fetchStatus: "idle",
+  updateStatus: "idle",
 };
 
 const updateServerSide = async (newCart, userID) => {
@@ -62,7 +64,51 @@ const cartSlice = createSlice({
       state.buyItems = {};
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getServerCart.pending, (state) => {
+        state.fetchStatus = "pending";
+      })
+      .addCase(getServerCart.fulfilled, (state, action) => {
+        state.fetchStatus = "idle";
+        state.cartItems = action.payload;
+      })
+      .addCase(getServerCart.rejected, (state) => {
+        state.fetchStatus = "error";
+      });
+  },
 });
+
+export const getServerCart = createAsyncThunk(
+  "cart/getServerCart",
+  async (userID) => {
+    try {
+      const response = await fetch(`http://localhost:3000/users/${userID}`);
+      if (!response.ok) throw new Error("failed to fetch data");
+      const data = await response.json();
+      if (data.cart && Object.keys(data.cart).length > 0) return data.cart;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+// export const updateServerCart = createAsyncThunk(
+//   "cart/updateServerCart",
+//   async (amount)=>{
+//     try{
+//       const res = fetch(`http://localhost:3000/users/${userID}`, {
+//         method: "PATCH",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ cart: newCart }),
+//       });
+//     }catch(error){
+//       console.log(error);
+//     }
+//   }
+// )
 
 export const {
   setWholeCart,

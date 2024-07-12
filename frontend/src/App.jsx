@@ -27,7 +27,7 @@ import ProductEditPage from "./Admin/ProductEditPage";
 import ProductContextProvider from "./contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
 import { checkLocalUser, setRedirectPath } from "./Store/userSlice";
-import { setWholeCart } from "./Store/cartSlice";
+import { getServerCart } from "./Store/cartSlice";
 
 function App() {
   return (
@@ -53,15 +53,7 @@ function ContentsWrapper() {
 
   useEffect(() => {
     if (currentUser) {
-      const updateCart = async () => {
-        const response = await fetch(
-          `http://localhost:3000/users/${currentUser.id}`
-        );
-        const data = await response.json();
-        if (data.cart && Object.keys(data.cart).length > 0)
-          dispatch(setWholeCart(data.cart));
-      };
-      updateCart();
+      dispatch(getServerCart(currentUser.id));
     }
   }, [currentUser, dispatch]);
 
