@@ -311,17 +311,18 @@
       "email": "Anas1@gmail.com",
       "password": "Anas1@gmail.com",
       "address": {
-        "name": "anas",
-        "address": "afaf",
+        "name": "Anas",
+        "address": "nafko ",
         "city": "agaga",
-        "state": "aggag",
+        "state": "kerala",
         "pincode": "123455",
-        "phone": "151515590"
+        "phone": "2414151"
       },
       "cart": {
-        "2": 2,
-        "6": 2,
-        "24": 1
+        "13": 2,
+        "16": 3,
+        "17": 1,
+        "21": 2
       },
       "orders": {},
       "isAdmin": false
@@ -469,7 +470,7 @@
     },
     {
       "id": "16",
-      "name": "Comfy Recliner Chair",
+      "name": "Recliner Chair",
       "oldPrice": 12996,
       "discountPrice": 9999,
       "image": "https://img.freepik.com/free-photo/modern-chair-table_1203-7231.jpg?t=st=1720249743~exp=1720253343~hmac=4e4b215f875611d0087d2de0c116c5896e9e0b4ffd7a7ffa2f3a93847f9bcc59&w=360",
