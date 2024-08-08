@@ -1,18 +1,19 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import userRouter from "./routes/userRoutes.js";
 import authRouter from "./routes/auth.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const PORT = 3000;
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 
 mongoose
-  .connect("mongodb://localhost:27017/furniture-shop")
+  .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("Connected to MongoDB");
   })
