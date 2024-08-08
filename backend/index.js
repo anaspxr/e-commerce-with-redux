@@ -1,12 +1,15 @@
 import express from "express";
 import cors from "cors";
-import productsRouter from "./routes/productRoutes.js";
 import mongoose from "mongoose";
+import userRouter from "./routes/userRoutes.js";
+import authRouter from "./routes/auth.js";
 
 const PORT = 3000;
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);
 
 mongoose
   .connect("mongodb://localhost:27017/furniture-shop")
