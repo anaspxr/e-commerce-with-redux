@@ -1,10 +1,35 @@
 import express from "express";
-import { verifyTokenAndAuthZ } from "../middlewares/verifyToken.js";
+import {
+  verifyTokenAndAdmin,
+  verifyTokenAndAuthZ,
+} from "../middlewares/verifyToken.js";
 import bcrypt from "bcryptjs";
 import User from "../schema/userSchema.js";
 
 const router = express.Router();
+// url/api/users
 
+// get all users
+router.get("/", verifyTokenAndAdmin, async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json({ users });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+//get individual user
+router.get("/:id", verifyTokenAndAdmin, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+// update one user
 router.put("/:id", verifyTokenAndAuthZ, async (req, res) => {
   try {
     if (req.body.password) {
@@ -24,5 +49,17 @@ router.put("/:id", verifyTokenAndAuthZ, async (req, res) => {
     res.status(500).send(error.message);
   }
 });
+
+//  delete one user
+router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).send("User has been deleted");
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+// todo: get user stats  url/api/users/stats
 
 export default router;
