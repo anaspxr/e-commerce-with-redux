@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-//  url/api/users/register
+//  url/api/auth/register
 router.post("/register", async (req, res) => {
   try {
     const saltRounds = parseInt(process.env.SALT_ROUNDS, 10);
@@ -22,7 +22,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-//  url/api/users/login
+//  url/api/auth/login
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
