@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import authRouter from "./routes/auth.js";
 import userRouter from "./routes/userRoutes.js";
 import productRouter from "./routes/productRoutes.js";
+import cartRouter from "./routes/cartRoutes.js";
+
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -15,6 +17,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
+app.use("/api/cart", cartRouter);
 
 mongoose
   .connect(process.env.MONGO_URL)
