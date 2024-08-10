@@ -1,5 +1,13 @@
 import mongoose from "mongoose";
 
+const cartSchema = new mongoose.Schema(
+  {
+    productID: mongoose.Types.ObjectId,
+    quantity: Number,
+  },
+  { timestamps: true }
+);
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -23,8 +31,8 @@ const userSchema = new mongoose.Schema(
       state: String,
       phone: String,
     },
-    cart: [],
-    orders: [],
+    cart: [cartSchema],
+    orders: [mongoose.Types.ObjectId],
     isAdmin: {
       type: Boolean,
       default: false,
