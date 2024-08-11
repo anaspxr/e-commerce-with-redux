@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    orderID: { type: String, required: true },
     userID: { type: mongoose.Types.ObjectId, required: true },
     products: [
       {
@@ -14,6 +13,7 @@ const orderSchema = new mongoose.Schema(
     amount: { type: Number, required: true },
     address: { type: Object, required: true },
     status: { type: String, default: "pending" },
+    info: String,
   },
   { timestamps: true }
 );
