@@ -27,12 +27,11 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Cart",
     },
-    orders: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Order",
-      },
-    ],
+    orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
+    wishList: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "WishList",
+    },
     isAdmin: {
       type: Boolean,
       default: false,
