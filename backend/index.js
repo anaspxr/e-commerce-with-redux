@@ -6,6 +6,7 @@ import userRouter from "./routes/userRoutes.js";
 import productRouter from "./routes/productRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
+import wishListRouter from "./routes/wishListRoutes.js";
 
 import dotenv from "dotenv";
 
@@ -21,6 +22,7 @@ app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/orders", orderRouter);
+app.use("/api/wishlist", wishListRouter);
 
 mongoose
   .connect(process.env.MONGO_URL)

@@ -17,9 +17,9 @@ const router = express.Router();
 router.get("/:id", verifyTokenAndAuthZ, getCartOfUser);
 
 // add or update items to cart
-router.patch("/update", verifyToken, updateCart);
+router.post("/update", verifyToken, updateCart);
 
-router.patch("/remove", verifyToken, removeFromCart);
+router.delete("/remove", verifyToken, removeFromCart);
 
 //admin
 // get all cart
