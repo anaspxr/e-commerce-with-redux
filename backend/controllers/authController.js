@@ -24,13 +24,11 @@ const login = async (req, res) => {
     if (!user) {
       return res.status(404).send("User does not exist");
     }
-
     // compare password from body and the hashed password from db
     const isMatch = await bcrypt.compare(req.body.password, user.password);
     if (!isMatch) {
       return res.status(400).send("Invalid credentials");
     }
-
     // if password matches, generate a JWT token and send back to the client
     const accessToken = jwt.sign(
       {
