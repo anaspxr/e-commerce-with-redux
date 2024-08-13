@@ -1,4 +1,4 @@
-import Cart from "../schema/cartSchema.js";
+import Cart from "../../schema/cartSchema.js";
 
 const getAllCarts = async (req, res) => {
   try {
@@ -15,7 +15,7 @@ const getAllCarts = async (req, res) => {
 
 const getCartOfUser = async (req, res) => {
   try {
-    const data = await Cart.findOne({ userID: req.params.id }).populate({
+    const data = await Cart.findOne({ userID: req.user.id }).populate({
       path: "products.productID",
       select: "name price image", // fields to get from populate
     });
