@@ -15,7 +15,11 @@ const getAllCarts = async (req, res) => {
 
 const getCartOfUser = async (req, res) => {
   try {
-    const data = await Cart.findOne({ userID: req.params.id });
+    const data = await Cart.findOne({ userID: req.params.id }).populate({
+      path: "products.productID",
+      select: "name price image", // fields to get from populate
+    });
+
     if (data) {
       res.status(200).json(data);
     } else {
@@ -70,7 +74,7 @@ const removeFromCart = async (req, res) => {
     const cart = await Cart.findOneAndUpdate(
       { userID: req.user.id, "products.productID": req.body.productID },
       {
-        $pull: { products: { productID: req.body.productID } }, // if product exists, delete
+        $pull: { products: { productID: req.body.productID } },
       },
       { new: true }
     );
