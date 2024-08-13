@@ -1,17 +1,19 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import authRouter from "./routes/auth.js";
+import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
-import productRouter from "./routes/productRoutes.js";
-import cartRouter from "./routes/cartRoutes.js";
-import orderRouter from "./routes/orderRoutes.js";
-import wishListRouter from "./routes/wishListRoutes.js";
+import publicRouter from "./routes/publicRoutes.js";
 import uploadRouter from "./routes/uploadRoutes.js";
+import adminRouter from "./routes/adminRoutes.js";
 
 import dotenv from "dotenv";
+import connectDB from "./config/connectDB.js";
+import { errorHandler } from "./utils/errorHandler.js";
 
 dotenv.config();
+
+connectDB();
 
 const PORT = 3000;
 const app = express();
@@ -19,21 +21,14 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
-app.use("/api/users", userRouter);
-app.use("/api/products", productRouter);
-app.use("/api/carts", cartRouter);
-app.use("/api/orders", orderRouter);
-app.use("/api/wishlist", wishListRouter);
+app.use("/api/public", publicRouter);
 app.use("/api/upload", uploadRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/users", userRouter);
 
-mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => {
-    console.log("Connected to MongoDB");
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+app.use((req, res, next) => next(errorHandler(404, "Not found!")));
+
+mongoose.connection.once("open", () => {
+  console.log("connected to DB");
+  app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+});

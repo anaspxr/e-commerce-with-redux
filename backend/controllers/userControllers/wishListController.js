@@ -1,17 +1,8 @@
-import WishList from "../schema/wishListSchema.js";
-
-const getAllWishlists = async (req, res) => {
-  try {
-    const wishLists = await WishList.find();
-    res.status(200).json(wishLists);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
+import WishList from "../../schema/wishListSchema.js";
 
 const getUserWishlist = async (req, res) => {
   try {
-    const wishList = await WishList.findOne({ userID: req.params.id });
+    const wishList = await WishList.findOne({ userID: req.user.id });
     if (!wishList) return res.status(404).json("No wishlist found");
     res.status(200).json(wishList);
   } catch (error) {
@@ -22,7 +13,7 @@ const getUserWishlist = async (req, res) => {
 const removeFromWishlist = async (req, res) => {
   try {
     const wishList = await WishList.findOneAndUpdate(
-      { userID: req.params.id },
+      { userID: req.user.id },
       {
         $pull: { products: req.body.productID },
       },
@@ -47,14 +38,14 @@ const addToWishlist = async (req, res) => {
     }
 
     let wishList = await WishList.findOneAndUpdate(
-      { userID: req.params.id },
+      { userID: req.user.id },
       { $addToSet: { products: productID } },
       { new: true }
     );
 
     if (!wishList) {
       wishList = new WishList({
-        userID: req.params.id,
+        userID: req.user.id,
         products: [productID],
       });
       await wishList.save();
@@ -67,4 +58,4 @@ const addToWishlist = async (req, res) => {
   }
 };
 
-export { getAllWishlists, getUserWishlist, removeFromWishlist, addToWishlist };
+export { getUserWishlist, removeFromWishlist, addToWishlist };
