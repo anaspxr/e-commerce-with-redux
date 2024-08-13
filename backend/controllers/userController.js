@@ -21,6 +21,9 @@ const getUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
+    if (req.body.isAdmin && !req.user.isAdmin)
+      //if the user is not admin and is trying to update the isAdmin field,
+      return res.status(400).json("You are not allowed to do that");
     if (req.body.password) {
       const saltRounds = parseInt(process.env.SALT_ROUNDS, 10);
       const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
