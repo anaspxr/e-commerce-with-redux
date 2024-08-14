@@ -9,7 +9,6 @@ import adminRouter from "./routes/adminRoutes.js";
 
 import dotenv from "dotenv";
 import connectDB from "./config/connectDB.js";
-import { errorHandler } from "./utils/errorHandler.js";
 
 dotenv.config();
 
@@ -24,9 +23,9 @@ app.use("/api/auth", authRouter);
 app.use("/api/public", publicRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/admin", adminRouter);
-app.use("/api/users", userRouter);
+app.use("/api/user", userRouter);
 
-app.use((req, res, next) => next(errorHandler(404, "Not found!")));
+app.use((req, res) => res.status(404).json("Route not found!!"));
 
 mongoose.connection.once("open", () => {
   console.log("connected to DB");
