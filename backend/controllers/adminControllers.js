@@ -40,7 +40,7 @@ const updateUser = async (req, res) => {
     );
     res.status(200).json(updatedUser);
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).json(error);
   }
 };
 
@@ -84,7 +84,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
-    res.status(200).send("User has been deleted");
+    res.status(200).send("Product has been deleted");
   } catch (error) {
     res.status(500).json(error);
   }
