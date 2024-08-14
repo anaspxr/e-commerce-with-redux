@@ -34,7 +34,7 @@ const createOrder = async (req, res) => {
 const cancelOrder = async (req, res) => {
   try {
     const updatedOrder = await Order.findOneAndUpdate(
-      { _id: req.body.orderID, userID: req.user.id },
+      { _id: req.params.orderID, userID: req.user.id },
       {
         $set: { status: "cancelled", info: req.body.info || "" },
       },

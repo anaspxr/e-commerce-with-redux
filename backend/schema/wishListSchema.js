@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const wishListSchema = new mongoose.Schema(
   {
     userID: {
