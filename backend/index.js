@@ -9,6 +9,7 @@ import adminRouter from "./routes/adminRoutes.js";
 import dotenv from "dotenv";
 import connectDB from "./config/connectDB.js";
 import manageErrors from "./middlewares/manageErrors.js";
+import { customError } from "./utils/customErrorMaker.js";
 
 dotenv.config();
 
@@ -25,7 +26,9 @@ app.use("/api/upload", uploadRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/user", userRouter);
 
-app.use((req, res) => res.status(404).json("Route not found!!"));
+app.all("*", (req, res, next) =>
+  next(customError(404, `Cannot ${req.method} ${req.originalUrl}`))
+);
 
 app.use(manageErrors);
 
