@@ -1,25 +1,22 @@
 import express from "express";
 import { verifyToken } from "../middlewares/verifyToken.js";
-import {
-  getUser,
-  updateUser,
-} from "../controllers/userControllers/userController.js";
+import { getUser, updateUser } from "../controllers/user/userController.js";
 import {
   addToWishlist,
   getUserWishlist,
   removeFromWishlist,
-} from "../controllers/userControllers/wishListController.js";
+} from "../controllers/user/wishListController.js";
 import {
   cancelOrder,
   createOrder,
   getAllOrdersOfUser,
   getOrderOfUserById,
-} from "../controllers/userControllers/orderController.js";
+} from "../controllers/user/orderController.js";
 import {
   getCartOfUser,
   removeFromCart,
   updateCart,
-} from "../controllers/userControllers/cartController.js";
+} from "../controllers/user/cartController.js";
 
 const router = express.Router();
 
