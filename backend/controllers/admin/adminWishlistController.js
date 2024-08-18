@@ -1,22 +1,16 @@
 import WishList from "../../schema/wishListSchema.js";
+import CustomError from "../../utils/CustomError.js";
+import tryCatch from "../../utils/trycatch.js";
 
-const getAllWishlists = async (req, res) => {
-  try {
-    const wishLists = await WishList.find();
-    res.status(200).json(wishLists);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
+const getAllWishlists = tryCatch(async (req, res) => {
+  const wishLists = await WishList.find();
+  res.status(200).json(wishLists);
+});
 
-const getUserWishlist = async (req, res) => {
-  try {
-    const wishList = await WishList.findOne({ userID: req.params.id });
-    if (!wishList) return res.status(404).json("No wishlist found");
-    res.status(200).json(wishList);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
+const getUserWishlist = tryCatch(async (req, res, next) => {
+  const wishList = await WishList.findOne({ userID: req.params.id });
+  if (!wishList) next(new CustomError("Wishlist not found", 404));
+  res.status(200).json(wishList);
+});
 
 export { getAllWishlists, getUserWishlist };
