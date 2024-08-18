@@ -9,7 +9,7 @@ import adminRouter from "./routes/adminRoutes.js";
 import dotenv from "dotenv";
 import connectDB from "./config/connectDB.js";
 import manageErrors from "./middlewares/manageErrors.js";
-import { customError } from "./utils/customErrorMaker.js";
+import CustomError from "./utils/CustomError.js";
 
 dotenv.config();
 
@@ -26,9 +26,10 @@ app.use("/api/upload", uploadRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/user", userRouter);
 
-app.all("*", (req, res, next) =>
-  next(customError(404, `Cannot ${req.method} ${req.originalUrl}`))
-);
+app.all("*", (req, res, next) => {
+  const err = new CustomError(`Cannot ${req.method} ${req.originalUrl}`, 404);
+  next(err);
+});
 
 app.use(manageErrors);
 
