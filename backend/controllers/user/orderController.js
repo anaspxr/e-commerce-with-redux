@@ -1,51 +1,39 @@
 import Order from "../../schema/ordersSchema.js";
+import CustomError from "../../utils/CustomError.js";
+import tryCatch from "../../utils/trycatch.js";
 
-const getAllOrdersOfUser = async (req, res) => {
-  try {
-    const orders = await Order.find({ userID: req.user.id });
-    res.status(200).json(orders);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
-const getOrderOfUserById = async (req, res) => {
-  try {
-    const order = await Order.findOne({
-      _id: req.params.orderID,
-      userID: req.user.id,
-    });
-    if (!order) return res.status(404).json({ message: "order not found" });
-    res.status(200).json(order);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
+const getAllOrdersOfUser = tryCatch(async (req, res, next) => {
+  const orders = await Order.find({ userID: req.user.id });
+  if (!orders || orders.length === 0)
+    next(new CustomError("No orders found", 404));
+  res.status(200).json(orders);
+});
 
-const createOrder = async (req, res) => {
-  try {
-    const newOrder = new Order({ ...req.body, userID: req.user.id });
-    const savedOrder = await newOrder.save();
-    res.status(200).json(savedOrder);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
+const getOrder = tryCatch(async (req, res, next) => {
+  const order = await Order.findOne({
+    _id: req.params.orderID,
+    userID: req.user.id,
+  });
+  if (!order) next(new CustomError("Order not found", 404));
+  res.status(200).json(order);
+});
 
-const cancelOrder = async (req, res) => {
-  try {
-    const updatedOrder = await Order.findOneAndUpdate(
-      { _id: req.params.orderID, userID: req.user.id },
-      {
-        $set: { status: "cancelled", info: req.body.info || "" },
-      },
-      { new: true }
-    );
-    if (!updatedOrder)
-      return res.status(404).json({ message: "order not found" });
-    res.status(200).json(updatedOrder);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
+const createOrder = tryCatch(async (req, res) => {
+  const newOrder = new Order({ ...req.body, userID: req.user.id });
+  const savedOrder = await newOrder.save();
+  res.status(200).json(savedOrder);
+});
 
-export { getAllOrdersOfUser, getOrderOfUserById, createOrder, cancelOrder };
+const cancelOrder = tryCatch(async (req, res, next) => {
+  const updatedOrder = await Order.findOneAndUpdate(
+    { _id: req.params.orderID, userID: req.user.id },
+    {
+      $set: { status: "cancelled", info: req.body.info || "" },
+    },
+    { new: true }
+  );
+  if (!updatedOrder) next(new CustomError("Order not found", 404));
+  res.status(200).json(updatedOrder);
+});
+
+export { getAllOrdersOfUser, getOrder, createOrder, cancelOrder };

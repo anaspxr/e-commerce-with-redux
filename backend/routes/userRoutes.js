@@ -10,7 +10,7 @@ import {
   cancelOrder,
   createOrder,
   getAllOrdersOfUser,
-  getOrderOfUserById,
+  getOrder,
 } from "../controllers/user/orderController.js";
 import {
   getCartOfUser,
@@ -29,7 +29,7 @@ router.delete("/cart", verifyToken, removeFromCart); // remove product from the 
 
 router.get("/orders", verifyToken, getAllOrdersOfUser); //get user's orders
 router.post("/orders", verifyToken, createOrder); // create order
-router.get("/orders/:orderID", verifyToken, getOrderOfUserById); //get single order
+router.get("/orders/:orderID", verifyToken, getOrder); //get single order
 router.patch("/orders/cancel/:orderID", verifyToken, cancelOrder); // cancel order
 
 router.get("/wishlist", verifyToken, getUserWishlist); //get wishlist of the user
