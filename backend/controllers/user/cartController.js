@@ -1,8 +1,7 @@
 import Cart from "../../schema/cartSchema.js";
 import CustomError from "../../utils/CustomError.js";
-import tryCatch from "../../utils/trycatch.js";
 
-const getCartOfUser = tryCatch(async (req, res, next) => {
+const getCartOfUser = async (req, res, next) => {
   const data = await Cart.findOne({ userID: req.user.id }).populate({
     path: "products.productID",
     select: "name price image", // fields to get from populate
@@ -13,9 +12,9 @@ const getCartOfUser = tryCatch(async (req, res, next) => {
   } else {
     next(new CustomError("No cart found for the user", 404));
   }
-});
+};
 
-const updateCart = tryCatch(async (req, res, next) => {
+const updateCart = async (req, res, next) => {
   const { productID, quantity } = req.body;
 
   if (quantity < 1) {
@@ -47,9 +46,9 @@ const updateCart = tryCatch(async (req, res, next) => {
   }
   const savedCart = await cart.save();
   res.status(200).json(savedCart);
-});
+};
 
-const removeFromCart = tryCatch(async (req, res, next) => {
+const removeFromCart = async (req, res, next) => {
   const cart = await Cart.findOneAndUpdate(
     //find the cart of the user with user id and remove the product
     { userID: req.user.id, "products.productID": req.body.productID },
@@ -63,6 +62,6 @@ const removeFromCart = tryCatch(async (req, res, next) => {
   } else {
     next(new CustomError("Product not found in the cart", 404));
   }
-});
+};
 
 export { getCartOfUser, updateCart, removeFromCart };

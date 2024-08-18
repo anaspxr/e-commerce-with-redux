@@ -1,8 +1,7 @@
 import Product from "../schema/productSchema.js";
 import CustomError from "../utils/CustomError.js";
-import tryCatch from "../utils/trycatch.js";
 
-const getProducts = tryCatch(async (req, res) => {
+const getProducts = async (req, res) => {
   const queryNew = req.query.new;
   const queryCategory = req.query.category;
   let products;
@@ -21,13 +20,13 @@ const getProducts = tryCatch(async (req, res) => {
     products = await Product.find();
   }
   res.status(200).json(products);
-});
+};
 
-const getProductById = tryCatch(async (req, res, next) => {
+const getProductById = async (req, res, next) => {
   const id = req.params.id;
   const product = await Product.findById(id);
   if (!product) return next(new CustomError("Product not found", 404));
   res.status(200).json({ product });
-});
+};
 
 export { getProducts, getProductById };

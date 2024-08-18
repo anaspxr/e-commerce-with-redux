@@ -17,23 +17,24 @@ import {
   removeFromCart,
   updateCart,
 } from "../controllers/user/cartController.js";
+import tryCatch from "../utils/trycatch.js";
 
 const router = express.Router();
 
-router.get("/", verifyToken, getUser); //get own details
-router.patch("/", verifyToken, updateUser); // update own details
+router.get("/", verifyToken, tryCatch(getUser)); //get own details
+router.patch("/", verifyToken, tryCatch(updateUser)); // update own details
 
-router.get("/cart", verifyToken, getCartOfUser); // get the cart of the user
-router.post("/cart", verifyToken, updateCart); // add or update items to cart
-router.delete("/cart", verifyToken, removeFromCart); // remove product from the cart
+router.get("/cart", verifyToken, tryCatch(getCartOfUser)); // get the cart of the user
+router.post("/cart", verifyToken, tryCatch(updateCart)); // add or update items to cart
+router.delete("/cart", verifyToken, tryCatch(removeFromCart)); // remove product from the cart
 
-router.get("/orders", verifyToken, getAllOrdersOfUser); //get user's orders
-router.post("/orders", verifyToken, createOrder); // create order
-router.get("/orders/:orderID", verifyToken, getOrder); //get single order
-router.patch("/orders/cancel/:orderID", verifyToken, cancelOrder); // cancel order
+router.get("/orders", verifyToken, tryCatch(getAllOrdersOfUser)); //get user's orders
+router.post("/orders", verifyToken, tryCatch(createOrder)); // create order
+router.get("/orders/:orderID", verifyToken, tryCatch(getOrder)); //get single order
+router.patch("/orders/cancel/:orderID", verifyToken, tryCatch(cancelOrder)); // cancel order
 
-router.get("/wishlist", verifyToken, getUserWishlist); //get wishlist of the user
-router.post("/wishlist", verifyToken, addToWishlist); // add product to wishlist
-router.delete("/wishlist", verifyToken, removeFromWishlist); // remove product from wishlist
+router.get("/wishlist", verifyToken, tryCatch(getUserWishlist)); //get wishlist of the user
+router.post("/wishlist", verifyToken, tryCatch(addToWishlist)); // add product to wishlist
+router.delete("/wishlist", verifyToken, tryCatch(removeFromWishlist)); // remove product from wishlist
 
 export default router;

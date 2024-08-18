@@ -1,30 +1,29 @@
 import Order from "../../schema/ordersSchema.js";
 import CustomError from "../../utils/CustomError.js";
-import tryCatch from "../../utils/trycatch.js";
 
-const getAllOrdersOfUser = tryCatch(async (req, res, next) => {
+const getAllOrdersOfUser = async (req, res, next) => {
   const orders = await Order.find({ userID: req.user.id });
   if (!orders || orders.length === 0)
     next(new CustomError("No orders found", 404));
   res.status(200).json(orders);
-});
+};
 
-const getOrder = tryCatch(async (req, res, next) => {
+const getOrder = async (req, res, next) => {
   const order = await Order.findOne({
     _id: req.params.orderID,
     userID: req.user.id,
   });
   if (!order) next(new CustomError("Order not found", 404));
   res.status(200).json(order);
-});
+};
 
-const createOrder = tryCatch(async (req, res) => {
+const createOrder = async (req, res) => {
   const newOrder = new Order({ ...req.body, userID: req.user.id });
   const savedOrder = await newOrder.save();
   res.status(200).json(savedOrder);
-});
+};
 
-const cancelOrder = tryCatch(async (req, res, next) => {
+const cancelOrder = async (req, res, next) => {
   const updatedOrder = await Order.findOneAndUpdate(
     { _id: req.params.orderID, userID: req.user.id },
     {
@@ -34,6 +33,6 @@ const cancelOrder = tryCatch(async (req, res, next) => {
   );
   if (!updatedOrder) next(new CustomError("Order not found", 404));
   res.status(200).json(updatedOrder);
-});
+};
 
 export { getAllOrdersOfUser, getOrder, createOrder, cancelOrder };

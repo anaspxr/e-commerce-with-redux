@@ -1,14 +1,13 @@
 import WishList from "../../schema/wishListSchema.js";
 import CustomError from "../../utils/CustomError.js";
-import tryCatch from "../../utils/trycatch.js";
 
-const getUserWishlist = tryCatch(async (req, res, next) => {
+const getUserWishlist = async (req, res, next) => {
   const wishList = await WishList.findOne({ userID: req.user.id });
   if (!wishList) next(new CustomError("No wishlist found for the user", 404));
   res.status(200).json(wishList);
-});
+};
 
-const removeFromWishlist = tryCatch(async (req, res, next) => {
+const removeFromWishlist = async (req, res, next) => {
   const wishList = await WishList.findOneAndUpdate(
     { userID: req.user.id },
     {
@@ -21,9 +20,9 @@ const removeFromWishlist = tryCatch(async (req, res, next) => {
   } else {
     next(new CustomError("Product not found in wishlist", 404));
   }
-});
+};
 
-const addToWishlist = tryCatch(async (req, res, next) => {
+const addToWishlist = async (req, res, next) => {
   const productID = req.body.productID;
 
   if (!productID) next(new CustomError("Product ID is required", 400));
@@ -45,6 +44,6 @@ const addToWishlist = tryCatch(async (req, res, next) => {
   }
 
   res.status(200).json(wishList);
-});
+};
 
 export { getUserWishlist, removeFromWishlist, addToWishlist };

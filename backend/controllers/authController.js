@@ -1,10 +1,9 @@
 import User from "../schema/userSchema.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import tryCatch from "../utils/trycatch.js";
 import CustomError from "../utils/CustomError.js";
 
-const createUser = tryCatch(async (req, res) => {
+const createUser = async (req, res) => {
   const saltRounds = parseInt(process.env.SALT_ROUNDS, 10);
   const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
   const newUser = new User({
@@ -14,9 +13,9 @@ const createUser = tryCatch(async (req, res) => {
   });
   const savedUser = await newUser.save();
   res.status(201).json(savedUser);
-});
+};
 
-const login = tryCatch(async (req, res, next) => {
+const login = async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
     next(new CustomError("User does not exist", 404));
@@ -36,6 +35,6 @@ const login = tryCatch(async (req, res, next) => {
     { expiresIn: "3d" }
   );
   res.status(200).json({ accessToken });
-});
+};
 
 export { createUser, login };
