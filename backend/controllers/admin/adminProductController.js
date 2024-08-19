@@ -3,8 +3,8 @@ import CustomError from "../../utils/CustomError.js";
 
 const createProduct = async (req, res) => {
   const newProduct = new Product(req.body);
-  await newProduct.save();
-  res.status(200).json("Product saved..!!");
+  const savedProduct = await newProduct.save();
+  res.status(200).json({ message: "Product saved successfully", savedProduct });
 };
 
 const updateProduct = async (req, res, next) => {
@@ -16,13 +16,13 @@ const updateProduct = async (req, res, next) => {
     { new: true }
   );
   if (!updatedProduct) next(new CustomError("Product not found", 404));
-  res.status(200).json(updatedProduct);
+  res.status(200).json({ message: "Product updates successfully", updatedProduct });
 };
 
 const deleteProduct = async (req, res, next) => {
-  const deleted = await Product.findByIdAndDelete(req.params.id);
-  if (!deleted) next(new CustomError("Product not found", 404));
-  res.status(200).send("Product has been deleted");
+  const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+  if (!deletedProduct) next(new CustomError("Product not found", 404));
+  res.status(200).send({ message: "Product has been deleted", deletedProduct });
 };
 
 export { createProduct, updateProduct, deleteProduct };
