@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema(
     oldPrice: { type: Number },
     image: { type: String, required: true },
     category: [{ type: String, required: true }],
+    averageRating: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
