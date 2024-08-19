@@ -1,10 +1,9 @@
-import Order from "../../schema/ordersSchema.js";
+import Order from "../../schema/orderSchema.js";
 import CustomError from "../../utils/CustomError.js";
 
 const getAllOrdersOfUser = async (req, res, next) => {
   const orders = await Order.find({ userID: req.user.id });
-  if (!orders || orders.length === 0)
-    next(new CustomError("No orders found", 404));
+  if (!orders || orders.length === 0) next(new CustomError("No orders found", 404));
   res.status(200).json(orders);
 };
 

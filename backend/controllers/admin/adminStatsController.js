@@ -1,5 +1,5 @@
 import User from "../../schema/userSchema.js";
-import Order from "../../schema/ordersSchema.js";
+import Order from "../../schema/orderSchema.js";
 import CustomError from "../../utils/CustomError.js";
 
 // user stats
