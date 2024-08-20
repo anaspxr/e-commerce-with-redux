@@ -12,6 +12,7 @@
   "dependencies": {
     "@cascadia-code/scroll-to-hash-element": "^2.0.2",
     "@reduxjs/toolkit": "^2.2.6",
+    "axios": "^1.7.4",
     "dotenv": "^16.4.5",
     "formik": "^2.4.6",
     "json-server": "^1.0.0-beta.1",
