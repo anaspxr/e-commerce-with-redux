@@ -8,7 +8,7 @@ const getUser = async (req, res) => {
 };
 
 const updateUser = async (req, res, next) => {
-  if (req.body.isAdmin) next(new CustomError("Invalid field - isAdmin", 400));
+  if (req.body.isAdmin) return next(new CustomError("Invalid field - isAdmin", 400));
   if (req.body.password) {
     const saltRounds = parseInt(process.env.SALT_ROUNDS, 10);
     const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
@@ -21,7 +21,7 @@ const updateUser = async (req, res, next) => {
     },
     { new: true }
   );
-  if (!updatedUser) next(new CustomError("User not found", 404));
+  if (!updatedUser) return next(new CustomError("User not found", 404));
   res.status(200).json(updatedUser);
 };
 

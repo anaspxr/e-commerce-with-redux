@@ -3,7 +3,7 @@ import CustomError from "../../utils/CustomError.js";
 
 const getAllOrdersOfUser = async (req, res, next) => {
   const orders = await Order.find({ userID: req.user.id });
-  if (!orders || orders.length === 0) next(new CustomError("No orders found", 404));
+  if (!orders || orders.length === 0) return next(new CustomError("No orders found", 404));
   res.status(200).json(orders);
 };
 
@@ -12,7 +12,7 @@ const getOrder = async (req, res, next) => {
     _id: req.params.orderID,
     userID: req.user.id,
   });
-  if (!order) next(new CustomError("Order not found", 404));
+  if (!order) return next(new CustomError("Order not found", 404));
   res.status(200).json(order);
 };
 
@@ -30,7 +30,7 @@ const cancelOrder = async (req, res, next) => {
     },
     { new: true }
   );
-  if (!updatedOrder) next(new CustomError("Order not found", 404));
+  if (!updatedOrder) return next(new CustomError("Order not found", 404));
   res.status(200).json(updatedOrder);
 };
 

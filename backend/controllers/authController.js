@@ -18,12 +18,12 @@ const createUser = async (req, res) => {
 const login = async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    next(new CustomError("User does not exist", 404));
+    return next(new CustomError("User does not exist", 404));
   }
   // compare password from body and the hashed password from db
   const isMatch = await bcrypt.compare(req.body.password, user.password);
   if (!isMatch) {
-    next(new CustomError("Invalid credentials", 400));
+    return next(new CustomError("Invalid credentials", 400));
   }
   // if password matches, generate a JWT token and send back to the client
   const accessToken = jwt.sign(

@@ -8,7 +8,7 @@ const getAllWishlists = async (req, res) => {
 
 const getUserWishlist = async (req, res, next) => {
   const wishList = await WishList.findOne({ userID: req.params.id });
-  if (!wishList) next(new CustomError("Wishlist not found", 404));
+  if (!wishList) return next(new CustomError("Wishlist not found", 404));
   res.status(200).json(wishList);
 };
 

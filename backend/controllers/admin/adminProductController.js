@@ -15,13 +15,13 @@ const updateProduct = async (req, res, next) => {
     },
     { new: true }
   );
-  if (!updatedProduct) next(new CustomError("Product not found", 404));
+  if (!updatedProduct) return next(new CustomError("Product not found", 404));
   res.status(200).json({ message: "Product updates successfully", updatedProduct });
 };
 
 const deleteProduct = async (req, res, next) => {
   const deletedProduct = await Product.findByIdAndDelete(req.params.id);
-  if (!deletedProduct) next(new CustomError("Product not found", 404));
+  if (!deletedProduct) return next(new CustomError("Product not found", 404));
   res.status(200).send({ message: "Product has been deleted", deletedProduct });
 };
 

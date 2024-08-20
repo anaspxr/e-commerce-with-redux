@@ -8,13 +8,13 @@ const getAllOrders = async (req, res) => {
 
 const getAllOrdersOfUser = async (req, res, next) => {
   const orders = await Order.find({ userID: req.params.id });
-  if (!orders || orders.length === 0) next(new CustomError("No orders found", 404));
+  if (!orders || orders.length === 0) return next(new CustomError("No orders found", 404));
   res.status(200).json(orders);
 };
 
 const getOrder = async (req, res, next) => {
   const order = await Order.findById(req.params.id);
-  if (!order) next(new CustomError("Order not found", 404));
+  if (!order) return next(new CustomError("Order not found", 404));
   res.status(200).json(order);
 };
 
@@ -26,13 +26,13 @@ const updateOrder = async (req, res, next) => {
     },
     { new: true }
   );
-  if (!updatedOrder) next(new CustomError("Order not found", 404));
+  if (!updatedOrder) return next(new CustomError("Order not found", 404));
   res.status(200).json(updatedOrder);
 };
 
 const deleteOrder = async (req, res, next) => {
   const deleted = await Order.findByIdAndDelete(req.params.orderID);
-  if (!deleted) next(new CustomError("Order not found", 404));
+  if (!deleted) return next(new CustomError("Order not found", 404));
   res.status(200).json("Order has been deleted");
 };
 export { getAllOrders, getAllOrdersOfUser, getOrder, updateOrder, deleteOrder };

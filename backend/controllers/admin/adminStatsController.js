@@ -56,7 +56,7 @@ const getMonthlyRevenue = async (req, res, next) => {
       },
     },
   ]);
-  if (!stats) next(new CustomError("No data found", 404));
+  if (!stats) return next(new CustomError("No data found", 404));
   res.status(200).json({ year, stats });
 };
 
@@ -76,7 +76,7 @@ const getYearlyRevenue = async (req, res, next) => {
       },
     },
   ]);
-  if (!stats) next(new CustomError("No data found", 404));
+  if (!stats) return next(new CustomError("No data found", 404));
   res.status(200).json({ stats });
 };
 
@@ -90,7 +90,7 @@ const getTotalRevenue = async (req, res, next) => {
       },
     },
   ]);
-  if (!stats) next(new CustomError("No data found", 404));
+  if (!stats) return next(new CustomError("No data found", 404));
   res.status(200).json({ stats });
 };
 
@@ -112,7 +112,7 @@ const getMostSold = async (req, res, next) => {
       $limit: 5,
     },
   ]);
-  if (!stats) next(new CustomError("No data found", 404));
+  if (!stats) return next(new CustomError("No data found", 404));
   res.status(200).json({ stats });
 };
 

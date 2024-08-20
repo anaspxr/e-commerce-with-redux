@@ -35,8 +35,8 @@ const updateReview = async (req, res, next) => {
 
 const deleteReview = async (req, res, next) => {
   const deletedReview = await Review.findOneAndDelete({
+    _id: req.params.reviewID,
     userID: req.user.id,
-    productID: req.params.productID,
   });
   if (!deletedReview) return next(new CustomError("Review not found", 404));
   res.status(200).json(deletedReview);

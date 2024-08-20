@@ -36,6 +36,6 @@ router.delete("/wishlist", verifyToken, tryCatch(removeFromWishlist)); // remove
 
 router.post("/review/:productID", verifyToken, tryCatch(createReview)); // create a review for a product
 router.patch("/review/:productID", verifyToken, tryCatch(updateReview)); // update a review for a product
-router.delete("/review/:productID", verifyToken, tryCatch(deleteReview)); // delete a review for a product
+router.delete("/review/:reviewID", verifyToken, tryCatch(deleteReview)); // delete a review for a product
 
 export default router;

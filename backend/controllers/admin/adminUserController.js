@@ -1,4 +1,5 @@
 import User from "../../schema/userSchema.js";
+import Review from "../../schema/reviewSchema.js";
 import bcrypt from "bcryptjs";
 import CustomError from "../../utils/CustomError.js";
 
@@ -9,7 +10,7 @@ const getAllUsers = async (req, res) => {
 
 const getUser = async (req, res, next) => {
   const user = await User.findById(req.params.id);
-  if (!user) next(new CustomError("User not found", 404));
+  if (!user) return next(new CustomError("User not found", 404));
   res.status(200).json({ user });
 };
 
@@ -26,14 +27,20 @@ const updateUser = async (req, res, next) => {
     },
     { new: true }
   );
-  if (!updatedUser) next(new CustomError("User not found", 404));
+  if (!updatedUser) return next(new CustomError("User not found", 404));
   res.status(200).json(updatedUser);
 };
 
 const deleteUser = async (req, res, next) => {
   const user = await User.findByIdAndDelete(req.params.id);
-  if (!user) next(new CustomError("User not found", 404));
+  if (!user) return next(new CustomError("User not found", 404));
   res.status(200).json({ message: "User has been deleted", user });
 };
 
-export { getAllUsers, getUser, deleteUser, updateUser };
+const deleteReview = async (req, res, next) => {
+  const deletedReview = await Review.findByIdAndDelete(req.params.reviewID);
+  if (!deletedReview) return next(new CustomError("Review not found", 404));
+  res.status(200).json(deletedReview);
+};
+
+export { getAllUsers, getUser, deleteUser, updateUser, deleteReview };
