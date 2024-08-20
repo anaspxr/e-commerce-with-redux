@@ -1,4 +1,5 @@
 import Product from "../schema/productSchema.js";
+import Review from "../schema/reviewSchema.js";
 import CustomError from "../utils/CustomError.js";
 
 const getProducts = async (req, res) => {
@@ -23,10 +24,19 @@ const getProducts = async (req, res) => {
 };
 
 const getProductById = async (req, res, next) => {
-  const id = req.params.id;
+  const id = req.params.productID;
   const product = await Product.findById(id);
   if (!product) return next(new CustomError("Product not found", 404));
   res.status(200).json({ product });
 };
 
-export { getProducts, getProductById };
+const getReviewsOfProduct = async (req, res, next) => {
+  const reviews = await Review.find({ productID: req.params.productID }).populate(
+    "userID",
+    "name email"
+  );
+  if (!reviews) return next(new CustomError("Reviews not found", 404));
+  res.status(200).json(reviews);
+};
+
+export { getProducts, getProductById, getReviewsOfProduct };

@@ -26,7 +26,7 @@ const getMonthlyUsers = async (req, res, next) => {
       },
     },
   ]);
-  if (stats) next(new CustomError("No data found", 404));
+  if (!stats) return next(new CustomError("No data found", 404));
   res.status(200).json({ year, stats });
 };
 

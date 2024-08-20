@@ -1,5 +1,3 @@
-// accepts status code and message for error and create the error object in standardized format
-
 class CustomError extends Error {
   constructor(message, statusCode) {
     super(message);
