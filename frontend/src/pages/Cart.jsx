@@ -14,7 +14,7 @@ export default function Cart() {
   const navigate = useNavigate();
   const totalAmount = Object.keys(cart).reduce((acc, productID) => {
     const product = products?.find((item) => item.id === productID);
-    return acc + Number(product?.discountPrice) * Number(cart[productID]);
+    return acc + Number(product?.price) * Number(cart[productID]);
   }, 0);
   const oldAmount = Object.keys(cart).reduce((acc, productID) => {
     const product = products?.find((item) => item.id === productID);
@@ -33,25 +33,19 @@ export default function Cart() {
   return (
     <div className="p-5">
       {Object.keys(cart).length === 0 ? (
-        <h1 className="text-3xl text-orange-900 text-center mb-10">
-          Your cart is empty
-        </h1>
+        <h1 className="text-3xl text-orange-900 text-center mb-10">Your cart is empty</h1>
       ) : (
         <>
           {loading && <p>Loading...</p>}
           {error && <p>{error.message}</p>}
           {products && (
             <>
-              <h1 className="text-3xl text-orange-900 text-center mb-10">
-                Cart
-              </h1>
+              <h1 className="text-3xl text-orange-900 text-center mb-10">Cart</h1>
 
               <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-5">
                 {Object.keys(cart).map((productID) => {
-                  const product = products.find(
-                    (item) => item.id === productID
-                  );
-                  const total = product?.discountPrice * cart[productID];
+                  const product = products.find((item) => item.id === productID);
+                  const total = product?.price * cart[productID];
                   const oldTotal = product?.oldPrice * cart[productID];
                   return (
                     <div key={productID}>
@@ -60,8 +54,7 @@ export default function Cart() {
                       ) : (
                         <div
                           key={productID}
-                          className="flex flex-col justify-between bg-white overflow-hidden "
-                        >
+                          className="flex flex-col justify-between bg-white overflow-hidden ">
                           <img
                             className=" w-full h-60 object-cover"
                             src={product.image}
@@ -72,9 +65,7 @@ export default function Cart() {
                             <div>
                               <h1 className="text-xl">{product.name}</h1>
                               <div className=" flex flex-wrap gap-5">
-                                <span className="text-orange-500">
-                                  ₹{product.discountPrice}
-                                </span>
+                                <span className="text-orange-500">₹{product.price}</span>
                                 <span className="text-gray-400 line-through">
                                   ₹{product.oldPrice}
                                 </span>
@@ -92,8 +83,7 @@ export default function Cart() {
                                       })
                                     );
                                   }}
-                                  className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300"
-                                >
+                                  className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300">
                                   +
                                 </button>
                                 <button
@@ -105,15 +95,12 @@ export default function Cart() {
                                       })
                                     );
                                   }}
-                                  className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300"
-                                >
+                                  className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300">
                                   -
                                 </button>
                               </div>
                               <div className=" flex flex-wrap gap-5">
-                                <span className="text-green-500">
-                                  Total: ₹{total}
-                                </span>
+                                <span className="text-green-500">Total: ₹{total}</span>
                                 <span className="text-gray-400 line-through">
                                   ₹{oldTotal}
                                 </span>
@@ -137,15 +124,12 @@ export default function Cart() {
 
                 <div className="flex flex-col">
                   <div className="mt-5">
-                    <p className="text-green-500 text-xl">
-                      Total: ₹{totalAmount + 200}
-                    </p>
+                    <p className="text-green-500 text-xl">Total: ₹{totalAmount + 200}</p>
                     <p className="text-gray-400 line-through">₹{oldAmount} </p>
                   </div>
                   <button
                     onClick={handleCheckout}
-                    className="bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5"
-                  >
+                    className="bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5">
                     {currentUser ? "Checkout" : "Login to Checkout"}
                   </button>
                 </div>

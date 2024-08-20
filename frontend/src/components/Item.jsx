@@ -7,11 +7,11 @@ export default function Item({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart.cartItems);
-  const added = Object.keys(cart).includes(product.id);
+  const added = cart && Object.keys(cart)?.includes(product.id);
   const currentUser = useSelector((state) => state.user.currentUser);
 
-  function calculateDiscountPrice(oldPrice, discountPrice) {
-    return Math.floor(((oldPrice - discountPrice) / oldPrice) * 100);
+  function calculateDiscountPrice(oldPrice, price) {
+    return Math.floor(((oldPrice - price) / oldPrice) * 100);
   }
 
   function handleBuyNow(id) {
@@ -44,34 +44,28 @@ export default function Item({ product }) {
         <div>
           <Link
             to={`/products/${product.id}`}
-            className="sm:text-lg lg:text-xl text-orange-900 hover:text-orange-600"
-          >
+            className="sm:text-lg lg:text-xl text-orange-900 hover:text-orange-600">
             {product.name}
           </Link>
           <div className=" flex flex-wrap gap-x-5">
-            <span className="text-orange-600"> ₹{product.discountPrice}</span>
-            <span className="text-gray-400 line-through">
-              ₹{product.oldPrice}
-            </span>
+            <span className="text-orange-600"> ₹{product.price}</span>
+            <span className="text-gray-400 line-through">₹{product.oldPrice}</span>
           </div>
           <p className="text-green-800">
-            {calculateDiscountPrice(product.oldPrice, product.discountPrice)}%
-            off
+            {calculateDiscountPrice(product.oldPrice, product.price)}% off
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <button
             onClick={handleAddToCart}
-            className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm"
-          >
+            className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm">
             {added ? "Go to Cart" : "Add to Cart"}
           </button>
           <button
             onClick={() => {
               handleBuyNow(product.id);
             }}
-            className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm"
-          >
+            className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm">
             Buy Now
           </button>
         </div>

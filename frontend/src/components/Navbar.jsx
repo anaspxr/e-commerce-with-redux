@@ -102,9 +102,7 @@ export default function Navbar() {
         </Link>
         <Link className="sm:hidden" to="/">
           <img
-            className={`h-9 ${
-              scrolled ? "md:h-14" : "md:h-16 "
-            } transition-[height] duration-700 `}
+            className={`h-9 ${scrolled ? "md:h-14" : "md:h-16 "} transition-[height] duration-700 `}
             src={logoSmall}
             alt="Comfort Craft"
           />
@@ -113,20 +111,13 @@ export default function Navbar() {
 
       <div className="2xl:flex items-center gap-5 hidden text-orange-950">
         {menuItems.map((item, i) => (
-          <NavLink
-            end
-            key={i}
-            className="flex flex-col justify-center items-center"
-            to={item.to}
-          >
+          <NavLink end key={i} className="flex flex-col justify-center items-center" to={item.to}>
             {({ isActive }) => {
               //? for the active tab indicator
               return (
                 <>
                   {item.title}
-                  {isActive && (
-                    <hr className="border-none rounded-sm h-1 bg-orange-900 w-5/6" />
-                  )}
+                  {isActive && <hr className="border-none rounded-sm h-1 bg-orange-900 w-5/6" />}
                 </>
               );
             }}
@@ -153,7 +144,7 @@ export default function Navbar() {
               <MdOutlineShoppingCart className="text-3xl text-orange-900 hover:text-orange-700" />
             </Link>
             <div className="w-4 h-4 flex justify-center items-center text-sm -ml-4 -mt-1 rounded-full bg-orange-600 text-white">
-              {Object.keys(cart).length}
+              {(cart && Object.keys(cart)?.length) || 0}
             </div>
           </div>
         )}
@@ -251,10 +242,7 @@ function DropDown() {
     };
   }, []);
   return (
-    <div
-      id="categoryButton"
-      className="hidden md:inline-block 2xl:hidden relative text-left "
-    >
+    <div id="categoryButton" className="hidden md:inline-block 2xl:hidden relative text-left ">
       <div>
         <button
           onClick={() => {

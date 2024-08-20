@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { addressSchema } from "../schemas/validationSchemas";
 import { useEffect, useState } from "react";
-import useFetch from "../utils/useFetch";
+import useFetch from "../utils/useFetch.js";
 import { useSelector } from "react-redux";
 import PopUpAlert from "./PopUpAlert";
 
@@ -13,16 +13,13 @@ export default function Address() {
   );
 
   async function updateAddress(value) {
-    const response = await fetch(
-      `http://localhost:3000/users/${currentUser.id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ address: value }),
-      }
-    );
+    const response = await fetch(`http://localhost:3000/users/${currentUser.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ address: value }),
+    });
     if (response.ok) {
       setShowAlert({ message: "Address Updated...!" });
     } else {
@@ -77,9 +74,7 @@ export default function Address() {
           <form className="flex flex-col gap-2">
             {fields.map((field) => (
               <div key={field}>
-                {editOpen && (
-                  <label htmlFor={field}>{field.toUpperCase()}</label>
-                )}
+                {editOpen && <label htmlFor={field}>{field.toUpperCase()}</label>}
                 <input
                   disabled={!editOpen}
                   className={`w-full p-2 border rounded-sm ${
@@ -107,8 +102,7 @@ export default function Address() {
               disabled={!editOpen}
               type="submit"
               onClick={handleSubmit}
-              className="bg-orange-500 hover:opacity-90 text-white px-4 py-2 rounded-md mt-5 h-fit disabled:bg-opacity-70 "
-            >
+              className="bg-orange-500 hover:opacity-90 text-white px-4 py-2 rounded-md mt-5 h-fit disabled:bg-opacity-70 ">
               Update
             </button>
             <button
@@ -118,8 +112,7 @@ export default function Address() {
                 }
                 setEditOpen(!editOpen);
               }}
-              className="bg-orange-500 hover:opacity-90 text-white px-4 py-2 rounded-md mt-5 h-fit"
-            >
+              className="bg-orange-500 hover:opacity-90 text-white px-4 py-2 rounded-md mt-5 h-fit">
               {editOpen ? "Cancel" : "Edit"}
             </button>
           </div>

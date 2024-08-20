@@ -21,8 +21,8 @@ export default function Product() {
       return item.id === productID;
     });
 
-  function calculateDiscountPrice(oldPrice, discountPrice) {
-    return Math.floor(((oldPrice - discountPrice) / oldPrice) * 100);
+  function calculateDiscountPrice(oldPrice, price) {
+    return Math.floor(((oldPrice - price) / oldPrice) * 100);
   }
   function handleBuyNow(id) {
     dispatch(addToBuy({ [id]: 1 }));
@@ -46,9 +46,7 @@ export default function Product() {
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
       {!error && !loading && !product && (
-        <h1 className="text-red-500 text-center text-xl ">
-          Product not found!!
-        </h1>
+        <h1 className="text-red-500 text-center text-xl ">Product not found!!</h1>
       )}
       {product && (
         <>
@@ -61,24 +59,13 @@ export default function Product() {
               />
             </div>
             <div className="flex flex-col items-center">
-              <h1 className="text-2xl text-orange-950 font-semibold">
-                {product.name}
-              </h1>
+              <h1 className="text-2xl text-orange-950 font-semibold">{product.name}</h1>
               <div className=" flex flex-wrap gap-5">
-                <span className="text-orange-500">
-                  {" "}
-                  ₹{product.discountPrice}
-                </span>
-                <span className="text-gray-400 line-through">
-                  ₹{product.oldPrice}
-                </span>
+                <span className="text-orange-500"> ₹{product.price}</span>
+                <span className="text-gray-400 line-through">₹{product.oldPrice}</span>
               </div>
               <p className="text-green-800">
-                {calculateDiscountPrice(
-                  product.oldPrice,
-                  product.discountPrice
-                )}
-                % off
+                {calculateDiscountPrice(product.oldPrice, product.price)}% off
               </p>
               <p className="text-lg font-semibold text-orange-950">
                 {product.description}
@@ -87,16 +74,14 @@ export default function Product() {
             <div className="flex justify-center gap-10 mt-5">
               <button
                 onClick={handleAddToCart}
-                className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300"
-              >
+                className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300">
                 {added ? "Go to Cart" : "Add to Cart"}
               </button>
               <button
                 onClick={() => {
                   handleBuyNow(productID);
                 }}
-                className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300"
-              >
+                className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300">
                 Buy Now
               </button>
             </div>

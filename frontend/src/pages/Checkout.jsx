@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Address from "../components/Address";
 import { ProductContext } from "../contexts/ProductContext";
-import useFetch from "../utils/useFetch";
+import useFetch from "../utils/useFetch.js";
 import { useDispatch, useSelector } from "react-redux";
 import {
   buyQuantityMinus,
@@ -26,7 +26,7 @@ export default function Checkout() {
 
   const totalAmount = Object.keys(buyItems).reduce((acc, productID) => {
     const product = products?.find((item) => item.id === productID);
-    return acc + Number(product.discountPrice) * Number(buyItems[productID]);
+    return acc + Number(product.price) * Number(buyItems[productID]);
   }, 0);
   const oldAmount = Object.keys(buyItems).reduce((acc, productID) => {
     const product = products?.find((item) => item.id === productID);
@@ -49,9 +49,7 @@ export default function Checkout() {
                   setProgress("address");
                 }
               }}
-              className={`text-xl cursor-pointer ${
-                progress === "items" && "hidden"
-              }`}
+              className={`text-xl cursor-pointer ${progress === "items" && "hidden"}`}
             />
           </div>
           {progress === "items" && <Items buyItems={buyItems} />}
@@ -68,9 +66,7 @@ export default function Checkout() {
 
             <div className="flex gap-x-5 flex-col">
               <div className="mt-5">
-                <p className="text-green-500 text-xl">
-                  Total: ₹{totalAmount + 200}
-                </p>
+                <p className="text-green-500 text-xl">Total: ₹{totalAmount + 200}</p>
                 <p className="text-gray-400 line-through">₹{oldAmount} </p>
               </div>
               {progress === "items" && (
@@ -78,8 +74,7 @@ export default function Checkout() {
                   onClick={() => {
                     setProgress("address");
                   }}
-                  className="bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit md:text-base text-xs"
-                >
+                  className="bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit md:text-base text-xs">
                   Confirm items
                 </button>
               )}
@@ -88,8 +83,7 @@ export default function Checkout() {
                   onClick={() => {
                     setProgress("payment");
                   }}
-                  className="disabled:bg-opacity-50 bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit md:text-base text-xs disabled:cursor-not-allowed"
-                >
+                  className="disabled:bg-opacity-50 bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit md:text-base text-xs disabled:cursor-not-allowed">
                   Proceed to Payment
                 </button>
               )}
@@ -101,8 +95,7 @@ export default function Checkout() {
                     dispatch(clearBuy());
                     navigate("/");
                   }}
-                  className="disabled:bg-opacity-50 bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit md:text-base text-xs disabled:cursor-not-allowed"
-                >
+                  className="disabled:bg-opacity-50 bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit md:text-base text-xs disabled:cursor-not-allowed">
                   Pay ₹{totalAmount + 200}
                 </button>
               )}
@@ -121,13 +114,12 @@ function Items({ buyItems }) {
     <div className="m-auto max-w-3xl flex flex-wrap gap-3 p-2 justify-center">
       {Object.keys(buyItems).map((productID) => {
         const product = products?.find((item) => item.id === productID);
-        const total = product.discountPrice * buyItems[productID];
+        const total = product.price * buyItems[productID];
         return (
           <div key={productID} className="shadow-md p-1 rounded-sm">
             <div
               key={productID}
-              className="flex flex-col justify-between bg-white overflow-hidden "
-            >
+              className="flex flex-col justify-between bg-white overflow-hidden ">
               <img
                 className="w-52 h-32 object-cover"
                 src={product.image}
@@ -141,16 +133,14 @@ function Items({ buyItems }) {
                     onClick={() => {
                       dispatch(buyQuantityPlus(productID));
                     }}
-                    className="bg-orange-200 h-7 w-7 rounded-md mr-1 hover:bg-orange-300"
-                  >
+                    className="bg-orange-200 h-7 w-7 rounded-md mr-1 hover:bg-orange-300">
                     +
                   </button>
                   <button
                     onClick={() => {
                       dispatch(buyQuantityMinus(productID));
                     }}
-                    className="bg-orange-200 h-7 w-7 rounded-md hover:bg-orange-300"
-                  >
+                    className="bg-orange-200 h-7 w-7 rounded-md hover:bg-orange-300">
                     -
                   </button>
                 </p>

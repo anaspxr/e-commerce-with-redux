@@ -1,4 +1,4 @@
-import useFetch from "../utils/useFetch";
+import useFetch from "../utils/useFetch.js";
 import { Link } from "react-router-dom";
 
 export default function Admin() {
@@ -14,16 +14,14 @@ export default function Admin() {
   } = useFetch("http://localhost:3000/products");
 
   const totalOrders =
-    users &&
-    users.reduce((total, user) => total + Object.keys(user.orders).length, 0);
+    users && users.reduce((total, user) => total + Object.keys(user.orders).length, 0);
 
   return (
     <div>
       <div className="grid  md:grid-cols-2 gap-2">
         <Link
           to="/admin/users"
-          className="bg-slate-200 px-2 py-5 rounded-md text-slate-500 hover:bg-slate-300"
-        >
+          className="bg-slate-200 px-2 py-5 rounded-md text-slate-500 hover:bg-slate-300">
           <p className="text-3xl mb-5">Users</p>
           {loadingUsers && <p>Loading...</p>}
           {errorUsers && <p>Error: {errorUsers.message}</p>}
@@ -31,8 +29,7 @@ export default function Admin() {
         </Link>
         <Link
           to="/admin/products"
-          className="bg-slate-200 px-2 py-5 rounded-md text-slate-500 hover:bg-slate-300"
-        >
+          className="bg-slate-200 px-2 py-5 rounded-md text-slate-500 hover:bg-slate-300">
           <p className="text-3xl mb-5">Products</p>
           {loadingProducts && <p>Loading...</p>}
           {errorProducts && <p>Error: {errorProducts.message}</p>}

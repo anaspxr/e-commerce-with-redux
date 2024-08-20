@@ -2,15 +2,11 @@ import { useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import { productSchema } from "../schemas/validationSchemas";
 import { handleAdd, handleEdit } from "../utils/serverUtils";
-import useFetch from "../utils/useFetch";
+import useFetch from "../utils/useFetch.js";
 import { useEffect, useState } from "react";
 export default function ProductEditPage() {
   const { id } = useParams();
-  const {
-    data: products,
-    loading,
-    error,
-  } = useFetch("http://localhost:3000/products");
+  const { data: products, loading, error } = useFetch("http://localhost:3000/products");
 
   const [preview, setPreview] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -52,11 +48,7 @@ export default function ProductEditPage() {
       {loading && <p>Loading...</p>}
       {error && <p>network error..</p>}
       <div className={`grid lg:${preview && "grid-cols-2"} gap-2 items-center`}>
-        <div>
-          {showForm && (
-            <ProductForm preview={preview} setPreview={setPreview} />
-          )}
-        </div>
+        <div>{showForm && <ProductForm preview={preview} setPreview={setPreview} />}</div>
         {preview && (
           <div id="preview">
             <div className="flex flex-col items-center bg-slate-200 my-2 p-2 rounded-md">
@@ -70,26 +62,21 @@ export default function ProductEditPage() {
               </div>
 
               <p className="text-lg">{preview.name}</p>
-              <p className="text-lg">₹{preview.discountPrice}</p>
+              <p className="text-lg">₹{preview.price}</p>
               <p>Old Price: ₹{preview.oldPrice}</p>
               <p>Category: {preview.category}</p>
               <p>Description: {preview.description}</p>
 
               <button
                 onClick={handleFinalSubmit}
-                className="bg-slate-500 hover:opacity-90 text-white p-2 rounded-md my-3 h-fit"
-              >
-                {id === "addproduct"
-                  ? "Confirm Add Product"
-                  : "Confirm Update Product"}
+                className="bg-slate-500 hover:opacity-90 text-white p-2 rounded-md my-3 h-fit">
+                {id === "addproduct" ? "Confirm Add Product" : "Confirm Update Product"}
               </button>
             </div>
           </div>
         )}
       </div>
-      {!showForm && !loading && !error && (
-        <p className="text-center">Not found!!</p>
-      )}
+      {!showForm && !loading && !error && <p className="text-center">Not found!!</p>}
     </div>
   );
 }
@@ -98,31 +85,24 @@ function ProductForm({ preview, setPreview }) {
   const initialValues = preview || {
     name: "",
     oldPrice: "",
-    discountPrice: "",
+    price: "",
     category: "",
     image: "",
     description: "",
   };
-  const {
-    handleChange,
-    handleSubmit,
-    errors,
-    touched,
-    handleBlur,
-    values,
-    setValues,
-  } = useFormik({
-    initialValues: initialValues,
-    validationSchema: productSchema,
-    onSubmit: (values) => {
-      setPreview(values);
-      window.scrollTo(0, document.body.scrollHeight);
-    },
-  });
+  const { handleChange, handleSubmit, errors, touched, handleBlur, values, setValues } =
+    useFormik({
+      initialValues: initialValues,
+      validationSchema: productSchema,
+      onSubmit: (values) => {
+        setPreview(values);
+        window.scrollTo(0, document.body.scrollHeight);
+      },
+    });
   const formInputs = [
     { name: "name", title: "Product Name", type: "text" },
     { name: "oldPrice", title: "Old Price", type: "number" },
-    { name: "discountPrice", title: "Discount Price", type: "number" },
+    { name: "price", title: "Discount Price", type: "number" },
     { name: "category", title: "Category", type: "text" },
     { name: "image", title: "Image Url", type: "text" },
     { name: "description", title: "Description", type: "text" },
@@ -136,8 +116,7 @@ function ProductForm({ preview, setPreview }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-lg m-auto flex flex-col bg-slate-200 text-slate-900 shadow-md p-5 rounded-md"
-    >
+      className="max-w-lg m-auto flex flex-col bg-slate-200 text-slate-900 shadow-md p-5 rounded-md">
       {formInputs.map((field) => {
         return (
           <div className="flex flex-col" key={field.name}>
@@ -159,8 +138,7 @@ function ProductForm({ preview, setPreview }) {
       })}
       <button
         type="submit"
-        className="bg-slate-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit"
-      >
+        className="bg-slate-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit">
         Show Preview
       </button>
     </form>

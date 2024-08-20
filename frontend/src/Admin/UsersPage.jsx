@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useFetch from "../utils/useFetch";
+import useFetch from "../utils/useFetch.js";
 import SearchField from "../components/SearchField";
 import getSearchResults from "../utils/getSearchResults";
 
@@ -60,9 +60,7 @@ export default function UsersPage() {
           ) : (
             <>
               {loadingProducts && <p>Loading</p>}
-              {errorProducts && (
-                <p>Error fetching products data {errorProducts} </p>
-              )}
+              {errorProducts && <p>Error fetching products data {errorProducts} </p>}
             </>
           )}
         </div>
@@ -91,8 +89,7 @@ function UsersList({ users, setSelectedUser }) {
         />
         <button
           className="bg-slate-500 text-white rounded-md p-1 text-sm my-3 hover:bg-opacity-90"
-          onClick={() => setToggle(!toggle)}
-        >
+          onClick={() => setToggle(!toggle)}>
           {toggle ? "Show Users" : "Show Admins"}
         </button>
       </div>
@@ -103,8 +100,7 @@ function UsersList({ users, setSelectedUser }) {
           .map((user) => (
             <li
               key={user.id}
-              className="flex justify-between sm p-2 bg-gray-200 rounded-md"
-            >
+              className="flex justify-between sm p-2 bg-gray-200 rounded-md">
               <div>
                 <p className="text-slate-500">{user.name}</p>
                 <p className="text-slate-700">{user.email}</p>
@@ -120,8 +116,7 @@ function UsersList({ users, setSelectedUser }) {
                   onClick={() => {
                     window.scrollTo(0, 0);
                     setSelectedUser(user);
-                  }}
-                >
+                  }}>
                   See Details
                 </button>
               )}
