@@ -10,6 +10,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/connectDB.js";
 import manageErrors from "./middlewares/manageErrors.js";
 import CustomError from "./utils/CustomError.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ const PORT = 3000;
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/auth", authRouter);
 app.use("/api/public", publicRouter);
