@@ -47,7 +47,7 @@ const login = async (req, res, next) => {
   // send refresh token as an HTTP-only cookie for better security
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: true,
+    secure: false, //todo change to true in production
     sameSite: "strict",
   });
 
@@ -66,6 +66,7 @@ const login = async (req, res, next) => {
 
 const refreshToken = async (req, res, next) => {
   const token = req.cookies.refreshToken;
+  console.log(req.cookies.refreshToken);
 
   if (!token) {
     return next(new CustomError("Refresh token not found", 401));
