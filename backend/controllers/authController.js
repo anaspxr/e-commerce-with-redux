@@ -34,7 +34,17 @@ const login = async (req, res, next) => {
     process.env.JWT_SEC,
     { expiresIn: "3d" }
   );
-  res.status(200).json({ accessToken });
+
+  // send only necessary user details
+  const userDetails = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    cart: user.cart,
+    orders: user.orders,
+  };
+
+  res.status(200).json({ accessToken, user: userDetails });
 };
 
 export { createUser, login };
