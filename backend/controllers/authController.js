@@ -66,7 +66,6 @@ const login = async (req, res, next) => {
 
 const refreshToken = async (req, res, next) => {
   const token = req.cookies.refreshToken;
-  console.log(req.cookies.refreshToken);
 
   if (!token) {
     return next(new CustomError("Refresh token not found", 401));
@@ -99,4 +98,9 @@ const refreshToken = async (req, res, next) => {
   res.status(200).json({ user: userDetails, accessToken });
 };
 
-export { createUser, login, refreshToken };
+const logout = async (req, res) => {
+  res.clearCookie("refreshToken");
+  res.status(200).json({ message: "Logged out successfully" });
+};
+
+export { createUser, login, refreshToken, logout };
