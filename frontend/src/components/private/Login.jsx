@@ -1,35 +1,17 @@
-import { useState } from "react";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../Store/userSlice";
-import axiosErrorCatch from "../../utils/axiosErrorCatch";
 
-export default function Login({ setAlert, setNewUser }) {
+export default function Login({ setNewUser }) {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const { loading } = useSelector((state) => state.user);
   const { values, handleChange, handleSubmit } = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     onSubmit: async (values) => {
-      setLoading(true);
-      try {
-        const { data } = await axios.post(
-          "http://localhost:3000/api/auth/login",
-          values,
-          { withCredentials: true }
-        );
-        dispatch(login(data)); //data contains user (user details) and accessToken
-      } catch (error) {
-        setAlert({
-          message: axiosErrorCatch(error),
-          type: "warning",
-        });
-      } finally {
-        setLoading(false);
-      }
+      dispatch(login(values));
     },
   });
 

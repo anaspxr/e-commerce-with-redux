@@ -26,8 +26,7 @@ import AdminContainer from "./Admin/AdminContainer";
 import ProductEditPage from "./Admin/ProductEditPage";
 import ProductContextProvider from "./contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
-import refreshToken from "./utils/refreshToken";
-import { login, setRedirectPath } from "./Store/userSlice";
+import { refreshToken, setRedirectPath } from "./Store/userSlice";
 
 function App() {
   return (
@@ -47,14 +46,8 @@ function ContentsWrapper() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    async function refresh() {
-      const data = await refreshToken();
-      if (data) {
-        dispatch(login(data));
-      }
-    }
-    refresh(); // Refresh the token on app load
-  });
+    dispatch(refreshToken());
+  }, [dispatch]);
 
   return (
     <>
