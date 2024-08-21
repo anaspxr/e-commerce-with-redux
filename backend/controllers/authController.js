@@ -20,31 +20,82 @@ const login = async (req, res, next) => {
   if (!user) {
     return next(new CustomError("User does not exist", 404));
   }
-  // compare password from body and the hashed password from db
+
   const isMatch = await bcrypt.compare(req.body.password, user.password);
   if (!isMatch) {
     return next(new CustomError("Invalid credentials", 400));
   }
-  // if password matches, generate a JWT token and send back to the client
+
+  // generate access token
   const accessToken = jwt.sign(
-    {
-      id: user._id,
-      isAdmin: user.isAdmin,
-    },
+    { id: user._id, isAdmin: user.isAdmin },
     process.env.JWT_SEC,
-    { expiresIn: "3d" }
+    { expiresIn: "15m" }
   );
 
-  // send only necessary user details
+  // generate refresh token
+  const refreshToken = jwt.sign(
+    { id: user._id, isAdmin: user.isAdmin },
+    process.env.JWT_REFRESH_SEC,
+    { expiresIn: "7d" }
+  );
+
+  // store the refresh token in the database
+  user.refreshToken = refreshToken;
+  await user.save();
+
+  // send refresh token as an HTTP-only cookie for better security
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+  });
+
+  // Send only necessary user details and the access token
   const userDetails = {
     _id: user._id,
     name: user.name,
     email: user.email,
+    isAdmin: user.isAdmin,
     cart: user.cart,
     orders: user.orders,
   };
 
-  res.status(200).json({ accessToken, user: userDetails });
+  res.status(200).json({ user: userDetails, accessToken });
 };
 
-export { createUser, login };
+const refreshToken = async (req, res, next) => {
+  const token = req.cookies.refreshToken;
+
+  if (!token) {
+    return next(new CustomError("Refresh token not found", 401));
+  }
+
+  const decoded = jwt.verify(token, process.env.JWT_REFRESH_SEC);
+
+  // check if the token matches the one stored in the database
+  const user = await User.findById(decoded.id);
+  if (user.refreshToken !== token) {
+    return next(new CustomError("Invalid refresh token", 403));
+  }
+
+  // Generate a new access token
+  const accessToken = jwt.sign(
+    { id: user._id, isAdmin: user.isAdmin },
+    process.env.JWT_SEC,
+    { expiresIn: "15m" }
+  );
+
+  const userDetails = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    cart: user.cart,
+    orders: user.orders,
+  };
+
+  res.status(200).json({ user: userDetails, accessToken });
+};
+
+export { createUser, login, refreshToken };
