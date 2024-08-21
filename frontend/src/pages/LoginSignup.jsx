@@ -9,7 +9,9 @@ export default function LoginSignup() {
   const [newUser, setNewUser] = useState(false);
   const [alert, setAlert] = useState(null);
 
-  const { currentUser, error, redirectPath } = useSelector((state) => state.user);
+  const { currentUser, error, redirectPath } = useSelector(
+    (state) => state.user
+  );
   const navigate = useNavigate();
   useEffect(() => {
     if (currentUser) {
@@ -29,7 +31,7 @@ export default function LoginSignup() {
       {newUser ? (
         <SignUp setAlert={setAlert} setNewUser={setNewUser} />
       ) : (
-        <Login setNewUser={setNewUser} />
+        <Login setAlert={setAlert} setNewUser={setNewUser} />
       )}
     </div>
   );

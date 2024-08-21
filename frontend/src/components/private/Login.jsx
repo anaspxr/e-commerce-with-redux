@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../Store/userSlice";
 
-export default function Login({ setNewUser }) {
+export default function Login({ setAlert, setNewUser }) {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.user);
   const { values, handleChange, handleSubmit } = useFormik({
@@ -58,6 +58,7 @@ export default function Login({ setNewUser }) {
         Do not have an account?
         <span
           onClick={() => {
+            setAlert(null);
             setNewUser(true);
           }}
           className="text-orange-700 underline cursor-pointer hover:text-orange-500">

@@ -33,7 +33,7 @@ const userSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload;
       });
     builder // logout
       .addCase(logout.pending, (state) => {
@@ -48,7 +48,7 @@ const userSlice = createSlice({
       })
       .addCase(logout.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload;
       });
     builder //refreshToken
       .addCase(refreshToken.fulfilled, (state, action) => {
@@ -63,9 +63,13 @@ export const login = createAsyncThunk(
   "user/login",
   async (values, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post("http://localhost:3000/api/auth/login", values, {
-        withCredentials: true,
-      });
+      const { data } = await axios.post(
+        "http://localhost:3000/api/auth/login",
+        values,
+        {
+          withCredentials: true,
+        }
+      );
       return data; //data contains user (user details) and accessToken
     } catch (error) {
       return rejectWithValue(axiosErrorCatch(error));
@@ -73,19 +77,22 @@ export const login = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk("user/logout", async (_, { rejectWithValue }) => {
-  try {
-    return await axios.post(
-      "http://localhost:3000/api/auth/logout",
-      {},
-      {
-        withCredentials: true,
-      }
-    );
-  } catch (error) {
-    return rejectWithValue(axiosErrorCatch(error));
+export const logout = createAsyncThunk(
+  "user/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await axios.post(
+        "http://localhost:3000/api/auth/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+    } catch (error) {
+      return rejectWithValue(axiosErrorCatch(error));
+    }
   }
-});
+);
 
 export const refreshToken = createAsyncThunk(
   "user/refreshToken",
@@ -98,7 +105,10 @@ export const refreshToken = createAsyncThunk(
           withCredentials: true, // Ensures cookies are included in the request
         }
       );
-      return { user: response.data.user, accessToken: response.data.accessToken };
+      return {
+        user: response.data.user,
+        accessToken: response.data.accessToken,
+      };
     } catch (error) {
       return rejectWithValue(console.log(axiosErrorCatch(error)));
     }
