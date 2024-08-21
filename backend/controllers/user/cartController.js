@@ -4,7 +4,7 @@ import CustomError from "../../utils/CustomError.js";
 const getCartOfUser = async (req, res, next) => {
   const data = await Cart.findOne({ userID: req.user.id }).populate({
     path: "products.productID",
-    select: "name price image", // fields to get from populate
+    select: "name price image oldPrice", // fields to get from populate
   });
 
   if (data) {

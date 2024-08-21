@@ -1,10 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axiosErrorCatch from "../utils/axiosErrorCatch";
+import axios from "axios";
 
 const initialState = {
-  cartItems: {},
-  buyItems: {},
-  fetchStatus: "idle",
-  updateStatus: "idle",
+  cartItems: [],
+  buyItems: [],
+  fetching: false,
+  updating: false,
+  error: null,
 };
 
 const updateServerSide = async (newCart, userID) => {
@@ -67,48 +70,34 @@ const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getServerCart.pending, (state) => {
-        state.fetchStatus = "pending";
+        state.fetching = true;
       })
       .addCase(getServerCart.fulfilled, (state, action) => {
-        state.fetchStatus = "idle";
+        state.fetching = false;
         state.cartItems = action.payload;
       })
-      .addCase(getServerCart.rejected, (state) => {
-        state.fetchStatus = "error";
+      .addCase(getServerCart.rejected, (state, action) => {
+        state.fetching = false;
+        state.error = action.payload;
       });
   },
 });
 
 export const getServerCart = createAsyncThunk(
   "cart/getServerCart",
-  async (userID) => {
+  async (accessToken, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:3000/users/${userID}`);
-      if (!response.ok) throw new Error("failed to fetch data");
-      const data = await response.json();
-      if (data.cart && Object.keys(data.cart).length > 0) return data.cart;
-    } catch (error) {
-      console.log(error);
+      const { data } = await axios.get("http://localhost:3000/api/user/cart", {
+        headers: {
+          token: `Bearer ${accessToken}`,
+        },
+      });
+      return data.products;
+    } catch (err) {
+      rejectWithValue(axiosErrorCatch(err));
     }
   }
 );
-
-// export const updateServerCart = createAsyncThunk(
-//   "cart/updateServerCart",
-//   async (amount)=>{
-//     try{
-//       const res = fetch(`http://localhost:3000/users/${userID}`, {
-//         method: "PATCH",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ cart: newCart }),
-//       });
-//     }catch(error){
-//       console.log(error);
-//     }
-//   }
-// )
 
 export const {
   setWholeCart,
