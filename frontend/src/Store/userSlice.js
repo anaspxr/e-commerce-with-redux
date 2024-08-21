@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   currentUser: null,
   isAdmin: false,
+  accessToken: null,
   redirectPath: "/",
 };
 
@@ -11,27 +12,22 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      localStorage.setItem("currentUser", JSON.stringify(action.payload));
-      state.isAdmin = action.payload.isAdmin;
-      state.currentUser = action.payload;
+      state.accessToken = action.payload.accessToken;
+      state.currentUser = action.payload.user;
+      state.isAdmin = action.payload.user.isAdmin;
     },
     logout: (state) => {
-      localStorage.removeItem("currentUser");
+      // clear the accessToken and reset all states
+      state.accessToken = null;
       state.currentUser = null;
+      state.isAdmin = false;
     },
     setRedirectPath: (state, action) => {
       state.redirectPath = action.payload;
     },
-    checkLocalUser: (state) => {
-      const userExists = JSON.parse(localStorage.getItem("currentUser"));
-      if (userExists) {
-        state.currentUser = userExists;
-      }
-    },
   },
 });
 
-export const { login, logout, setRedirectPath, checkLocalUser } =
-  userSlice.actions;
+export const { login, logout, setRedirectPath } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 import { login } from "../../Store/userSlice";
+import axiosErrorCatch from "../../utils/axiosErrorCatch";
 
 export default function Login({ setAlert, setNewUser }) {
   const dispatch = useDispatch();
@@ -14,43 +16,27 @@ export default function Login({ setAlert, setNewUser }) {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:3000/users");
-        if (!response.ok) {
-          throw new Error("Failed to fetch");
-        }
-        const users = await response.json();
-        const user = users.find(
-          (user) =>
-            user.email === values.email && user.password === values.password
+        const { data } = await axios.post(
+          "http://localhost:3000/api/auth/login",
+          values,
+          { withCredentials: true }
         );
-        if (user) {
-          dispatch(
-            login({
-              email: user.email,
-              name: user.name,
-              isAdmin: user.isAdmin,
-              id: user.id,
-            })
-          );
-        } else {
-          setAlert({ message: "Invalid credentials", type: "warning" });
-        }
+        dispatch(login(data)); //data contains user (user details) and accessToken
       } catch (error) {
         setAlert({
-          message: "Failed to fetch" + error.message,
+          message: axiosErrorCatch(error),
           type: "warning",
         });
+      } finally {
         setLoading(false);
       }
-      setLoading(false);
     },
   });
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white shadow-lg border p-5 sm:w-[500px] w-5/6 flex flex-col items-center justify-center rounded-lg mb-20"
-    >
+      className="bg-white shadow-lg border p-5 sm:w-[500px] w-5/6 flex flex-col items-center justify-center rounded-lg mb-20">
       <h1 className="text-2xl text-orange-900">Login</h1>
       <div className="w-full my-2">
         <label className="text-orange-900" htmlFor="email">
@@ -83,8 +69,7 @@ export default function Login({ setAlert, setNewUser }) {
       <button
         disabled={loading}
         type="submit"
-        className="bg-orange-700 text-white p-2 rounded-md hover:bg-orange-600 transition duration-300 w-full my-4"
-      >
+        className="bg-orange-700 text-white p-2 rounded-md hover:bg-orange-600 transition duration-300 w-full my-4">
         {loading ? "Loading..." : "Login"}
       </button>
       <p className="text-orange-900">
@@ -93,8 +78,7 @@ export default function Login({ setAlert, setNewUser }) {
           onClick={() => {
             setNewUser(true);
           }}
-          className="text-orange-700 underline cursor-pointer hover:text-orange-500"
-        >
+          className="text-orange-700 underline cursor-pointer hover:text-orange-500">
           Sign up
         </span>
       </p>

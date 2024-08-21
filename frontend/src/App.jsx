@@ -26,8 +26,8 @@ import AdminContainer from "./Admin/AdminContainer";
 import ProductEditPage from "./Admin/ProductEditPage";
 import ProductContextProvider from "./contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
-import { checkLocalUser, setRedirectPath } from "./Store/userSlice";
-import { getServerCart } from "./Store/cartSlice";
+import refreshToken from "./utils/refreshToken";
+import { login, setRedirectPath } from "./Store/userSlice";
 
 function App() {
   return (
@@ -45,17 +45,16 @@ function ContentsWrapper() {
   const location = useLocation();
   const isAdminPage = location.pathname.includes("/admin");
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.user.currentUser);
 
   useEffect(() => {
-    dispatch(checkLocalUser());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (currentUser) {
-      dispatch(getServerCart(currentUser.id));
+    async function refresh() {
+      const data = await refreshToken();
+      if (data) {
+        dispatch(login(data));
+      }
     }
-  }, [currentUser, dispatch]);
+    refresh(); // Refresh the token on app load
+  });
 
   return (
     <>
@@ -69,24 +68,12 @@ function ContentsWrapper() {
             <Route path="/" element={<Home />} />
             <Route path="/products">
               <Route index element={<Products category="furniture" />} />
-              <Route
-                path="homedecor"
-                element={<Products category="homedecor" />}
-              />
+              <Route path="homedecor" element={<Products category="homedecor" />} />
               <Route path="sofas" element={<Products category="sofas" />} />
-              <Route
-                path="mattresses"
-                element={<Products category="mattresses" />}
-              />
+              <Route path="mattresses" element={<Products category="mattresses" />} />
               <Route path="dining" element={<Products category="dining" />} />
-              <Route
-                path="lightings"
-                element={<Products category="lightings" />}
-              />
-              <Route
-                path="furnishings"
-                element={<Products category="furnishings" />}
-              />
+              <Route path="lightings" element={<Products category="lightings" />} />
+              <Route path="furnishings" element={<Products category="furnishings" />} />
               <Route path=":productID" element={<Product />} />
             </Route>
             <Route path="/login" element={<LoginSignup />} />
