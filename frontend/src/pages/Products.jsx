@@ -26,7 +26,7 @@ export default function Products({ category }) {
       {items && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-3 p-2 sm:p-3 lg:p-5">
           {items.map((item) => (
-            <Item key={item.id} product={item} />
+            <Item key={item._id} product={item} />
           ))}
         </div>
       )}

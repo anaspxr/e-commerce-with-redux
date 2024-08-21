@@ -1,5 +1,5 @@
 import Navbar from "./components/Navbar";
-import { BrowserRouter, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import { useEffect } from "react";
@@ -31,23 +31,21 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <ProductContextProvider>
-        <BrowserRouter>
-          <>
-            {!isAdminPage ? (
-              // If not an admin page, render the normal app with navbar and footer
-              <>
-                <Navbar />
-                <div className="md:pt-24 pt-16 "></div>
-                <UserRoutes />
-                <Footer />
-              </>
-            ) : (
-              <AdminRoutes /> // If admin page, render the admin routes
-            )}
-            <ScrollToTop />
-            <ScrollToHashElement />
-          </>
-        </BrowserRouter>
+        <>
+          {!isAdminPage ? (
+            // If not an admin page, render the normal app with navbar and footer
+            <>
+              <Navbar />
+              <div className="md:pt-24 pt-16 "></div>
+              <UserRoutes />
+              <Footer />
+            </>
+          ) : (
+            <AdminRoutes /> // If admin page, render the admin routes
+          )}
+          <ScrollToTop />
+          <ScrollToHashElement />
+        </>
       </ProductContextProvider>
     </div>
   );

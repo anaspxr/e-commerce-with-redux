@@ -45,7 +45,7 @@ export function Recommend() {
       {loading && <p>Loading...</p>}
       {error && <p>{error.message}</p>}
       {randomItems.map((item) => (
-        <Item key={item.id} product={item} />
+        <Item key={item._id} product={item} />
       ))}
     </div>
   );

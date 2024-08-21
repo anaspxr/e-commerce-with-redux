@@ -24,7 +24,7 @@ export default function Popular() {
       {popularProducts && (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4">
           {popularProducts.map((item) => (
-            <Item key={item.id} product={item} />
+            <Item key={item._id} product={item} />
           ))}
         </div>
       )}

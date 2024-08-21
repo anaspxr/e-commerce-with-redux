@@ -33,7 +33,7 @@ export default function Item({ product }) {
 
   return (
     <div className="flex flex-col  bg-white shadow-2xl overflow-hidden rounded-md border">
-      <Link to={`/products/${product.id}`}>
+      <Link to={`/products/${product._id}`}>
         <img
           className="top-0 left-0 transition-transform duration-500 hover:scale-105 w-full h-32 lg:h-60 object-cover"
           src={product.image}
@@ -49,7 +49,9 @@ export default function Item({ product }) {
           </Link>
           <div className=" flex flex-wrap gap-x-5">
             <span className="text-orange-600"> ₹{product.price}</span>
-            <span className="text-gray-400 line-through">₹{product.oldPrice}</span>
+            <span className="text-gray-400 line-through">
+              ₹{product.oldPrice}
+            </span>
           </div>
           <p className="text-green-800">
             {calculateDiscountPrice(product.oldPrice, product.price)}% off
