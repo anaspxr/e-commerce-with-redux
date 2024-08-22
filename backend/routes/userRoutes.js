@@ -8,13 +8,21 @@ import {
 } from "../controllers/user/wishListController.js";
 import {
   cancelOrder,
-  createOrder,
+  checkout,
   getAllOrdersOfUser,
   getOrder,
 } from "../controllers/user/orderController.js";
-import { getCartOfUser, removeFromCart, updateCart } from "../controllers/user/cartController.js";
+import {
+  getCartOfUser,
+  removeFromCart,
+  updateCart,
+} from "../controllers/user/cartController.js";
 import tryCatch from "../utils/trycatch.js";
-import { createReview, deleteReview, updateReview } from "../controllers/user/reviewController.js";
+import {
+  createReview,
+  deleteReview,
+  updateReview,
+} from "../controllers/user/reviewController.js";
 
 const router = express.Router();
 
@@ -25,8 +33,9 @@ router.get("/cart", verifyToken, tryCatch(getCartOfUser)); // get the cart of th
 router.post("/cart", verifyToken, tryCatch(updateCart)); // add or update items to cart
 router.delete("/cart", verifyToken, tryCatch(removeFromCart)); // remove product from the cart
 
+router.post("/checkout", verifyToken, tryCatch(checkout)); // start payment process
+
 router.get("/orders", verifyToken, tryCatch(getAllOrdersOfUser)); //get user's orders
-router.post("/orders", verifyToken, tryCatch(createOrder)); // create order
 router.get("/orders/:orderID", verifyToken, tryCatch(getOrder)); //get single order
 router.patch("/orders/cancel/:orderID", verifyToken, tryCatch(cancelOrder)); // cancel order
 
