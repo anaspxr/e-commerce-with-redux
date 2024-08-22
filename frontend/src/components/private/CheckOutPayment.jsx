@@ -10,6 +10,7 @@ export default function CheckOutPayment({ buyItems }) {
     pincode: "766521",
     phone: "9876543210",
   };
+
   return (
     <div className="m-auto max-w-3xl p-5 text-orange-900">
       <h1 className="text-2xl py-3">Payment</h1>
