@@ -9,12 +9,12 @@ export default function Cart() {
     <div className="p-5">
       {fetching && <p>Loading...</p>}
       {error && <p>{error}</p>}
-      {!fetching && !error && cartItems.length === 0 ? (
+      {!fetching && !error && cartItems?.length === 0 ? (
         <h1 className="text-3xl text-orange-900 text-center mb-10">
           Your cart is empty
         </h1>
       ) : (
-        <CartDetails cartItems={cartItems} />
+        cartItems && <CartDetails cartItems={cartItems} />
       )}
     </div>
   );

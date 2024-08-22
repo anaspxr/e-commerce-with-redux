@@ -36,7 +36,7 @@ const getMonthlyRevenue = async (req, res, next) => {
   const stats = await Order.aggregate([
     {
       $match: {
-        createdAt: {
+        purchaseDate: {
           $gte: new Date(`${year}-01-01`),
           $lte: new Date(`${year}-12-31`),
         },
@@ -45,7 +45,7 @@ const getMonthlyRevenue = async (req, res, next) => {
     },
     {
       $project: {
-        month: { $month: "$createdAt" },
+        month: { $month: "$purchaseDate" },
         sales: "$amount",
       },
     },
@@ -65,7 +65,7 @@ const getYearlyRevenue = async (req, res, next) => {
     { $match: { status: { $ne: "cancelled" } } },
     {
       $project: {
-        year: { $year: "$createdAt" },
+        year: { $year: "$purchaseDate" },
         sales: "$amount",
       },
     },
@@ -116,4 +116,10 @@ const getMostSold = async (req, res, next) => {
   res.status(200).json({ stats });
 };
 
-export { getMonthlyUsers, getMonthlyRevenue, getYearlyRevenue, getTotalRevenue, getMostSold };
+export {
+  getMonthlyUsers,
+  getMonthlyRevenue,
+  getYearlyRevenue,
+  getTotalRevenue,
+  getMostSold,
+};

@@ -55,6 +55,30 @@ const checkout = async (req, res, next) => {
   res.status(200).json({ newOrder, id: session.id });
 };
 
+const createOrder = async (req, res, next) => {
+  const newOrder = await new Order({
+    ...req.body,
+    userID: req.user.id,
+  }).populate("products.productID", "name price image");
+
+  if (!newOrder) return next(new CustomError("Order not created", 400));
+
+  // check if all products are available
+  const hasUnavailableProducts = newOrder.products.some(
+    (product) =>
+      !product.productID || !product.productID.name || !product.productID.price
+  );
+
+  if (hasUnavailableProducts) {
+    return next(
+      new CustomError("Some products are unavailable or incomplete", 400)
+    );
+  }
+  const savedOrder = await newOrder.save();
+  console.log(savedOrder);
+  res.status(200).json(savedOrder);
+};
+
 const getAllOrdersOfUser = async (req, res, next) => {
   const orders = await Order.find({ userID: req.user.id });
   if (!orders || orders.length === 0)
@@ -83,34 +107,4 @@ const cancelOrder = async (req, res, next) => {
   res.status(200).json(updatedOrder);
 };
 
-export { getAllOrdersOfUser, getOrder, checkout, cancelOrder };
-
-// const idempotencyKey = v4();
-// return stripe.customers
-//   .create({
-//     email: token.email,
-//     source: token.id,
-//   })
-//   .then((customer) => {
-//     stripe.charges.create(
-//       {
-//         amount: amount * 100,
-//         currency: "inr",
-//         customer: customer.id,
-//         receipt_email: token.email,
-//         description: "sPurchased the products",
-//         shipping: {
-//           name: token.card.name,
-//           address: token.card.address,
-//         },
-//       },
-//       { idempotencyKey }
-//     );
-//   })
-//   .then((result) => {
-//     res.status(200).json(result);
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//     return next(new CustomError("Payment failed", 400));
-//   });
+export { createOrder, getAllOrdersOfUser, getOrder, checkout, cancelOrder };

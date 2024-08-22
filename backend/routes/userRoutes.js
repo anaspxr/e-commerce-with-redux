@@ -9,6 +9,7 @@ import {
 import {
   cancelOrder,
   checkout,
+  createOrder,
   getAllOrdersOfUser,
   getOrder,
 } from "../controllers/user/orderController.js";
@@ -36,6 +37,7 @@ router.delete("/cart", verifyToken, tryCatch(removeFromCart)); // remove product
 router.post("/checkout", verifyToken, tryCatch(checkout)); // start payment process
 
 router.get("/orders", verifyToken, tryCatch(getAllOrdersOfUser)); //get user's orders
+router.post("/orders", verifyToken, tryCatch(createOrder)); // create new orders
 router.get("/orders/:orderID", verifyToken, tryCatch(getOrder)); //get single order
 router.patch("/orders/cancel/:orderID", verifyToken, tryCatch(cancelOrder)); // cancel order
 
