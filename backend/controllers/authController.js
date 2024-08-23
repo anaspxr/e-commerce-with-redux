@@ -57,8 +57,6 @@ const login = async (req, res, next) => {
     name: user.name,
     email: user.email,
     isAdmin: user.isAdmin,
-    cart: user.cart,
-    orders: user.orders,
   };
 
   res.status(200).json({ user: userDetails, accessToken });
