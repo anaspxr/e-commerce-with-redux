@@ -30,7 +30,7 @@ const login = async (req, res, next) => {
   const accessToken = jwt.sign(
     { id: user._id, isAdmin: user.isAdmin },
     process.env.JWT_SEC,
-    { expiresIn: "15m" }
+    { expiresIn: "1h" }
   );
 
   // generate refresh token
@@ -83,7 +83,7 @@ const refreshToken = async (req, res, next) => {
   const accessToken = jwt.sign(
     { id: user._id, isAdmin: user.isAdmin },
     process.env.JWT_SEC,
-    { expiresIn: "30m" }
+    { expiresIn: "1h" }
   );
 
   const userDetails = {
