@@ -6,21 +6,22 @@ import { useEffect } from "react";
 import ScrollToHashElement from "@cascadia-code/scroll-to-hash-element";
 import ProductContextProvider from "./contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
-import { refreshToken } from "./Store/userSlice";
 import { getServerCart } from "./Store/cartSlice";
 import UserRoutes from "./routes/UserRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
+import useRefreshToken from "./hooks/useRefreshToken";
 
 function App() {
   const location = useLocation();
-  const isAdminPage = location.pathname.includes("/admin");
+  const refresh = useRefreshToken();
+  const isAdminPage = location.pathname.startsWith("/admin");
   const { accessToken } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
     // Refresh token on app load
-    dispatch(refreshToken());
-  }, [dispatch]);
+    refresh();
+  }, [refresh]);
 
   useEffect(() => {
     // Fetch cart from server if user is logged in

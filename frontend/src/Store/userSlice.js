@@ -15,6 +15,11 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    refreshUser: (state, action) => {
+      state.currentUser = action.payload.user;
+      state.accessToken = action.payload.accessToken;
+      state.isAdmin = action.payload.user?.isAdmin;
+    },
     setRedirectPath: (state, action) => {
       state.redirectPath = action.payload;
     },
@@ -49,12 +54,6 @@ const userSlice = createSlice({
       .addCase(logout.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
-    builder //refreshToken
-      .addCase(refreshToken.fulfilled, (state, action) => {
-        state.currentUser = action.payload.user;
-        state.accessToken = action.payload.accessToken;
-        state.isAdmin = action.payload.user.isAdmin;
       });
   },
 });
@@ -94,27 +93,6 @@ export const logout = createAsyncThunk(
   }
 );
 
-export const refreshToken = createAsyncThunk(
-  "user/refreshToken",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/refreshtoken",
-        {},
-        {
-          withCredentials: true, // Ensures cookies are included in the request
-        }
-      );
-      return {
-        user: response.data.user,
-        accessToken: response.data.accessToken,
-      };
-    } catch (error) {
-      return rejectWithValue(console.log(axiosErrorCatch(error)));
-    }
-  }
-);
-
-export const { setRedirectPath } = userSlice.actions;
+export const { refreshUser, setRedirectPath } = userSlice.actions;
 
 export default userSlice.reducer;
