@@ -1,9 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addToBuy, removeFromCart } from "../Store/cartSlice";
+import { addToBuy } from "../Store/cartSlice";
 import useCartUtil from "../hooks/useCartUtil";
-import { quantityPlusUtil } from "../utils/cartUtils";
+import {
+  quantityMinusUtil,
+  quantityPlusUtil,
+  removeFromCartUtil,
+} from "../utils/cartUtils";
 import NoItem from "../components/NoItem";
+import { FaTrash } from "react-icons/fa";
 
 export default function Cart() {
   const { cartItems, fetching, error } = useSelector((state) => state.cart);
@@ -26,7 +31,9 @@ function CartDetails({ cartItems }) {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
-  const { utilFunction: quantityPlus, loading } = useCartUtil(quantityPlusUtil);
+  const { utilFunction: quantityPlus } = useCartUtil(quantityPlusUtil);
+  const { utilFunction: quantityMinus } = useCartUtil(quantityMinusUtil);
+  const { utilFunction: removeFromCart } = useCartUtil(removeFromCartUtil);
 
   const totalAmount = cartItems.reduce(
     (acc, product) => acc + product.productID.price * product.quantity,
@@ -94,15 +101,36 @@ function CartDetails({ cartItems }) {
                         </button>
                         <button
                           onClick={() => {
-                            dispatch(
-                              removeFromCart({
-                                cartID: productDetails._id,
-                                userID: currentUser.id,
-                              })
-                            );
+                            if (product.quantity === 1) {
+                              confirm(
+                                "Do you want to remove this item from cart?"
+                              ) &&
+                                removeFromCart({
+                                  productID: productDetails._id,
+                                  quantity: product.quantity,
+                                });
+                            } else {
+                              quantityMinus({
+                                productID: productDetails._id,
+                                quantity: product.quantity,
+                              });
+                            }
                           }}
                           className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300">
                           -
+                        </button>
+                        <button
+                          onClick={() => {
+                            confirm(
+                              "Do you want to remove this item from cart?"
+                            ) &&
+                              removeFromCart({
+                                productID: productDetails._id,
+                                quantity: product.quantity,
+                              });
+                          }}
+                          className="bg-orange-200 h-6 w-6 rounded-md text-gray-700 flex justify-center items-center hover:bg-orange-300">
+                          <FaTrash />
                         </button>
                       </div>
                       <div className=" flex flex-wrap gap-5">

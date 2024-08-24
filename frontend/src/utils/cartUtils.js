@@ -68,3 +68,15 @@ export const setQuantityUtil = async (
     return { error: axiosErrorCatch(err) };
   }
 };
+
+export const removeFromCartUtil = async ({ productID }, axiosPrivate) => {
+  try {
+    const { data } = await axiosPrivate.delete(
+      "http://localhost:3000/api/user/cart",
+      { data: { productID } }
+    );
+    return { newCart: data.products, error: null };
+  } catch (err) {
+    return { error: axiosErrorCatch(err) };
+  }
+};
