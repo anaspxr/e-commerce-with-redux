@@ -64,6 +64,10 @@ const removeFromCart = async (req, res, next) => {
     { new: true }
   );
   if (cart) {
+    await cart.populate({
+      path: "products.productID",
+      select: "name price image oldPrice", // fields to get from populate
+    });
     res.status(200).json(cart);
   } else {
     next(new CustomError("Product not found in the cart", 404));
