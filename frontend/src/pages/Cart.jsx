@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addToBuy, addToCart, removeFromCart } from "../Store/cartSlice";
+import { addToBuy, removeFromCart } from "../Store/cartSlice";
+import useCartUtil from "../hooks/useCartUtil";
+import { quantityPlusUtil } from "../utils/cartUtils";
 import NoItem from "../components/NoItem";
 
 export default function Cart() {
@@ -24,6 +26,7 @@ function CartDetails({ cartItems }) {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
+  const { utilFunction: quantityPlus, loading } = useCartUtil(quantityPlusUtil);
 
   const totalAmount = cartItems.reduce(
     (acc, product) => acc + product.productID.price * product.quantity,
@@ -81,12 +84,10 @@ function CartDetails({ cartItems }) {
                         <p>Quantity: {product.quantity} </p>
                         <button
                           onClick={() => {
-                            dispatch(
-                              addToCart({
-                                cartID: productDetails._id,
-                                userID: currentUser.id,
-                              })
-                            );
+                            quantityPlus({
+                              productID: productDetails._id,
+                              quantity: product.quantity,
+                            });
                           }}
                           className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300">
                           +
