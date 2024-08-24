@@ -1,45 +1,48 @@
 import { useParams } from "react-router-dom";
 import { RelatedProducts, Recommend } from "../components/Recommend";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { ProductContext } from "../contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
 import { addToBuy } from "../Store/cartSlice";
 import { setRedirectPath } from "../Store/userSlice";
+import useFetch from "../utils/useFetch";
+import { addToCartUtil } from "../utils/cartUtils";
+import useCartUtil from "../hooks/useCartUtil";
 
 export default function Product() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
-  const { products, loading, error } = useContext(ProductContext);
   const currentUser = useSelector((state) => state.user.currentUser);
   const { productID } = useParams();
   const navigate = useNavigate();
   const added = Object.keys(cartItems).includes(productID);
-  const product =
-    products &&
-    products.find((item) => {
-      return item.id === productID;
-    });
+
+  const { utilFunction: addToCart, loading: cartLoading } =
+    useCartUtil(addToCartUtil);
+
+  const { data, loading, error } = useFetch(`/public/products/${productID}`);
+
+  const product = data ? data.product : null;
 
   function calculateDiscountPrice(oldPrice, price) {
     return Math.floor(((oldPrice - price) / oldPrice) * 100);
   }
+
   function handleBuyNow(id) {
     dispatch(addToBuy({ [id]: 1 }));
     navigate("/checkout");
   }
-  // function handleAddToCart() {
-  //   if (!currentUser) {
-  //     dispatch(setRedirectPath("/products/" + productID));
-  //     navigate("/login");
-  //     return;
-  //   }
-  //   {
-  //     added
-  //       ? navigate("/cart")
-  //       : dispatch(addToCart({ cartID: product.id, userID: currentUser.id }));
-  //   }
-  // }
+
+  function handleAddToCart() {
+    if (!currentUser) {
+      // if user is not logged in, redirect to login page
+      dispatch(setRedirectPath("/"));
+      navigate("/login");
+      return;
+    }
+    added
+      ? navigate("/cart")
+      : addToCart({ productID: product._id, quantity: 1 });
+  }
 
   return (
     <>
@@ -79,16 +82,16 @@ export default function Product() {
             </div>
             <div className="flex justify-center gap-10 mt-5">
               <button
-                // onClick={handleAddToCart}
-                className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300">
-                {added ? "Go to Cart" : "Add to Cart"}
-              </button>
-              <button
                 onClick={() => {
                   handleBuyNow(productID);
                 }}
                 className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300">
                 Buy Now
+              </button>
+              <button
+                onClick={handleAddToCart}
+                className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 w-28">
+                {cartLoading ? "..." : added ? "Go to Cart" : "Add to Cart"}
               </button>
             </div>
           </div>

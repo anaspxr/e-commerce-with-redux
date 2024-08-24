@@ -8,7 +8,7 @@ export function RelatedProducts({ product }) {
     <>
       {loading && <p>Loading...</p>}
       {error && <p>{error.message}</p>}
-      {data.products && (
+      {data?.products && (
         <div className="grid grid-cols-2 sm:grid-cols-3  md:grid-cols-4 gap-2 sm:gap-4 mt-5">
           {data.products
             .filter((item) => item.category === product.category)
