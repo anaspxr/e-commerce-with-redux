@@ -5,14 +5,14 @@ import { axiosPrivate } from "../utils/axios";
 
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
-  const user = useSelector((state) => state.user.accessToken);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       // ? this function will be called before every request
       (config) => {
         if (!config.headers["token"]) {
-          config.headers["token"] = `Bearer ${user?.token}`;
+          config.headers["token"] = `Bearer ${user?.accessToken}`;
         }
         return config;
       },
