@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import ScrollToHashElement from "@cascadia-code/scroll-to-hash-element";
-import ProductContextProvider from "./contexts/ProductContext";
 import UserRoutes from "./routes/UserRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
 import PersistLogin from "./components/private/PersistLogin";
@@ -15,23 +14,21 @@ function App() {
   return (
     <PersistLogin>
       <div className="flex flex-col min-h-screen">
-        <ProductContextProvider>
-          <>
-            {!isAdminPage ? (
-              // If not an admin page, render the normal app with navbar and footer
-              <>
-                <Navbar />
-                <div className="md:pt-24 pt-16 "></div>
-                <UserRoutes />
-                <Footer />
-              </>
-            ) : (
-              <AdminRoutes /> // If admin page, render the admin routes
-            )}
-            <ScrollToTop />
-            <ScrollToHashElement />
-          </>
-        </ProductContextProvider>
+        <>
+          {!isAdminPage ? (
+            // If not an admin page, render the normal app with navbar and footer
+            <>
+              <Navbar />
+              <div className="md:pt-24 pt-16 "></div>
+              <UserRoutes />
+              <Footer />
+            </>
+          ) : (
+            <AdminRoutes /> // If admin page, render the admin routes
+          )}
+          <ScrollToTop />
+          <ScrollToHashElement />
+        </>
       </div>
     </PersistLogin>
   );

@@ -1,13 +1,12 @@
 import logo from "./assets/logo.png";
 import logoSmall from "./assets/logo-small.png";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { HiMenuAlt1, HiX, HiChevronDown } from "react-icons/hi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import Button from "./Button";
 import SearchField from "./SearchField";
-import { ProductContext } from "../contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../Store/userSlice";
 
@@ -44,7 +43,6 @@ const menuItems = [
 
 export default function Navbar() {
   const cart = useSelector((state) => state.cart.cartItems);
-  const { products } = useContext(ProductContext);
   const currentUser = useSelector((state) => state.user.currentUser);
   const isAdmin = useSelector((state) => state.user.isAdmin);
   const dispatch = useDispatch();
@@ -132,7 +130,6 @@ export default function Navbar() {
       </div>
       <div className="flex items-center gap-1 sm:gap-2">
         <SearchField
-          searchData={products}
           handleSearch={(value) => {
             if (value === "") {
               return;

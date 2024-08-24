@@ -1,19 +1,13 @@
-import { useContext } from "react";
+import useFetch from "../utils/useFetch";
 import Item from "./Item";
-import { ProductContext } from "../contexts/ProductContext";
 
 export default function Popular() {
-  const { products, loading, error } = useContext(ProductContext) || [];
-  const popularProducts = products
-    ? [
-        products[3],
-        products[8],
-        products[10],
-        products[12],
-        products[14],
-        products[26],
-      ]
-    : null;
+  const {
+    data: popularProducts,
+    loading,
+    error,
+  } = useFetch("public/products/popular");
+
   return (
     <div className="p-2 sm:p-3 lg:p-5 pb-10 bg-amber-100">
       <h2 className="md:text-4xl text-3xl text-orange-900 py-5 text-center">
@@ -24,7 +18,7 @@ export default function Popular() {
       {popularProducts && (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4">
           {popularProducts.map((item) => (
-            <Item key={item._id} product={item} />
+            <Item key={item.product._id} product={item.product} />
           ))}
         </div>
       )}
