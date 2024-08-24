@@ -9,6 +9,7 @@ import {
 } from "../utils/cartUtils";
 import NoItem from "../components/NoItem";
 import { FaTrash } from "react-icons/fa";
+import { ClipLoader } from "react-spinners";
 
 export default function Cart() {
   const { cartItems, fetching, error } = useSelector((state) => state.cart);
@@ -31,9 +32,12 @@ function CartDetails({ cartItems }) {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
-  const { utilFunction: quantityPlus } = useCartUtil(quantityPlusUtil);
-  const { utilFunction: quantityMinus } = useCartUtil(quantityMinusUtil);
-  const { utilFunction: removeFromCart } = useCartUtil(removeFromCartUtil);
+  const { utilFunction: quantityPlus, loading: plusLoading } =
+    useCartUtil(quantityPlusUtil);
+  const { utilFunction: quantityMinus, loading: minusLoading } =
+    useCartUtil(quantityMinusUtil);
+  const { utilFunction: removeFromCart, loading: removeLoading } =
+    useCartUtil(removeFromCartUtil);
 
   const totalAmount = cartItems.reduce(
     (acc, product) => acc + product.productID.price * product.quantity,
@@ -90,6 +94,7 @@ function CartDetails({ cartItems }) {
                       <div className="flex gap-2 mt-2">
                         <p>Quantity: {product.quantity} </p>
                         <button
+                          disabled={plusLoading}
                           onClick={() => {
                             quantityPlus({
                               productID: productDetails._id,
@@ -97,9 +102,14 @@ function CartDetails({ cartItems }) {
                             });
                           }}
                           className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300">
-                          +
+                          {plusLoading ? (
+                            <ClipLoader size={15} color="grey" />
+                          ) : (
+                            "+"
+                          )}
                         </button>
                         <button
+                          disabled={product.quantity === 1 || minusLoading}
                           onClick={() => {
                             if (product.quantity === 1) {
                               confirm(
@@ -117,9 +127,14 @@ function CartDetails({ cartItems }) {
                             }
                           }}
                           className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300">
-                          -
+                          {minusLoading ? (
+                            <ClipLoader size={15} color="grey" />
+                          ) : (
+                            "-"
+                          )}
                         </button>
                         <button
+                          disabled={removeLoading}
                           onClick={() => {
                             confirm(
                               "Do you want to remove this item from cart?"
@@ -130,7 +145,11 @@ function CartDetails({ cartItems }) {
                               });
                           }}
                           className="bg-orange-200 h-6 w-6 rounded-md text-gray-700 flex justify-center items-center hover:bg-orange-300">
-                          <FaTrash />
+                          {removeLoading ? (
+                            <ClipLoader size={15} color="grey" />
+                          ) : (
+                            <FaTrash />
+                          )}
                         </button>
                       </div>
                       <div className=" flex flex-wrap gap-5">

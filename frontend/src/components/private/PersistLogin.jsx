@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useRefreshToken from "../../hooks/useRefreshToken";
 import { getServerCart } from "../../Store/cartSlice";
+import { BeatLoader } from "react-spinners";
 
 const PersistLogin = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +34,17 @@ const PersistLogin = ({ children }) => {
     }
   }, [accessToken, dispatch]);
 
-  return <>{isLoading ? <h1>Loading...</h1> : <> {children}</>}</>;
+  return (
+    <>
+      {isLoading ? (
+        <div className="flex justify-center items-center h-screen">
+          <BeatLoader color="brown" />
+        </div>
+      ) : (
+        <> {children}</>
+      )}
+    </>
+  );
 };
 
 export default PersistLogin;

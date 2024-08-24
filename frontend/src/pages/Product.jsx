@@ -7,6 +7,7 @@ import { setRedirectPath } from "../Store/userSlice";
 import useFetch from "../utils/useFetch";
 import { addToCartUtil } from "../utils/cartUtils";
 import useCartUtil from "../hooks/useCartUtil";
+import { SyncLoader } from "react-spinners";
 
 export default function Product() {
   const dispatch = useDispatch();
@@ -91,7 +92,13 @@ export default function Product() {
               <button
                 onClick={handleAddToCart}
                 className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 w-28">
-                {cartLoading ? "..." : added ? "Go to Cart" : "Add to Cart"}
+                {cartLoading ? (
+                  <SyncLoader color="white" size={5} />
+                ) : added ? (
+                  "Go to Cart"
+                ) : (
+                  "Add to Cart"
+                )}
               </button>
             </div>
           </div>

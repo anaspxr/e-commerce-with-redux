@@ -4,6 +4,7 @@ import { addToBuy } from "../Store/cartSlice";
 import { setRedirectPath } from "../Store/userSlice";
 import useCartUtil from "../hooks/useCartUtil";
 import { addToCartUtil } from "../utils/cartUtils";
+import { SyncLoader } from "react-spinners";
 
 export default function Item({ product }) {
   const dispatch = useDispatch();
@@ -74,8 +75,14 @@ export default function Item({ product }) {
           </button>
           <button
             onClick={handleAddToCart}
-            className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm">
-            {loading ? ".." : added ? "Go to Cart" : "Add to Cart"}
+            className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm w-24">
+            {loading ? (
+              <SyncLoader color="white" size={5} />
+            ) : added ? (
+              "Go to Cart"
+            ) : (
+              "Add to Cart"
+            )}
           </button>
           {added && (
             <button
