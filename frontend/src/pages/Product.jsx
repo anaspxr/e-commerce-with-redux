@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProductContext } from "../contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
-import { addToBuy, addToCart } from "../Store/cartSlice";
+import { addToBuy } from "../Store/cartSlice";
 import { setRedirectPath } from "../Store/userSlice";
 
 export default function Product() {
@@ -28,25 +28,27 @@ export default function Product() {
     dispatch(addToBuy({ [id]: 1 }));
     navigate("/checkout");
   }
-  function handleAddToCart() {
-    if (!currentUser) {
-      dispatch(setRedirectPath("/products/" + productID));
-      navigate("/login");
-      return;
-    }
-    {
-      added
-        ? navigate("/cart")
-        : dispatch(addToCart({ cartID: product.id, userID: currentUser.id }));
-    }
-  }
+  // function handleAddToCart() {
+  //   if (!currentUser) {
+  //     dispatch(setRedirectPath("/products/" + productID));
+  //     navigate("/login");
+  //     return;
+  //   }
+  //   {
+  //     added
+  //       ? navigate("/cart")
+  //       : dispatch(addToCart({ cartID: product.id, userID: currentUser.id }));
+  //   }
+  // }
 
   return (
     <>
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
       {!error && !loading && !product && (
-        <h1 className="text-red-500 text-center text-xl ">Product not found!!</h1>
+        <h1 className="text-red-500 text-center text-xl ">
+          Product not found!!
+        </h1>
       )}
       {product && (
         <>
@@ -59,10 +61,14 @@ export default function Product() {
               />
             </div>
             <div className="flex flex-col items-center">
-              <h1 className="text-2xl text-orange-950 font-semibold">{product.name}</h1>
+              <h1 className="text-2xl text-orange-950 font-semibold">
+                {product.name}
+              </h1>
               <div className=" flex flex-wrap gap-5">
                 <span className="text-orange-500"> ₹{product.price}</span>
-                <span className="text-gray-400 line-through">₹{product.oldPrice}</span>
+                <span className="text-gray-400 line-through">
+                  ₹{product.oldPrice}
+                </span>
               </div>
               <p className="text-green-800">
                 {calculateDiscountPrice(product.oldPrice, product.price)}% off
@@ -73,7 +79,7 @@ export default function Product() {
             </div>
             <div className="flex justify-center gap-10 mt-5">
               <button
-                onClick={handleAddToCart}
+                // onClick={handleAddToCart}
                 className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300">
                 {added ? "Go to Cart" : "Add to Cart"}
               </button>

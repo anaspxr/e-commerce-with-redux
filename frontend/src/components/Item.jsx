@@ -1,14 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addToBuy, addToCart } from "../Store/cartSlice";
+import { addToBuy } from "../Store/cartSlice";
 import { setRedirectPath } from "../Store/userSlice";
+import useCartUtil from "../hooks/useCartUtil";
+import { addToCartUtil } from "../utils/cartUtils";
 
 export default function Item({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart.cartItems);
-  const added = cart && Object.keys(cart)?.includes(product.id);
+  const added = cart?.some((item) => item.productID === product._id);
   const currentUser = useSelector((state) => state.user.currentUser);
+  const { utilFunction: addToCart, loading } = useCartUtil(addToCartUtil);
 
   function calculateDiscountPrice(oldPrice, price) {
     return Math.floor(((oldPrice - price) / oldPrice) * 100);
@@ -18,18 +21,22 @@ export default function Item({ product }) {
     dispatch(addToBuy({ [id]: 1 }));
     navigate("/checkout");
   }
+
   function handleAddToCart() {
     if (!currentUser) {
+      // if user is not logged in, redirect to login page
       dispatch(setRedirectPath("/"));
       navigate("/login");
       return;
     }
-    {
-      added
-        ? navigate("/cart")
-        : dispatch(addToCart({ cartID: product.id, userID: currentUser.id }));
-    }
+    added
+      ? navigate("/cart")
+      : addToCart({ productID: product._id, quantity: 1 });
   }
+
+  // function handleRemoveFromCart() {
+  //   dispatch(re({ productID: product._id }));
+  // }
 
   return (
     <div className="flex flex-col  bg-white shadow-2xl overflow-hidden rounded-md border">
@@ -59,17 +66,24 @@ export default function Item({ product }) {
         </div>
         <div className="flex flex-wrap gap-2">
           <button
-            onClick={handleAddToCart}
-            className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm">
-            {added ? "Go to Cart" : "Add to Cart"}
-          </button>
-          <button
             onClick={() => {
               handleBuyNow(product.id);
             }}
             className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm">
             Buy Now
           </button>
+          <button
+            onClick={handleAddToCart}
+            className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm">
+            {loading ? ".." : added ? "Go to Cart" : "Add to Cart"}
+          </button>
+          {added && (
+            <button
+              // onClick={handleRemoveFromCart}
+              className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm">
+              Remove from Cart
+            </button>
+          )}
         </div>
       </div>
     </div>

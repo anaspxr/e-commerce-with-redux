@@ -14,7 +14,7 @@ export default function UserRoutes() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/products">
-        <Route index element={<Products category="furniture" />} />
+        <Route index element={<Products />} />
         <Route path="homedecor" element={<Products category="homedecor" />} />
         <Route path="sofas" element={<Products category="sofas" />} />
         <Route path="mattresses" element={<Products category="mattresses" />} />
