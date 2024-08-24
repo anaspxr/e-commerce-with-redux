@@ -27,14 +27,7 @@ const cartSlice = createSlice({
     setWholeCart: (state, action) => {
       state.cartItems = action.payload;
     },
-    addToCart: (state, action) => {
-      if (state.cartItems[action.payload.cartID]) {
-        state.cartItems[action.payload.cartID] += 1;
-      } else {
-        state.cartItems[action.payload.cartID] = 1;
-      }
-      updateServerSide(state.cartItems, action.payload.userID);
-    },
+
     removeFromCart: (state, action) => {
       if (state.cartItems[action.payload.cartID] > 1) {
         state.cartItems[action.payload.cartID] -= 1;
@@ -43,6 +36,7 @@ const cartSlice = createSlice({
       }
       updateServerSide(state.cartItems, action.payload.userID);
     },
+
     clearFromCart: (state, action) => {
       delete state.cartItems[action.payload.cartID];
       updateServerSide(state.cartItems, action.payload.userID);
@@ -101,7 +95,6 @@ export const getServerCart = createAsyncThunk(
 
 export const {
   setWholeCart,
-  addToCart,
   removeFromCart,
   addToBuy,
   clearCart,
