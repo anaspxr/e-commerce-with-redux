@@ -45,6 +45,12 @@ const updateCart = async (req, res, next) => {
     }
   }
   const savedCart = await cart.save();
+
+  await savedCart.populate({
+    path: "products.productID",
+    select: "name price image oldPrice", // fields to get from populate
+  });
+
   res.status(200).json(savedCart);
 };
 
