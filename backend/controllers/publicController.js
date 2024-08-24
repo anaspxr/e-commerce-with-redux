@@ -72,6 +72,20 @@ const getPopular = async (req, res, next) => {
   res.status(200).json(popularProducts);
 };
 
+const getRelatedProducts = async (req, res, next) => {
+  try {
+    const categories = req.query.categories?.split(",");
+
+    const relatedProducts = await Product.find({
+      category: { $in: categories }, // Matches any category in the product's category array
+    }).limit(4); // Limits the number of results
+
+    res.status(200).json(relatedProducts);
+  } catch (error) {
+    next(error); // Passes any error to the error-handling middleware
+  }
+};
+
 const getProductById = async (req, res, next) => {
   const id = req.params.productID;
   const product = await Product.findById(id);
@@ -87,4 +101,10 @@ const getReviewsOfProduct = async (req, res, next) => {
   res.status(200).json(reviews);
 };
 
-export { getProducts, getProductById, getReviewsOfProduct, getPopular };
+export {
+  getProducts,
+  getProductById,
+  getReviewsOfProduct,
+  getPopular,
+  getRelatedProducts,
+};
