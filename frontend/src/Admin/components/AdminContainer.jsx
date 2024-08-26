@@ -11,6 +11,7 @@ import {
 import { PiSignOutFill } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../Store/userSlice";
+import { FaShippingFast } from "react-icons/fa";
 
 export default function AdminContainer({ children }) {
   const location = useLocation();
@@ -18,6 +19,7 @@ export default function AdminContainer({ children }) {
     { name: "Dashboard", icon: <MdSpaceDashboard />, link: "admin" },
     { name: "Users", icon: <FaUsers />, link: "admin/users" },
     { name: "Products", icon: <FaBagShopping />, link: "admin/products" },
+    { name: "Orders", icon: <FaShippingFast />, link: "admin/orders" },
   ];
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -89,7 +91,7 @@ export default function AdminContainer({ children }) {
         className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform ${
           !isOpen && "-translate-x-full"
         }  bg-slate-300 border-r border-slate-400 sm:translate-x-0`}>
-        <div className="h-full px-3 overflow-y-auto">
+        <div className="h-full px-3 overflow-y-auto flex flex-col justify-between">
           <button
             onClick={() => {
               setIsOpen(false);
@@ -113,13 +115,13 @@ export default function AdminContainer({ children }) {
                 </Link>
               </li>
             ))}
-            <li
-              className="cursor-pointer flex items-center p-2 text-slate-950 rounded-lg  hover:bg-slate-200  group"
-              onClick={() => dispatch(logout())}>
-              <PiSignOutFill />
-              <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
-            </li>
           </ul>
+          <li
+            className="cursor-pointer flex items-center p-2 text-slate-950 rounded-lg  hover:bg-slate-200  group mb-4"
+            onClick={() => dispatch(logout())}>
+            <PiSignOutFill />
+            <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
+          </li>
         </div>
       </div>
       <div className="sm:ml-64 mt-20 m-5 p-4">{children}</div>

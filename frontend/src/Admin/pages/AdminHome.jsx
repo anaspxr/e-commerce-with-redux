@@ -30,6 +30,9 @@ export default function Admin() {
           <p className="text-2xl">{data?.orders}</p>
         </div>
       </div>
+      <div className="bg-slate-200 px-2 py-5 rounded-md text-slate-500 hover:bg-slate-300 my-2">
+        <p className="text-slate-900 text-2xl ">Stats</p>
+      </div>
     </div>
   );
 }
