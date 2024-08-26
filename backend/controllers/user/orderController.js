@@ -80,7 +80,9 @@ const createOrder = async (req, res, next) => {
 };
 
 const getAllOrdersOfUser = async (req, res, next) => {
-  const orders = await Order.find({ userID: req.user.id });
+  const orders = await Order.find({ userID: req.user.id }).populate(
+    "products.productID"
+  );
   if (!orders || orders.length === 0)
     return next(new CustomError("No orders found", 404));
   res.status(200).json(orders);
@@ -90,7 +92,7 @@ const getOrder = async (req, res, next) => {
   const order = await Order.findOne({
     _id: req.params.orderID,
     userID: req.user.id,
-  });
+  }).populate("products.productID");
   if (!order) return next(new CustomError("Order not found", 404));
   res.status(200).json(order);
 };
