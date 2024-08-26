@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToBuy } from "../Store/cartSlice";
 import { setRedirectPath } from "../Store/userSlice";
 import useFetch from "../utils/useFetch";
-import { addToCartUtil } from "../utils/cartUtils";
+import { addToCartUtil, removeFromCartUtil } from "../utils/cartUtils";
 import useCartUtil from "../hooks/useCartUtil";
 import { SyncLoader } from "react-spinners";
 
@@ -18,6 +18,9 @@ export default function Product() {
 
   const { utilFunction: addToCart, loading: cartLoading } =
     useCartUtil(addToCartUtil);
+
+  const { utilFunction: removeFromCart, loading: cartLoadingRemove } =
+    useCartUtil(removeFromCartUtil);
 
   const { data, loading, error } = useFetch(`/public/products/${productID}`);
   const product = data ? data.product : null;
@@ -98,6 +101,19 @@ export default function Product() {
                   "Add to Cart"
                 )}
               </button>
+              {added && (
+                <button
+                  onClick={() => {
+                    removeFromCart({ productID: product._id });
+                  }}
+                  className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300">
+                  {cartLoadingRemove ? (
+                    <SyncLoader color="white" size={5} />
+                  ) : (
+                    "Remove from Cart"
+                  )}
+                </button>
+              )}
             </div>
           </div>
           <div className="bg-orange-100 p-2 sm:p-4">

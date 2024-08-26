@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToBuy } from "../Store/cartSlice";
 import { setRedirectPath } from "../Store/userSlice";
 import useCartUtil from "../hooks/useCartUtil";
-import { addToCartUtil } from "../utils/cartUtils";
+import { addToCartUtil, removeFromCartUtil } from "../utils/cartUtils";
 import { SyncLoader } from "react-spinners";
 
 export default function Item({ product }) {
@@ -14,6 +14,8 @@ export default function Item({ product }) {
 
   const currentUser = useSelector((state) => state.user.currentUser);
   const { utilFunction: addToCart, loading } = useCartUtil(addToCartUtil);
+  const { utilFunction: removeFromCart, loading: loadingRemove } =
+    useCartUtil(removeFromCartUtil);
 
   function calculateDiscountPrice(oldPrice, price) {
     return Math.floor(((oldPrice - price) / oldPrice) * 100);
@@ -35,10 +37,6 @@ export default function Item({ product }) {
       ? navigate("/cart")
       : addToCart({ productID: product._id, quantity: 1 });
   }
-
-  // function handleRemoveFromCart() {
-  //   dispatch(re({ productID: product._id }));
-  // }
 
   return (
     <div className="flex flex-col  bg-white shadow-2xl overflow-hidden rounded-md border">
@@ -85,9 +83,15 @@ export default function Item({ product }) {
           </button>
           {added && (
             <button
-              // onClick={handleRemoveFromCart}
+              onClick={() => {
+                removeFromCart({ productID: product._id });
+              }}
               className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm">
-              Remove from Cart
+              {loadingRemove ? (
+                <SyncLoader color="white" size={5} />
+              ) : (
+                "Remove from Cart"
+              )}
             </button>
           )}
         </div>
