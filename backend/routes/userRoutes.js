@@ -3,6 +3,7 @@ import { verifyToken } from "../middlewares/verifyToken.js";
 import { getUser, updateUser } from "../controllers/user/userController.js";
 import {
   addToWishlist,
+  getPopulatedUserWishlist,
   getUserWishlist,
   removeFromWishlist,
 } from "../controllers/user/wishListController.js";
@@ -42,6 +43,7 @@ router.get("/orders/:orderID", verifyToken, tryCatch(getOrder)); //get single or
 router.patch("/orders/cancel/:orderID", verifyToken, tryCatch(cancelOrder)); // cancel order
 
 router.get("/wishlist", verifyToken, tryCatch(getUserWishlist)); //get wishlist of the user
+router.get("/wishlist/populated", verifyToken, tryCatch(getPopulatedUserWishlist)); //get wishlist of the user
 router.post("/wishlist", verifyToken, tryCatch(addToWishlist)); // add product to wishlist
 router.delete("/wishlist", verifyToken, tryCatch(removeFromWishlist)); // remove product from wishlist
 

@@ -3,7 +3,17 @@ import CustomError from "../../utils/CustomError.js";
 
 const getUserWishlist = async (req, res, next) => {
   const wishList = await WishList.findOne({ userID: req.user.id });
-  if (!wishList) return next(new CustomError("No wishlist found for the user", 404));
+  if (!wishList)
+    return next(new CustomError("No wishlist found for the user", 404));
+  res.status(200).json(wishList);
+};
+
+const getPopulatedUserWishlist = async (req, res, next) => {
+  const wishList = await WishList.findOne({ userID: req.user.id }).populate(
+    "products"
+  );
+  if (!wishList)
+    return next(new CustomError("No wishlist found for the user", 404));
   res.status(200).json(wishList);
 };
 
@@ -46,4 +56,9 @@ const addToWishlist = async (req, res, next) => {
   res.status(200).json(wishList);
 };
 
-export { getUserWishlist, removeFromWishlist, addToWishlist };
+export {
+  getUserWishlist,
+  removeFromWishlist,
+  addToWishlist,
+  getPopulatedUserWishlist,
+};
