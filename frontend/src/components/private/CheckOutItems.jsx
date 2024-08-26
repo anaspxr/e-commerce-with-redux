@@ -1,4 +1,14 @@
+import { useDispatch } from "react-redux";
+import {
+  buyQuantityMinus,
+  buyQuantityPlus,
+  removeFromBuy,
+} from "../../Store/cartSlice";
+import { FaTrash } from "react-icons/fa";
+
 export default function CheckOutItems({ buyItems }) {
+  const dispatch = useDispatch();
+
   return (
     <div className="m-auto max-w-3xl flex flex-wrap gap-3 p-2 justify-center">
       {buyItems.map((product) => {
@@ -17,18 +27,30 @@ export default function CheckOutItems({ buyItems }) {
                 <p>
                   Quantity: {product.quantity}
                   <button
-                    //   onClick={() => {
-                    //     dispatch(buyQuantityPlus(productID));
-                    //   }}
+                    onClick={() => {
+                      dispatch(buyQuantityPlus(product.productID._id));
+                    }}
                     className="bg-orange-200 h-7 w-7 rounded-md mr-1 hover:bg-orange-300">
                     +
                   </button>
                   <button
-                    //   onClick={() => {
-                    //     dispatch(buyQuantityMinus(productID));
-                    //   }}
+                    onClick={() => {
+                      dispatch(buyQuantityMinus(product.productID._id));
+                    }}
                     className="bg-orange-200 h-7 w-7 rounded-md hover:bg-orange-300">
                     -
+                  </button>
+                  <button
+                    onClick={() => {
+                      confirm(
+                        "Do you want to remove this item from checkout?"
+                      ) &&
+                        dispatch(
+                          removeFromBuy({ cartID: product.productID._id })
+                        );
+                    }}
+                    className="bg-orange-200 h-6 w-6 rounded-md text-gray-700 flex justify-center items-center hover:bg-orange-300">
+                    <FaTrash />
                   </button>
                 </p>
                 <p className="text-green-500">Total: ₹{total}</p>

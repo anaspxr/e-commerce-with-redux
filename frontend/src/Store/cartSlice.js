@@ -10,16 +10,6 @@ const initialState = {
   error: null,
 };
 
-const updateServerSide = async (newCart, userID) => {
-  fetch(`http://localhost:3000/users/${userID}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ cart: newCart }),
-  });
-};
-
 const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -28,18 +18,8 @@ const cartSlice = createSlice({
       state.cartItems = action.payload;
     },
 
-    removeFromCart: (state, action) => {
-      if (state.cartItems[action.payload.cartID] > 1) {
-        state.cartItems[action.payload.cartID] -= 1;
-      } else {
-        delete state.cartItems[action.payload.cartID];
-      }
-      updateServerSide(state.cartItems, action.payload.userID);
-    },
-
     clearFromCart: (state, action) => {
       delete state.cartItems[action.payload.cartID];
-      updateServerSide(state.cartItems, action.payload.userID);
     },
     clearCart: (state) => {
       state.cartItems = {};
@@ -47,16 +27,30 @@ const cartSlice = createSlice({
     addToBuy: (state, action) => {
       state.buyItems = action.payload;
     },
+
     buyQuantityPlus: (state, action) => {
-      state.buyItems[action.payload] += 1;
+      const index = state.buyItems.findIndex(
+        (item) => item.productID._id === action.payload
+      );
+      state.buyItems[index].quantity += 1;
     },
+
     buyQuantityMinus: (state, action) => {
-      if (state.buyItems[action.payload] > 1) {
-        state.buyItems[action.payload] -= 1;
-      } else {
-        delete state.buyItems[action.payload];
-      }
+      const index = state.buyItems.findIndex(
+        (item) => item.productID._id === action.payload
+      );
+      const currentQuantity = state.buyItems[index].quantity;
+      state.buyItems[index].quantity =
+        currentQuantity > 1 ? currentQuantity - 1 : 1;
     },
+
+    removeFromBuy: (state, action) => {
+      const index = state.buyItems.findIndex(
+        (item) => item.productID._id === action.payload.cartID
+      );
+      state.buyItems.splice(index, 1);
+    },
+
     clearBuy: (state) => {
       state.buyItems = {};
     },
@@ -95,13 +89,13 @@ export const getServerCart = createAsyncThunk(
 
 export const {
   setWholeCart,
-  removeFromCart,
   addToBuy,
   clearCart,
   clearFromCart,
   clearBuy,
   buyQuantityMinus,
   buyQuantityPlus,
+  removeFromBuy,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
