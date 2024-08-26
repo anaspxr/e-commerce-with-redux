@@ -58,6 +58,15 @@ const cartSlice = createSlice({
     setWishlist: (state, action) => {
       state.wishlist = action.payload;
     },
+    resetCart: (state) => {
+      state.cartItems = [];
+      state.buyItems = [];
+      state.wishlist = [];
+      state.orders = [];
+      state.fetching = false;
+      state.updating = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -107,6 +116,7 @@ export const {
   buyQuantityPlus,
   removeFromBuy,
   setWishlist,
+  resetCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

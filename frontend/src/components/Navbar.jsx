@@ -5,10 +5,11 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { HiMenuAlt1, HiX, HiChevronDown } from "react-icons/hi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
+import { IoIosHeartEmpty } from "react-icons/io";
 import Button from "./Button";
 import SearchField from "./SearchField";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../Store/userSlice";
+import { useSelector } from "react-redux";
+import { BsBoxSeam } from "react-icons/bs";
 
 const menuItems = [
   {
@@ -45,7 +46,6 @@ export default function Navbar() {
   const cart = useSelector((state) => state.cart.cartItems);
   const currentUser = useSelector((state) => state.user.currentUser);
   const isAdmin = useSelector((state) => state.user.isAdmin);
-  const dispatch = useDispatch();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -165,23 +165,32 @@ export default function Navbar() {
               className={`${
                 profileOpen ? "flex" : "hidden"
               } absolute flex-col p-2 gap-2 right-0 z-10 mt-2 w-56 origin-top-right mr-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5`}>
-              <p className="text-sm">
+              <div className="text-sm">
+                <div className="flex flex-wrap gap-1 mb-1">
+                  {isAdmin ? (
+                    <Link to="/admin">
+                      <Button>Admin Panel</Button>
+                    </Link>
+                  ) : (
+                    <div className="flex gap-2 flex-col">
+                      <Link to="/profile">
+                        <Button>Profile</Button>
+                      </Link>
+                      <Link to="/orders">
+                        <Button>
+                          Orders <BsBoxSeam />
+                        </Button>
+                      </Link>
+                      <Link to="/wishlist">
+                        <Button>
+                          Wishlist <IoIosHeartEmpty />{" "}
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
+                </div>
                 Logged in as
                 <span className="text-orange-900"> {currentUser.email}</span>
-              </p>
-              <div className="flex flex-wrap gap-1">
-                {isAdmin ? (
-                  <Link to="/admin">
-                    <Button>Admin Panel</Button>
-                  </Link>
-                ) : (
-                  <Link to="/profile">
-                    <Button>Profile</Button>
-                  </Link>
-                )}
-                <div onClick={() => dispatch(logout())}>
-                  <Button>Logout</Button>
-                </div>
               </div>
             </div>
           </div>
