@@ -1,7 +1,7 @@
 import Button from "../components/Button";
 import Address from "../components/Address";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../Store/userSlice";
+import { handleLogout } from "../utils/handleLogout";
 export default function Profile() {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -12,7 +12,10 @@ export default function Profile() {
         <h1 className="text-2xl text-orange-900">User Details</h1>
         <p className="text-lg text-orange-900">Name: {currentUser.name}</p>
         <p className="text-lg text-orange-900">Email: {currentUser.email}</p>
-        <span onClick={() => dispatch(logout())}>
+        <span
+          onClick={() => {
+            handleLogout(dispatch);
+          }}>
           <Button>Log out</Button>
         </span>
       </div>

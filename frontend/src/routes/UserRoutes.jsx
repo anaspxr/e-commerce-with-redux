@@ -8,6 +8,8 @@ import Cart from "../pages/Cart";
 import Profile from "../pages/Profile";
 import Checkout from "../pages/Checkout";
 import PrivateRoutes from "./PrivateRoutes";
+import Orders from "../pages/Orders";
+import Wishlist from "../pages/Wishlist";
 
 export default function UserRoutes() {
   return (
@@ -32,6 +34,8 @@ export default function UserRoutes() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/orders" element={<Orders />} />
       </Route>
     </Routes>
   );
