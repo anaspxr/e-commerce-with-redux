@@ -2,16 +2,21 @@ import { useParams } from "react-router-dom";
 import { RelatedProducts, Recommend } from "../components/Recommend";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addToBuy } from "../Store/cartSlice";
+import { addToBuy, setWishlist } from "../Store/cartSlice";
 import { setRedirectPath } from "../Store/userSlice";
 import useFetch from "../utils/useFetch";
 import { addToCartUtil, removeFromCartUtil } from "../utils/cartUtils";
 import useCartUtil from "../hooks/useCartUtil";
 import { SyncLoader } from "react-spinners";
+import { IoMdHeart, IoMdHeartEmpty, IoMdShareAlt } from "react-icons/io";
+import { useState } from "react";
+import { axiosPrivate } from "../utils/axios";
+import axiosErrorCatch from "../utils/axiosErrorCatch";
 
 export default function Product() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const wishlist = useSelector((state) => state.cart.wishlist);
   const currentUser = useSelector((state) => state.user.currentUser);
   const { productID } = useParams();
   const navigate = useNavigate();
@@ -26,6 +31,8 @@ export default function Product() {
   const product = data ? data.product : null;
 
   const added = cartItems?.some((item) => item.productID?._id === product?._id);
+  const inWishList = wishlist?.includes(product?._id);
+  const [wishlistError, setWishlistError] = useState(null);
 
   function calculateDiscountPrice(oldPrice, price) {
     return Math.floor(((oldPrice - price) / oldPrice) * 100);
@@ -48,6 +55,38 @@ export default function Product() {
       : addToCart({ productID: product._id, quantity: 1 });
   }
 
+  async function addToWishlist() {
+    if (!currentUser) {
+      dispatch(setRedirectPath("/"));
+      navigate("/login");
+      return;
+    }
+    try {
+      const { data } = await axiosPrivate.post(`/user/wishlist`, {
+        productID: product._id,
+      });
+      dispatch(setWishlist(data.products));
+    } catch (error) {
+      setWishlistError(axiosErrorCatch(error));
+    }
+  }
+
+  async function removeFromWishlist() {
+    if (!currentUser) {
+      dispatch(setRedirectPath("/"));
+      navigate("/login");
+      return;
+    }
+    try {
+      const { data } = await axiosPrivate.delete(`/user/wishlist`, {
+        data: { productID: product._id },
+      });
+      dispatch(setWishlist(data.products));
+    } catch (error) {
+      setWishlistError(axiosErrorCatch(error));
+    }
+  }
+
   return (
     <>
       {loading && <p>Loading...</p>}
@@ -60,12 +99,30 @@ export default function Product() {
       {product && (
         <>
           <div className="p-10 ">
-            <div className="flex justify-center items-center ">
+            <div className="flex justify-center relative left-3">
               <img
                 src={product.image}
                 alt={product.name}
                 className="h-60 md:h-96 object-cover"
               />
+              <div className="flex flex-col items-start justify-start h-max gap-1 relative left-3">
+                {!inWishList ? (
+                  <button onClick={addToWishlist} title="Add to Wishlist">
+                    <IoMdHeartEmpty className="text-2xl md:text-3xl text-red-700 z-20 hover:text-red-500" />
+                  </button>
+                ) : (
+                  <button onClick={removeFromWishlist}>
+                    <IoMdHeart className="text-2xl md:text-3xl text-red-500 z-20  " />
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                  }}
+                  title="Share">
+                  <IoMdShareAlt className="text-2xl md:text-3xl text-orange-700 z-20 hover:text-orange-500" />
+                </button>
+              </div>
             </div>
             <div className="flex flex-col items-center">
               <h1 className="text-2xl text-orange-950 font-semibold">

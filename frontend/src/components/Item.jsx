@@ -1,16 +1,26 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addToBuy } from "../Store/cartSlice";
+import { addToBuy, setWishlist } from "../Store/cartSlice";
 import { setRedirectPath } from "../Store/userSlice";
 import useCartUtil from "../hooks/useCartUtil";
 import { addToCartUtil, removeFromCartUtil } from "../utils/cartUtils";
 import { SyncLoader } from "react-spinners";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
+import { useState } from "react";
+import axiosErrorCatch from "../utils/axiosErrorCatch";
 
 export default function Item({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart.cartItems);
+  const wishlist = useSelector((state) => state.cart.wishlist);
   const added = cart?.some((item) => item.productID?._id === product._id);
+
+  const inWishList = wishlist?.includes(product._id);
+  const [wishlistError, setWishlistError] = useState(null);
+
+  const axiosPrivate = useAxiosPrivate();
 
   const currentUser = useSelector((state) => state.user.currentUser);
   const { utilFunction: addToCart, loading } = useCartUtil(addToCartUtil);
@@ -38,6 +48,38 @@ export default function Item({ product }) {
       : addToCart({ productID: product._id, quantity: 1 });
   }
 
+  async function addToWishlist() {
+    if (!currentUser) {
+      dispatch(setRedirectPath("/"));
+      navigate("/login");
+      return;
+    }
+    try {
+      const { data } = await axiosPrivate.post(`/user/wishlist`, {
+        productID: product._id,
+      });
+      dispatch(setWishlist(data.products));
+    } catch (error) {
+      setWishlistError(axiosErrorCatch(error));
+    }
+  }
+
+  async function removeFromWishlist() {
+    if (!currentUser) {
+      dispatch(setRedirectPath("/"));
+      navigate("/login");
+      return;
+    }
+    try {
+      const { data } = await axiosPrivate.delete(`/user/wishlist`, {
+        data: { productID: product._id },
+      });
+      dispatch(setWishlist(data.products));
+    } catch (error) {
+      setWishlistError(axiosErrorCatch(error));
+    }
+  }
+
   return (
     <div className="flex flex-col  bg-white shadow-2xl overflow-hidden rounded-md border">
       <Link to={`/products/${product._id}`}>
@@ -49,11 +91,22 @@ export default function Item({ product }) {
       </Link>
       <div className="flex flex-col justify-between h-full p-3">
         <div>
-          <Link
-            to={`/products/${product.id}`}
-            className="sm:text-lg lg:text-xl text-orange-900 hover:text-orange-600">
-            {product.name}
-          </Link>
+          <div className="flex justify-between items-center">
+            <Link
+              to={`/products/${product._id}`}
+              className="sm:text-lg  lg:text-xl text-orange-900 hover:text-orange-600">
+              {product.name}
+            </Link>
+            {!inWishList ? (
+              <button onClick={addToWishlist} title="Add to Wishlist">
+                <IoMdHeartEmpty className="text-2xl md:text-3xl text-red-700 z-20 hover:text-red-500" />
+              </button>
+            ) : (
+              <button onClick={removeFromWishlist}>
+                <IoMdHeart className="text-2xl md:text-3xl text-red-500 z-20  " />
+              </button>
+            )}
+          </div>
           <div className=" flex flex-wrap gap-x-5">
             <span className="text-orange-600"> ₹{product.price}</span>
             <span className="text-gray-400 line-through">

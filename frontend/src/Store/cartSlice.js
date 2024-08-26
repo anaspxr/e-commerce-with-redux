@@ -4,6 +4,7 @@ import axiosErrorCatch from "../utils/axiosErrorCatch";
 const initialState = {
   cartItems: [],
   buyItems: [],
+  wishlist: [],
   orders: [],
   fetching: false,
   updating: false,
@@ -54,6 +55,9 @@ const cartSlice = createSlice({
     clearBuy: (state) => {
       state.buyItems = {};
     },
+    setWishlist: (state, action) => {
+      state.wishlist = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -102,6 +106,7 @@ export const {
   buyQuantityMinus,
   buyQuantityPlus,
   removeFromBuy,
+  setWishlist,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
