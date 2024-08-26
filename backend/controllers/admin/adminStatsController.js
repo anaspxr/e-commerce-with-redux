@@ -1,6 +1,16 @@
 import User from "../../schema/userSchema.js";
 import Order from "../../schema/orderSchema.js";
+import Product from "../../schema/productSchema.js";
 import CustomError from "../../utils/CustomError.js";
+
+// count total number of users, products and ``orders
+const getCount = async (req, res) => {
+  const users = await User.countDocuments();
+  const products = await Product.countDocuments();
+  const orders = await Order.countDocuments();
+
+  res.status(200).json({ users, products, orders });
+};
 
 // user stats
 const getMonthlyUsers = async (req, res, next) => {
@@ -117,6 +127,7 @@ const getMostSold = async (req, res, next) => {
 };
 
 export {
+  getCount,
   getMonthlyUsers,
   getMonthlyRevenue,
   getYearlyRevenue,
