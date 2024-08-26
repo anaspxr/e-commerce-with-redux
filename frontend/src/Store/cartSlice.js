@@ -76,7 +76,7 @@ const cartSlice = createSlice({
       .addCase(getServerCart.fulfilled, (state, action) => {
         state.fetching = false;
         state.cartItems = action.payload?.cart;
-        state.orders = action.payload?.orders;
+        state.wishlist = action.payload?.wishlist.products;
         state.error = null;
       })
       .addCase(getServerCart.rejected, (state, action) => {
@@ -97,10 +97,10 @@ export const getServerCart = createAsyncThunk(
       rejectWithValue(axiosErrorCatch(err));
     }
     try {
-      const { data: orders } = await axiosPrivate.get("user/orders");
-      data.orders = orders;
+      const { data: wishlist } = await axiosPrivate.get("user/wishlist");
+      data.wishlist = wishlist;
     } catch (err) {
-      data.orders = [];
+      data.wishlist = [];
     }
     return data;
   }

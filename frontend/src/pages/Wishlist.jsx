@@ -17,7 +17,7 @@ export default function Wishlist() {
       {!loading && !error && wishlist?.length === 0 ? (
         <div className="flex justify-center flex-col items-center">
           <h1 className="text-xl text-orange-900 text-center mb-10">
-            Your cart is empty..!!
+            Your wishlist is empty..!!
           </h1>
           <Link
             to="/products"
