@@ -6,7 +6,7 @@ export default function Categories() {
       name: "Sofas & Seatings",
       image:
         "https://cdn.pixabay.com/photo/2017/08/02/01/01/living-room-2569325_1280.jpg",
-      to: "/products/sofas",
+      to: "/products/sofa",
     },
     {
       name: "Home Decor",
@@ -42,8 +42,7 @@ export default function Categories() {
   return (
     <div
       id="categories"
-      className=" flex flex-col items-center bg-orange-50 py-10"
-    >
+      className=" flex flex-col items-center bg-orange-50 py-10">
       <h1 className="text-3xl text-orange-900 m-10">Categories</h1>
       <div className="grid grid-cols-2 md:grid-cols-3  gap-2">
         {categories.map((category, i) => (

@@ -21,7 +21,7 @@ const menuItems = [
   },
   {
     title: "Sofas & Seatings",
-    to: "/products/sofas",
+    to: "/products/sofa",
   },
   {
     title: "Kitchen & dining",
