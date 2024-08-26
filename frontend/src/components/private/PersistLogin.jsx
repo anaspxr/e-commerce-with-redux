@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import useRefreshToken from "../../hooks/useRefreshToken";
 import { getServerCart } from "../../Store/cartSlice";
 import { BeatLoader } from "react-spinners";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const PersistLogin = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
-
+  const axiosPrivate = useAxiosPrivate();
   const refresh = useRefreshToken();
   const accessToken = useSelector((state) => state.user.accessToken);
 
@@ -30,9 +31,9 @@ const PersistLogin = ({ children }) => {
   useEffect(() => {
     // Fetch cart from server if user is logged in
     if (accessToken) {
-      dispatch(getServerCart(accessToken));
+      dispatch(getServerCart(axiosPrivate));
     }
-  }, [accessToken, dispatch]);
+  }, [accessToken, axiosPrivate, dispatch]);
 
   return (
     <>

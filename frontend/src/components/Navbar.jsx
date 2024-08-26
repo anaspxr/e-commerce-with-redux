@@ -147,7 +147,7 @@ export default function Navbar() {
               <MdOutlineShoppingCart className="text-3xl text-orange-900 hover:text-orange-700" />
             </Link>
             <div className="w-4 h-4 flex justify-center items-center text-sm -ml-4 -mt-1 rounded-full bg-orange-600 text-white">
-              {(cart && Object.keys(cart)?.length) || 0}
+              {cart?.length || 0}
             </div>
           </div>
         )}

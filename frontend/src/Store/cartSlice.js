@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosErrorCatch from "../utils/axiosErrorCatch";
-import axios from "axios";
 
 const initialState = {
   cartItems: [],
   buyItems: [],
+  orders: [],
   fetching: false,
   updating: false,
   error: null,
@@ -62,7 +62,9 @@ const cartSlice = createSlice({
       })
       .addCase(getServerCart.fulfilled, (state, action) => {
         state.fetching = false;
-        state.cartItems = action.payload;
+        state.cartItems = action.payload?.cart;
+        state.orders = action.payload?.orders;
+        state.error = null;
       })
       .addCase(getServerCart.rejected, (state, action) => {
         state.fetching = false;
@@ -73,17 +75,21 @@ const cartSlice = createSlice({
 
 export const getServerCart = createAsyncThunk(
   "cart/getServerCart",
-  async (accessToken, { rejectWithValue }) => {
+  async (axiosPrivate, { rejectWithValue }) => {
+    const data = {};
     try {
-      const { data } = await axios.get("http://localhost:3000/api/user/cart", {
-        headers: {
-          token: `Bearer ${accessToken}`,
-        },
-      });
-      return data.products;
+      const { data: cart } = await axiosPrivate.get("user/cart");
+      data.cart = cart.products;
     } catch (err) {
       rejectWithValue(axiosErrorCatch(err));
     }
+    try {
+      const { data: orders } = await axiosPrivate.get("user/orders");
+      data.orders = orders;
+    } catch (err) {
+      data.orders = [];
+    }
+    return data;
   }
 );
 
