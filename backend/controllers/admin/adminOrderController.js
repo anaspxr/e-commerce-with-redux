@@ -2,18 +2,25 @@ import Order from "../../schema/orderSchema.js";
 import CustomError from "../../utils/CustomError.js";
 
 const getAllOrders = async (req, res) => {
-  const orders = await Order.find();
+  const orders = await Order.find()
+    .populate({ path: "userID", select: "name email" })
+    .populate({ path: "products.productID", select: "name" });
   res.status(200).json(orders);
 };
 
 const getAllOrdersOfUser = async (req, res, next) => {
-  const orders = await Order.find({ userID: req.params.id });
-  if (!orders || orders.length === 0) return next(new CustomError("No orders found", 404));
+  const orders = await Order.find({ userID: req.params.id })
+    .populate({ path: "userID", select: "name email" })
+    .populate({ path: "products.productID", select: "name" });
+  if (!orders || orders.length === 0)
+    return next(new CustomError("No orders found", 404));
   res.status(200).json(orders);
 };
 
 const getOrder = async (req, res, next) => {
-  const order = await Order.findById(req.params.id);
+  const order = await Order.findById(req.params.id)
+    .populate({ path: "userID", select: "name email" })
+    .populate({ path: "products.productID", select: "name" });
   if (!order) return next(new CustomError("Order not found", 404));
   res.status(200).json(order);
 };
