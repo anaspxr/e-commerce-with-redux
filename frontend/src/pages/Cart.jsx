@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToBuy } from "../Store/cartSlice";
 import useCartUtil from "../hooks/useCartUtil";
@@ -14,12 +14,20 @@ export default function Cart() {
   const { cartItems, fetching, error } = useSelector((state) => state.cart);
   return (
     <div className="p-5">
+      <h1 className="text-3xl text-orange-900 text-center mb-10">Cart</h1>
       {fetching && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {!fetching && !error && cartItems?.length === 0 ? (
-        <h1 className="text-3xl text-orange-900 text-center mb-10">
-          Your cart is empty
-        </h1>
+        <div className="flex justify-center flex-col items-center">
+          <h1 className="text-xl text-orange-900 text-center mb-10">
+            Your cart is empty..!!
+          </h1>
+          <Link
+            to="/products"
+            className="bg-orange-600 text-white p-2 rounded-md hover:opacity-90">
+            Explore Products
+          </Link>
+        </div>
       ) : (
         cartItems && <CartDetails cartItems={cartItems} />
       )}
@@ -58,8 +66,6 @@ function CartDetails({ cartItems }) {
   }
   return (
     <>
-      <h1 className="text-3xl text-orange-900 text-center mb-10">Cart</h1>
-
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-5">
         {cartItems.map((product) => {
           const productDetails = product?.productID; //get populated product details in productID field
