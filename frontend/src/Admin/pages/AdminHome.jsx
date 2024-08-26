@@ -1,4 +1,4 @@
-import useFetch from "../utils/useFetch.js";
+import useFetch from "../../utils/useFetch";
 import { Link } from "react-router-dom";
 
 export default function Admin() {
@@ -14,7 +14,8 @@ export default function Admin() {
   } = useFetch("http://localhost:3000/products");
 
   const totalOrders =
-    users && users.reduce((total, user) => total + Object.keys(user.orders).length, 0);
+    users &&
+    users.reduce((total, user) => total + Object.keys(user.orders).length, 0);
 
   return (
     <div>

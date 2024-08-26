@@ -1,5 +1,5 @@
 import Button from "./Button";
-import heroImage from "./assets/hero-min.png";
+import heroImage from "../assets/hero-min.png";
 import { Link } from "react-router-dom";
 
 export default function Hero() {

@@ -1,12 +1,16 @@
 import { useParams } from "react-router-dom";
 import { useFormik } from "formik";
-import { productSchema } from "../schemas/validationSchemas";
-import { handleAdd, handleEdit } from "../utils/serverUtils";
-import useFetch from "../utils/useFetch.js";
+import { productSchema } from "../../schemas/validationSchemas.js";
+import { handleAdd, handleEdit } from "../../utils/serverUtils.js";
+import useFetch from "../../utils/useFetch.js";
 import { useEffect, useState } from "react";
 export default function ProductEditPage() {
   const { id } = useParams();
-  const { data: products, loading, error } = useFetch("http://localhost:3000/products");
+  const {
+    data: products,
+    loading,
+    error,
+  } = useFetch("http://localhost:3000/products");
 
   const [preview, setPreview] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -48,7 +52,11 @@ export default function ProductEditPage() {
       {loading && <p>Loading...</p>}
       {error && <p>network error..</p>}
       <div className={`grid lg:${preview && "grid-cols-2"} gap-2 items-center`}>
-        <div>{showForm && <ProductForm preview={preview} setPreview={setPreview} />}</div>
+        <div>
+          {showForm && (
+            <ProductForm preview={preview} setPreview={setPreview} />
+          )}
+        </div>
         {preview && (
           <div id="preview">
             <div className="flex flex-col items-center bg-slate-200 my-2 p-2 rounded-md">
@@ -70,13 +78,17 @@ export default function ProductEditPage() {
               <button
                 onClick={handleFinalSubmit}
                 className="bg-slate-500 hover:opacity-90 text-white p-2 rounded-md my-3 h-fit">
-                {id === "addproduct" ? "Confirm Add Product" : "Confirm Update Product"}
+                {id === "addproduct"
+                  ? "Confirm Add Product"
+                  : "Confirm Update Product"}
               </button>
             </div>
           </div>
         )}
       </div>
-      {!showForm && !loading && !error && <p className="text-center">Not found!!</p>}
+      {!showForm && !loading && !error && (
+        <p className="text-center">Not found!!</p>
+      )}
     </div>
   );
 }
@@ -90,15 +102,22 @@ function ProductForm({ preview, setPreview }) {
     image: "",
     description: "",
   };
-  const { handleChange, handleSubmit, errors, touched, handleBlur, values, setValues } =
-    useFormik({
-      initialValues: initialValues,
-      validationSchema: productSchema,
-      onSubmit: (values) => {
-        setPreview(values);
-        window.scrollTo(0, document.body.scrollHeight);
-      },
-    });
+  const {
+    handleChange,
+    handleSubmit,
+    errors,
+    touched,
+    handleBlur,
+    values,
+    setValues,
+  } = useFormik({
+    initialValues: initialValues,
+    validationSchema: productSchema,
+    onSubmit: (values) => {
+      setPreview(values);
+      window.scrollTo(0, document.body.scrollHeight);
+    },
+  });
   const formInputs = [
     { name: "name", title: "Product Name", type: "text" },
     { name: "oldPrice", title: "Old Price", type: "number" },

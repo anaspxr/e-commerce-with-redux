@@ -1,7 +1,7 @@
 import { useState } from "react";
-import useFetch from "../utils/useFetch.js";
-import SearchField from "../components/SearchField";
-import getSearchResults from "../utils/getSearchResults";
+import useFetch from "../../utils/useFetch.js";
+import SearchField from "../../components/SearchField.jsx";
+import getSearchResults from "../../utils/getSearchResults.js";
 
 export default function UsersPage() {
   const {
@@ -60,7 +60,9 @@ export default function UsersPage() {
           ) : (
             <>
               {loadingProducts && <p>Loading</p>}
-              {errorProducts && <p>Error fetching products data {errorProducts} </p>}
+              {errorProducts && (
+                <p>Error fetching products data {errorProducts} </p>
+              )}
             </>
           )}
         </div>

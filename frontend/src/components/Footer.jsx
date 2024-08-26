@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "./assets/logo.png";
+import logo from "../assets/logo.png";
 import {
   FaSquareFacebook,
   FaSquareInstagram,
@@ -27,8 +27,7 @@ export default function Footer() {
                 className="cursor-pointer"
                 onClick={() => {
                   window.scrollTo(0, 0);
-                }}
-              >
+                }}>
                 Scroll to Top
               </li>
               <li>

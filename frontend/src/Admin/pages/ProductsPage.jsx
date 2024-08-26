@@ -1,13 +1,17 @@
 import { useEffect, useReducer, useState } from "react";
-import useFetch from "../utils/useFetch.js";
+import useFetch from "../../utils/useFetch.js";
 import { FaRegEdit } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
-import SearchField from "../components/SearchField";
-import getSearchResults from "../utils/getSearchResults";
-import { handleDelete } from "../utils/serverUtils";
+import SearchField from "../../components/SearchField.jsx";
+import getSearchResults from "../../utils/getSearchResults.js";
+import { handleDelete } from "../../utils/serverUtils.js";
 export default function ProductsPage() {
-  const { data: products, loading, error } = useFetch("http://localhost:3000/products");
+  const {
+    data: products,
+    loading,
+    error,
+  } = useFetch("http://localhost:3000/products");
 
   const navigate = useNavigate();
   const [displayProducts, setDisplayProducts] = useState(products);
@@ -19,7 +23,9 @@ export default function ProductsPage() {
     <div>
       <div className="flex items-end justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-700 mb-3">Products</h1>
+          <h1 className="text-2xl font-semibold text-slate-700 mb-3">
+            Products
+          </h1>
           {loading && <p>Loading...</p>}
           {error && <p>Error: {error.message}</p>}
           {products && (
@@ -40,7 +46,10 @@ export default function ProductsPage() {
                 navigate(`/admin/products/${product.id}`);
               }}
             />
-            <Filter setDisplayProducts={setDisplayProducts} products={products} />
+            <Filter
+              setDisplayProducts={setDisplayProducts}
+              products={products}
+            />
           </div>
         )}
       </div>
@@ -69,7 +78,9 @@ export default function ProductsPage() {
                 </Link>
                 <button
                   onClick={() => {
-                    window.confirm("Are you sure you want to delete this item?") &&
+                    window.confirm(
+                      "Are you sure you want to delete this item?"
+                    ) &&
                       handleDelete(product.id, "products") &&
                       setDisplayProducts((prev) =>
                         prev.filter((p) => p.id !== product.id)

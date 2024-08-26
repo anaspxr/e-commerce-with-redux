@@ -1,5 +1,5 @@
-import logo from "./assets/logo.png";
-import logoSmall from "./assets/logo-small.png";
+import logo from "../assets/logo.png";
+import logoSmall from "../assets/logo-small.png";
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { HiMenuAlt1, HiX, HiChevronDown } from "react-icons/hi";

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import icon from "../components/assets/logo-small.png";
+import icon from "../../assets/logo-small.png";
 import { Link, useLocation } from "react-router-dom";
 import { RiMenu2Line } from "react-icons/ri";
 import { FaUsers, FaBagShopping } from "react-icons/fa6";
@@ -10,9 +10,9 @@ import {
 } from "react-icons/md";
 import { PiSignOutFill } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../Store/userSlice";
+import { logout } from "../../Store/userSlice";
 
-export default function Admin({ children }) {
+export default function AdminContainer({ children }) {
   const location = useLocation();
   const navItems = [
     { name: "Dashboard", icon: <MdSpaceDashboard />, link: "admin" },
@@ -45,8 +45,7 @@ export default function Admin({ children }) {
               setIsOpen(!isOpen);
             }}
             type="button"
-            className="inline-flex items-center p-2 text-sm text-slate-950 hover:text-slate-800 rounded-lg sm:hidden hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200 "
-          >
+            className="inline-flex items-center p-2 text-sm text-slate-950 hover:text-slate-800 rounded-lg sm:hidden hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200 ">
             <RiMenu2Line className="text-3xl hover:text-slate-600" />
           </button>
           <Link to="/admin" className="flex ms-2 md:me-24">
@@ -61,8 +60,7 @@ export default function Admin({ children }) {
           onClick={() => {
             setRightIconOpen(!rightIconOpen);
           }}
-          className="flex items-center ms-3 hover:text-slate-500"
-        >
+          className="flex items-center ms-3 hover:text-slate-500">
           <p className="hidden sm:block">{currentUser?.email}</p>
           <MdAdminPanelSettings className="text-4xl" />
         </button>
@@ -70,20 +68,17 @@ export default function Admin({ children }) {
         <div
           className={`${
             rightIconOpen ? "block" : "hidden"
-          } absolute top-16 right-2 bg-slate-200 border border-slate-200 rounded-md shadow-lg`}
-        >
+          } absolute top-16 right-2 bg-slate-200 border border-slate-200 rounded-md shadow-lg`}>
           <div className="space-y-2 font-medium">
             <Link
               to="/"
-              className=" flex items-center p-2 text-slate-950 rounded-lg  hover:bg-slate-300  group"
-            >
+              className=" flex items-center p-2 text-slate-950 rounded-lg  hover:bg-slate-300  group">
               Leave Admin page
             </Link>
 
             <p
               className="cursor-pointer flex items-center p-2 text-slate-950 rounded-lg  hover:bg-slate-300  group"
-              onClick={() => dispatch(logout())}
-            >
+              onClick={() => dispatch(logout())}>
               <PiSignOutFill />
               <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
             </p>
@@ -93,15 +88,13 @@ export default function Admin({ children }) {
       <div
         className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform ${
           !isOpen && "-translate-x-full"
-        }  bg-slate-300 border-r border-slate-400 sm:translate-x-0`}
-      >
+        }  bg-slate-300 border-r border-slate-400 sm:translate-x-0`}>
         <div className="h-full px-3 overflow-y-auto">
           <button
             onClick={() => {
               setIsOpen(false);
             }}
-            className="w-full mb-2 p-2 flex justify-end text-2xl hover:bg-slate-200 rounded-md hover:text-slate-600 sm:hidden"
-          >
+            className="w-full mb-2 p-2 flex justify-end text-2xl hover:bg-slate-200 rounded-md hover:text-slate-600 sm:hidden">
             <MdKeyboardDoubleArrowLeft />
           </button>
 
@@ -112,8 +105,7 @@ export default function Admin({ children }) {
                   to={item.link}
                   className={`${
                     location.pathname === "/" + item.link && "bg-slate-200"
-                  } flex items-center p-2 text-slate-950 rounded-lg  hover:bg-slate-200  group`}
-                >
+                  } flex items-center p-2 text-slate-950 rounded-lg  hover:bg-slate-200  group`}>
                   {item.icon}
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     {item.name}
@@ -123,8 +115,7 @@ export default function Admin({ children }) {
             ))}
             <li
               className="cursor-pointer flex items-center p-2 text-slate-950 rounded-lg  hover:bg-slate-200  group"
-              onClick={() => dispatch(logout())}
-            >
+              onClick={() => dispatch(logout())}>
               <PiSignOutFill />
               <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
             </li>
