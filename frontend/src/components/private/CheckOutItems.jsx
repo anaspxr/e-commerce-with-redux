@@ -1,11 +1,9 @@
 export default function CheckOutItems({ buyItems }) {
-  console.log(buyItems);
-
   return (
     <div className="m-auto max-w-3xl flex flex-wrap gap-3 p-2 justify-center">
       {buyItems.map((product) => {
         const productDetails = product.productID;
-        const total = productDetails.price * product.quantity;
+        const total = productDetails?.price * product.quantity;
         return (
           <div key={productDetails._id} className="shadow-md p-1 rounded-sm">
             <div className="flex flex-col justify-between bg-white overflow-hidden ">

@@ -10,7 +10,8 @@ export default function Item({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart.cartItems);
-  const added = cart?.some((item) => item.productID === product._id);
+  const added = cart?.some((item) => item.productID?._id === product._id);
+
   const currentUser = useSelector((state) => state.user.currentUser);
   const { utilFunction: addToCart, loading } = useCartUtil(addToCartUtil);
 
@@ -18,8 +19,8 @@ export default function Item({ product }) {
     return Math.floor(((oldPrice - price) / oldPrice) * 100);
   }
 
-  function handleBuyNow(id) {
-    dispatch(addToBuy({ [id]: 1 }));
+  function handleBuyNow() {
+    dispatch(addToBuy([{ productID: product, quantity: 1 }])); //this is the structure of buyItems
     navigate("/checkout");
   }
 
@@ -67,9 +68,7 @@ export default function Item({ product }) {
         </div>
         <div className="flex flex-wrap gap-2">
           <button
-            onClick={() => {
-              handleBuyNow(product.id);
-            }}
+            onClick={handleBuyNow}
             className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm">
             Buy Now
           </button>

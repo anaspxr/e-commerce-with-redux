@@ -15,21 +15,21 @@ export default function Product() {
   const currentUser = useSelector((state) => state.user.currentUser);
   const { productID } = useParams();
   const navigate = useNavigate();
-  const added = Object.keys(cartItems).includes(productID);
 
   const { utilFunction: addToCart, loading: cartLoading } =
     useCartUtil(addToCartUtil);
 
   const { data, loading, error } = useFetch(`/public/products/${productID}`);
-
   const product = data ? data.product : null;
+
+  const added = cartItems?.some((item) => item.productID?._id === product?._id);
 
   function calculateDiscountPrice(oldPrice, price) {
     return Math.floor(((oldPrice - price) / oldPrice) * 100);
   }
 
-  function handleBuyNow(id) {
-    dispatch(addToBuy({ [id]: 1 }));
+  function handleBuyNow() {
+    dispatch(addToBuy([{ productID: product, quantity: 1 }])); //this is the structure of buyItems
     navigate("/checkout");
   }
 
@@ -83,9 +83,7 @@ export default function Product() {
             </div>
             <div className="flex justify-center gap-10 mt-5">
               <button
-                onClick={() => {
-                  handleBuyNow(productID);
-                }}
+                onClick={handleBuyNow}
                 className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300">
                 Buy Now
               </button>

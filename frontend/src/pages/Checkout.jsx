@@ -29,12 +29,12 @@ export default function Checkout() {
     phone: "9876543210",
   };
   const totalAmount = buyItems.reduce(
-    (acc, product) => acc + product.productID.price * product.quantity,
+    (acc, product) => acc + product.productID?.price * product.quantity,
     0
   );
 
   const oldAmount = buyItems.reduce(
-    (acc, product) => acc + product.productID.oldPrice * product.quantity,
+    (acc, product) => acc + product.productID?.oldPrice * product.quantity,
     0
   );
 
