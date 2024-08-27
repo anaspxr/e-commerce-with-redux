@@ -50,6 +50,7 @@ export default function Item({ product }) {
   async function addToWishlist() {
     if (!currentUser) {
       dispatch(setRedirectPath("/"));
+      toast.error("Please login to add items to wishlist");
       navigate("/login");
       return;
     }
@@ -57,7 +58,6 @@ export default function Item({ product }) {
       const { data } = await axiosPrivate.post(`/user/wishlist`, {
         productID: product._id,
       });
-      toast.error("Please login to add items to wishlist");
       dispatch(setWishlist(data.products));
     } catch (error) {
       toast.error("Something went wrong, please try again later");
