@@ -118,6 +118,7 @@ export default function Product() {
                 )}
                 <button
                   onClick={() => {
+                    toast.success("Link copied to clipboard!");
                     navigator.clipboard.writeText(window.location.href);
                   }}
                   title="Share">
