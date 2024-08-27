@@ -20,7 +20,7 @@ export default function PrivateRoutes({ adminOnly = false }) {
   }
 
   if (adminOnly) {
-    return isAdmin ? <Outlet /> : <Navigate to="/" />;
+    return isAdmin ? <Outlet /> : <Navigate to="/notfound" />;
   }
 
   return <Outlet />;

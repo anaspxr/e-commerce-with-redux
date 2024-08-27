@@ -10,6 +10,7 @@ import Checkout from "../pages/Checkout";
 import PrivateRoutes from "./PrivateRoutes";
 import Orders from "../pages/Orders";
 import Wishlist from "../pages/Wishlist";
+import NotFoundPage from "../pages/NotFoundPage";
 
 export default function UserRoutes() {
   return (
@@ -37,6 +38,7 @@ export default function UserRoutes() {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/orders" element={<Orders />} />
       </Route>
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
