@@ -6,6 +6,8 @@ import ScrollToHashElement from "@cascadia-code/scroll-to-hash-element";
 import UserRoutes from "./routes/UserRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
 import PersistLogin from "./components/private/PersistLogin";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const location = useLocation();
@@ -14,21 +16,20 @@ function App() {
   return (
     <PersistLogin>
       <div className="flex flex-col min-h-screen">
-        <>
-          {!isAdminPage ? (
-            // If not an admin page, render the normal app with navbar and footer
-            <>
-              <Navbar />
-              <div className="md:pt-24 pt-16 "></div>
-              <UserRoutes />
-              <Footer />
-            </>
-          ) : (
-            <AdminRoutes /> // If admin page, render the admin routes
-          )}
-          <ScrollToTop />
-          <ScrollToHashElement />
-        </>
+        {!isAdminPage ? (
+          // If not an admin page, render the normal app with navbar and footer
+          <>
+            <Navbar />
+            <div className="md:pt-24 pt-16 "></div>
+            <UserRoutes />
+            <Footer />
+          </>
+        ) : (
+          <AdminRoutes /> // If admin page, render the admin routes
+        )}
+        <ToastContainer />
+        <ScrollToTop />
+        <ScrollToHashElement />
       </div>
     </PersistLogin>
   );
