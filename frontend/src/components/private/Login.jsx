@@ -25,6 +25,7 @@ export default function Login({ setAlert, setNewUser }) {
           EMAIL
         </label>
         <input
+          required
           id="email"
           className="w-full p-2 my-2 border rounded-md border-orange-900"
           type="email"
@@ -39,6 +40,7 @@ export default function Login({ setAlert, setNewUser }) {
           PASSWORD
         </label>
         <input
+          required
           id="password"
           className="w-full p-2 my-2 border rounded-md border-orange-900"
           type="password"

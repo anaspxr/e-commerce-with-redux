@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import axiosErrorCatch from "../utils/axiosErrorCatch";
+import { toast } from "react-toastify";
 
 const initialState = {
   currentUser: null,
@@ -69,8 +70,12 @@ export const login = createAsyncThunk(
           withCredentials: true,
         }
       );
+      toast.success("Logged in successfully!");
       return data; //data contains user (user details) and accessToken
     } catch (error) {
+      if (error.response.status !== 401) {
+        toast.error("Error while logging!");
+      }
       return rejectWithValue(axiosErrorCatch(error));
     }
   }
@@ -80,14 +85,17 @@ export const logout = createAsyncThunk(
   "user/logout",
   async (_, { rejectWithValue }) => {
     try {
-      return await axios.post(
+      await axios.post(
         "http://localhost:3000/api/auth/logout",
         {},
         {
           withCredentials: true,
         }
       );
+      toast.info("Logged out!");
+      return;
     } catch (error) {
+      toast.error("Error while logging out!");
       return rejectWithValue(axiosErrorCatch(error));
     }
   }

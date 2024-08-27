@@ -27,7 +27,13 @@ function App() {
         ) : (
           <AdminRoutes /> // If admin page, render the admin routes
         )}
-        <ToastContainer />
+        <ToastContainer
+          autoClose="2000"
+          hideProgressBar
+          stacked
+          className="toast-position"
+          draggable
+        />
         <ScrollToTop />
         <ScrollToHashElement />
       </div>

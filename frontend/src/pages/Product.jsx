@@ -9,9 +9,8 @@ import { addToCartUtil, removeFromCartUtil } from "../utils/cartUtils";
 import useCartUtil from "../hooks/useCartUtil";
 import { SyncLoader } from "react-spinners";
 import { IoMdHeart, IoMdHeartEmpty, IoMdShareAlt } from "react-icons/io";
-import { useState } from "react";
 import { axiosPrivate } from "../utils/axios";
-import axiosErrorCatch from "../utils/axiosErrorCatch";
+import { toast } from "react-toastify";
 
 export default function Product() {
   const dispatch = useDispatch();
@@ -32,7 +31,6 @@ export default function Product() {
 
   const added = cartItems?.some((item) => item.productID?._id === product?._id);
   const inWishList = wishlist?.includes(product?._id);
-  const [wishlistError, setWishlistError] = useState(null);
 
   function calculateDiscountPrice(oldPrice, price) {
     return Math.floor(((oldPrice - price) / oldPrice) * 100);
@@ -47,6 +45,7 @@ export default function Product() {
     if (!currentUser) {
       // if user is not logged in, redirect to login page
       dispatch(setRedirectPath("/"));
+      toast.error("Please login to add items to cart");
       navigate("/login");
       return;
     }
@@ -58,6 +57,7 @@ export default function Product() {
   async function addToWishlist() {
     if (!currentUser) {
       dispatch(setRedirectPath("/"));
+      toast.error("Please login to add items to wishlist");
       navigate("/login");
       return;
     }
@@ -67,13 +67,14 @@ export default function Product() {
       });
       dispatch(setWishlist(data.products));
     } catch (error) {
-      setWishlistError(axiosErrorCatch(error));
+      toast.error("Something went wrong, please try again later");
     }
   }
 
   async function removeFromWishlist() {
     if (!currentUser) {
       dispatch(setRedirectPath("/"));
+      toast.error("Please login");
       navigate("/login");
       return;
     }
@@ -83,7 +84,7 @@ export default function Product() {
       });
       dispatch(setWishlist(data.products));
     } catch (error) {
-      setWishlistError(axiosErrorCatch(error));
+      toast.error("Something went wrong, please try again later");
     }
   }
 

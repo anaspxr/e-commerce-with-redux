@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import axiosErrorCatch from "./axiosErrorCatch";
 
 export const addToCartUtil = async ({ productID }, axiosPrivate) => {
@@ -11,6 +12,7 @@ export const addToCartUtil = async ({ productID }, axiosPrivate) => {
     );
     return { newCart: data.products, error: null };
   } catch (err) {
+    toast.error("Something went wrong, please try again later");
     return { error: axiosErrorCatch(err) };
   }
 };
@@ -29,6 +31,7 @@ export const quantityPlusUtil = async (
     );
     return { newCart: data.products, error: null };
   } catch (err) {
+    toast.error("Something went wrong, please try again later");
     return { error: axiosErrorCatch(err) };
   }
 };
@@ -47,6 +50,7 @@ export const quantityMinusUtil = async (
     );
     return { newCart: data.products, error: null };
   } catch (err) {
+    toast.error("Something went wrong, please try again later");
     return { error: axiosErrorCatch(err) };
   }
 };
@@ -65,6 +69,7 @@ export const setQuantityUtil = async (
     );
     return { newCart: data.products, error: null };
   } catch (err) {
+    toast.error("Something went wrong, please try again later");
     return { error: axiosErrorCatch(err) };
   }
 };
@@ -77,6 +82,7 @@ export const removeFromCartUtil = async ({ productID }, axiosPrivate) => {
     );
     return { newCart: data.products, error: null };
   } catch (err) {
+    toast.error("Something went wrong, please try again later");
     return { error: axiosErrorCatch(err) };
   }
 };

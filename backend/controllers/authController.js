@@ -18,12 +18,12 @@ const createUser = async (req, res) => {
 const login = async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return next(new CustomError("User does not exist", 404));
+    return next(new CustomError("User does not exist", 401));
   }
 
   const isMatch = await bcrypt.compare(req.body.password, user.password);
   if (!isMatch) {
-    return next(new CustomError("Invalid credentials", 400));
+    return next(new CustomError("Invalid credentials", 401));
   }
 
   // generate access token

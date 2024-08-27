@@ -31,3 +31,7 @@ h6 {
   border-radius: 20px;
   background: #46140071;
 }
+
+.toast-position {
+  top: 4rem;
+}

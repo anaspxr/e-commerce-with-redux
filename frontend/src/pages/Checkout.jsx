@@ -8,10 +8,12 @@ import CheckOutPayment from "../components/private/CheckOutPayment.jsx";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import axiosErrorCatch from "../utils/axiosErrorCatch.js";
+import { toast } from "react-toastify";
 
 export default function Checkout() {
   useEffect(() => {
     if (buyItems.length === 0) {
+      toast.error("No items selected, redirecting to cart");
       navigate("/cart");
     }
   });

@@ -7,8 +7,7 @@ import { addToCartUtil, removeFromCartUtil } from "../utils/cartUtils";
 import { SyncLoader } from "react-spinners";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
-import { useState } from "react";
-import axiosErrorCatch from "../utils/axiosErrorCatch";
+import { toast } from "react-toastify";
 
 export default function Item({ product }) {
   const dispatch = useDispatch();
@@ -18,7 +17,6 @@ export default function Item({ product }) {
   const added = cart?.some((item) => item.productID?._id === product._id);
 
   const inWishList = wishlist?.includes(product._id);
-  const [wishlistError, setWishlistError] = useState(null);
 
   const axiosPrivate = useAxiosPrivate();
 
@@ -40,6 +38,7 @@ export default function Item({ product }) {
     if (!currentUser) {
       // if user is not logged in, redirect to login page
       dispatch(setRedirectPath("/"));
+      toast.error("Please login to add items to cart");
       navigate("/login");
       return;
     }
@@ -58,15 +57,17 @@ export default function Item({ product }) {
       const { data } = await axiosPrivate.post(`/user/wishlist`, {
         productID: product._id,
       });
+      toast.error("Please login to add items to wishlist");
       dispatch(setWishlist(data.products));
     } catch (error) {
-      setWishlistError(axiosErrorCatch(error));
+      toast.error("Something went wrong, please try again later");
     }
   }
 
   async function removeFromWishlist() {
     if (!currentUser) {
       dispatch(setRedirectPath("/"));
+      toast.error("Please login");
       navigate("/login");
       return;
     }
@@ -76,7 +77,7 @@ export default function Item({ product }) {
       });
       dispatch(setWishlist(data.products));
     } catch (error) {
-      setWishlistError(axiosErrorCatch(error));
+      toast.error("Something went wrong, please try again later");
     }
   }
 
