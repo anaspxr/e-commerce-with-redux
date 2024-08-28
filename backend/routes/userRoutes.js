@@ -10,6 +10,7 @@ import {
 import {
   cancelOrder,
   checkout,
+  checkoutSuccess,
   createOrder,
   getAllOrdersOfUser,
   getOrder,
@@ -36,6 +37,7 @@ router.post("/cart", verifyToken, tryCatch(updateCart)); // add or update items 
 router.delete("/cart", verifyToken, tryCatch(removeFromCart)); // remove product from the cart
 
 router.post("/checkout", verifyToken, tryCatch(checkout)); // start payment process
+router.post("/checkout/success", verifyToken, tryCatch(checkoutSuccess)); // complete payment process
 
 router.get("/orders", verifyToken, tryCatch(getAllOrdersOfUser)); //get user's orders
 router.post("/orders", verifyToken, tryCatch(createOrder)); // create new orders
@@ -43,7 +45,11 @@ router.get("/orders/:orderID", verifyToken, tryCatch(getOrder)); //get single or
 router.patch("/orders/cancel/:orderID", verifyToken, tryCatch(cancelOrder)); // cancel order
 
 router.get("/wishlist", verifyToken, tryCatch(getUserWishlist)); //get wishlist of the user
-router.get("/wishlist/populated", verifyToken, tryCatch(getPopulatedUserWishlist)); //get wishlist of the user
+router.get(
+  "/wishlist/populated",
+  verifyToken,
+  tryCatch(getPopulatedUserWishlist)
+); //get wishlist of the user
 router.post("/wishlist", verifyToken, tryCatch(addToWishlist)); // add product to wishlist
 router.delete("/wishlist", verifyToken, tryCatch(removeFromWishlist)); // remove product from wishlist
 

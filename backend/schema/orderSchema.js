@@ -13,10 +13,12 @@ const orderSchema = new mongoose.Schema(
         quantity: { type: Number, required: true, default: 1 },
       },
     ],
+    sessionID: { type: String },
     purchaseDate: { type: Date, default: Date.now },
     amount: { type: Number, required: true },
     address: { type: Object, required: true },
-    status: { type: String, default: "pending" },
+    paymentStatus: { type: String, default: "pending" },
+    shippingStatus: { type: String, default: "pending" },
     info: String,
   },
   { timestamps: true }

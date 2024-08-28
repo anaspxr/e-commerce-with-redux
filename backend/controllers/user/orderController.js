@@ -43,16 +43,31 @@ const checkout = async (req, res, next) => {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: lineData,
+    ui_mode: "embedded",
     mode: "payment",
-    success_url: `${process.env.FRONTEND_URL}/orders`,
-    cancel_url: `${process.env.FRONTEND_URL}/orders/cancel`,
+    return_url: `${process.env.FRONTEND_URL}/checkout/success/{CHECKOUT_SESSION_ID}`,
   });
 
   newOrder.sessionID = session.id;
-  const savedOrder = await newOrder.save(); // save the order to the database after successful payment
-  console.log(savedOrder);
+  await newOrder.save(); // save the order to the database after successful payment
 
-  res.status(200).json({ newOrder, id: session.id });
+  res
+    .status(200)
+    .json({ newOrder, id: session.id, clientSecret: session.client_secret });
+};
+
+const checkoutSuccess = async (req, res, next) => {
+  const { session_id } = req.body;
+  const order = await Order.findOne({ sessionID: session_id });
+  if (!order) return next(new CustomError("Order not found", 404));
+  if (order.paymentStatus === "paid")
+    return next(new CustomError("Status already updated", 400));
+  order.paymentStatus = "paid";
+  order.shippingStatus = "processing";
+  const updatedOrder = await (
+    await order.save()
+  ).populate("products.productID");
+  res.status(200).json(updatedOrder);
 };
 
 const createOrder = async (req, res, next) => {
@@ -101,7 +116,7 @@ const cancelOrder = async (req, res, next) => {
   const updatedOrder = await Order.findOneAndUpdate(
     { _id: req.params.orderID, userID: req.user.id },
     {
-      $set: { status: "cancelled", info: req.body.info || "" },
+      $set: { shippingStatus: "cancelled", info: req.body.info || "" },
     },
     { new: true }
   );
@@ -109,4 +124,11 @@ const cancelOrder = async (req, res, next) => {
   res.status(200).json(updatedOrder);
 };
 
-export { createOrder, getAllOrdersOfUser, getOrder, checkout, cancelOrder };
+export {
+  createOrder,
+  getAllOrdersOfUser,
+  getOrder,
+  checkout,
+  cancelOrder,
+  checkoutSuccess,
+};
