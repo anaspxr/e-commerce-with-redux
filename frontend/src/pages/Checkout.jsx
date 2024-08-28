@@ -6,9 +6,9 @@ import { useSelector } from "react-redux";
 import CheckOutItems from "../components/private/CheckOutItems.jsx";
 import CheckOutPayment from "../components/private/CheckOutPayment.jsx";
 import { loadStripe } from "@stripe/stripe-js";
-import axios from "axios";
 import axiosErrorCatch from "../utils/axiosErrorCatch.js";
 import { toast } from "react-toastify";
+import useAxiosPrivate from "../hooks/useAxiosPrivate.js";
 
 export default function Checkout() {
   useEffect(() => {
@@ -17,7 +17,8 @@ export default function Checkout() {
       navigate("/cart");
     }
   });
-  const { currentUser, accessToken } = useSelector((state) => state.user);
+  const axiosPrivate = useAxiosPrivate();
+  const { currentUser } = useSelector((state) => state.user);
   const { buyItems } = useSelector((state) => state.cart);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -56,14 +57,7 @@ export default function Checkout() {
         address,
       };
 
-      const { data } = await axios.post(
-        "http://localhost:3000/api/user/checkout",
-        body,
-        {
-          headers: { token: `Bearer ${accessToken}` },
-          withCredentials: true,
-        }
-      );
+      const { data } = await axiosPrivate.post("user/checkout", body);
 
       const results = await stripe.redirectToCheckout({
         sessionId: data.id,
