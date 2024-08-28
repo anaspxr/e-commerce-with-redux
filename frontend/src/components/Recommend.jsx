@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import Item from "./Item";
 import useFetch from "../utils/useFetch";
+import LoadingAndError from "./LoadingAndError";
 
 export function RelatedProducts({ product }) {
   const { data, loading, error } = useFetch("/public/products");
   return (
     <>
-      {loading && <p>Loading...</p>}
-      {error && <p>{error.message}</p>}
+      <LoadingAndError loading={loading} error={error} />
       {data?.products && (
         <div className="grid grid-cols-2 sm:grid-cols-3  md:grid-cols-4 gap-2 sm:gap-4 mt-5">
           {data.products

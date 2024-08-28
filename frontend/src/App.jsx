@@ -8,6 +8,7 @@ import AdminRoutes from "./routes/AdminRoutes";
 import PersistLogin from "./components/private/PersistLogin";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Zoom } from "react-toastify";
 
 function App() {
   const location = useLocation();
@@ -33,6 +34,7 @@ function App() {
           stacked
           className="toast-position"
           draggable
+          transition={Zoom}
         />
         <ScrollToTop />
         <ScrollToHashElement />

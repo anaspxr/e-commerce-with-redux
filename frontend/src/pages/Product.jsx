@@ -11,6 +11,7 @@ import { SyncLoader } from "react-spinners";
 import { IoMdHeart, IoMdHeartEmpty, IoMdShareAlt } from "react-icons/io";
 import { axiosPrivate } from "../utils/axios";
 import { toast } from "react-toastify";
+import LoadingAndError from "../components/LoadingAndError";
 
 export default function Product() {
   const dispatch = useDispatch();
@@ -90,8 +91,7 @@ export default function Product() {
 
   return (
     <>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
+      <LoadingAndError loading={loading} error={error} />
       {!error && !loading && !product && (
         <h1 className="text-red-500 text-center text-xl ">
           Product not found!!

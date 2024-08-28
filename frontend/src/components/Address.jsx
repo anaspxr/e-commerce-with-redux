@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useFetch from "../utils/useFetch.js";
 import { useSelector } from "react-redux";
 import PopUpAlert from "./PopUpAlert";
+import LoadingAndError from "./LoadingAndError.jsx";
 
 export default function Address() {
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -13,13 +14,16 @@ export default function Address() {
   );
 
   async function updateAddress(value) {
-    const response = await fetch(`http://localhost:3000/users/${currentUser.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ address: value }),
-    });
+    const response = await fetch(
+      `http://localhost:3000/users/${currentUser.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ address: value }),
+      }
+    );
     if (response.ok) {
       setShowAlert({ message: "Address Updated...!" });
     } else {
@@ -67,14 +71,15 @@ export default function Address() {
   return (
     <div>
       <h1 className="text-xl text-center text-orange-900">Address</h1>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
+      <LoadingAndError loading={loading} error={error} />
       {data && (
         <div className="m-auto max-w-3xl p-2">
           <form className="flex flex-col gap-2">
             {fields.map((field) => (
               <div key={field}>
-                {editOpen && <label htmlFor={field}>{field.toUpperCase()}</label>}
+                {editOpen && (
+                  <label htmlFor={field}>{field.toUpperCase()}</label>
+                )}
                 <input
                   disabled={!editOpen}
                   className={`w-full p-2 border rounded-sm ${

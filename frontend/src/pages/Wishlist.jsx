@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import useGetPrivateData from "../hooks/useGetPrivateData";
 import Item from "../components/Item";
+import LoadingAndError from "../components/LoadingAndError";
 
 export default function Wishlist() {
   const { data, loading, error } = useGetPrivateData(
@@ -12,8 +13,7 @@ export default function Wishlist() {
   return (
     <div className="p-5">
       <h1 className="text-3xl text-orange-900 text-center mb-10">Cart</h1>
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      <LoadingAndError loading={loading} error={error} />
       {!loading && !error && wishlist?.length === 0 ? (
         <div className="flex justify-center flex-col items-center">
           <h1 className="text-xl text-orange-900 text-center mb-10">

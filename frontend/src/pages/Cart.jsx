@@ -9,14 +9,14 @@ import {
 } from "../utils/cartUtils";
 import NoItem from "../components/NoItem";
 import { FaTrash } from "react-icons/fa";
+import LoadingAndError from "../components/LoadingAndError";
 
 export default function Cart() {
   const { cartItems, fetching, error } = useSelector((state) => state.cart);
   return (
     <div className="p-5">
       <h1 className="text-3xl text-orange-900 text-center mb-10">Cart</h1>
-      {fetching && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      {<LoadingAndError loading={fetching} error={error} />}
       {!fetching && !error && cartItems?.length === 0 ? (
         <div className="flex justify-center flex-col items-center">
           <h1 className="text-xl text-orange-900 text-center mb-10">

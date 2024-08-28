@@ -1,5 +1,6 @@
 import Categories from "../components/Categories";
 import Item from "../components/Item";
+import LoadingAndError from "../components/LoadingAndError";
 import useFetch from "../utils/useFetch";
 export default function Products({ category }) {
   const url = `public/products${category ? `?category=${category}` : ""}`;
@@ -19,8 +20,7 @@ export default function Products({ category }) {
         {category === "lightings" && "Lamps & Lightings"}
         {category === "mattresses" && "Mattresses"}
       </h2>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
+      <LoadingAndError loading={loading} error={error} />
       {products && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-3 p-2 sm:p-3 lg:p-5">
           {products.map((item) => (

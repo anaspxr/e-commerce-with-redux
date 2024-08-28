@@ -1,5 +1,6 @@
 import useFetch from "../utils/useFetch";
 import Item from "./Item";
+import LoadingAndError from "./LoadingAndError";
 
 export default function Popular() {
   const {
@@ -13,8 +14,7 @@ export default function Popular() {
       <h2 className="md:text-4xl text-3xl text-orange-900 py-5 text-center">
         Popular Products
       </h2>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
+      <LoadingAndError loading={loading} error={error} />
       {popularProducts && (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4">
           {popularProducts.map((item) => (

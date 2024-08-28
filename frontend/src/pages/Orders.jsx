@@ -1,3 +1,4 @@
+import LoadingAndError from "../components/LoadingAndError";
 import useGetPrivateData from "../hooks/useGetPrivateData";
 
 export default function Orders() {
@@ -6,8 +7,7 @@ export default function Orders() {
   return (
     <div className="p-5">
       <h1 className="text-3xl text-orange-900 text-center mb-10">Orders</h1>
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      <LoadingAndError loading={loading} error={error} />
       {data && (
         <div className="flex flex-col">
           {data.map((order) => (
@@ -27,16 +27,16 @@ export default function Orders() {
                   <tr key={product._id} className="border">
                     <td className="px-6 py-3">
                       <img
-                        src={product.productID.image}
-                        alt={product.productID.name}
+                        src={product.productID?.image}
+                        alt={product.productID?.name}
                         className="w-20 h-20 object-cover p-1"
                       />
-                      <p>{product.productID.name}</p>
+                      <p>{product.productID?.name}</p>
                     </td>
-                    <td className="px-6 py-3"> ₹{product.productID.price}</td>
+                    <td className="px-6 py-3"> ₹{product.productID?.price}</td>
                     <td className="px-6 py-3"> {product.quantity}</td>
                     <td className="px-6 py-3">
-                      {product.quantity * product.productID.price}
+                      {product.quantity * product.productID?.price}
                     </td>
                   </tr>
                 ))}
