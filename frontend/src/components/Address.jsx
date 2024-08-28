@@ -1,39 +1,38 @@
 import { useFormik } from "formik";
 import { addressSchema } from "../schemas/validationSchemas";
 import { useEffect, useState } from "react";
-import useFetch from "../utils/useFetch.js";
 import { useSelector } from "react-redux";
-import PopUpAlert from "./PopUpAlert";
 import LoadingAndError from "./LoadingAndError.jsx";
+import useGetPrivateData from "../hooks/useGetPrivateData.js";
+import useAxiosPrivate from "../hooks/useAxiosPrivate.js";
+import axiosErrorCatch from "../utils/axiosErrorCatch.js";
+import { toast } from "react-toastify";
 
-export default function Address() {
+export default function Address({ setAddress }) {
   const currentUser = useSelector((state) => state.user.currentUser);
-  const [showAlert, setShowAlert] = useState(null);
-  const { data, loading, error } = useFetch(
-    `http://localhost:3000/users/${currentUser.id}`
-  );
+  const { data, loading, error } = useGetPrivateData("/user");
+  const [updating, setUpdating] = useState(false);
+  const axiosPrivate = useAxiosPrivate();
+  const [editOpen, setEditOpen] = useState(false);
 
   async function updateAddress(value) {
-    const response = await fetch(
-      `http://localhost:3000/users/${currentUser.id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ address: value }),
-      }
-    );
-    if (response.ok) {
-      setShowAlert({ message: "Address Updated...!" });
-    } else {
-      setShowAlert({ message: "Error..!" });
+    setUpdating(true);
+    const { name, ...address } = value;
+
+    try {
+      await axiosPrivate.patch("/user", { name, address });
+      setEditOpen(false);
+      toast.success("Address updated successfully");
+    } catch (error) {
+      toast.error(axiosErrorCatch(error));
+    } finally {
+      setUpdating(false);
     }
   }
 
   const initialValues = {
-    name: "",
-    address: "",
+    name: currentUser.name,
+    flatName: "",
     city: "",
     state: "",
     pincode: "",
@@ -47,25 +46,25 @@ export default function Address() {
     errors,
     handleBlur,
     touched,
-    resetForm,
     setValues,
   } = useFormik({
     initialValues: initialValues,
     validationSchema: addressSchema,
     onSubmit: (values) => {
       setEditOpen(false);
+      if (setAddress) setAddress({ name: values.name, ...data.user.address }); // used in payment section
       updateAddress(values);
     },
   });
 
-  const fields = ["name", "address", "city", "state", "pincode", "phone"];
-
-  const [editOpen, setEditOpen] = useState(false);
+  const fields = ["name", "flatName", "city", "state", "pincode", "phone"];
 
   useEffect(() => {
-    if (data) {
-      setValues(data.address);
+    if (data?.user?.address) {
+      if (setAddress) setAddress({ name: values.name, ...data.user.address }); // used in payment section
+      setValues({ name: values.name, ...data.user.address });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, setValues]);
 
   return (
@@ -108,29 +107,15 @@ export default function Address() {
               type="submit"
               onClick={handleSubmit}
               className="bg-orange-500 hover:opacity-90 text-white px-4 py-2 rounded-md mt-5 h-fit disabled:bg-opacity-70 ">
-              Update
+              {updating ? "Updating..." : "Update"}
             </button>
             <button
-              onClick={() => {
-                if (editOpen) {
-                  resetForm();
-                }
-                setEditOpen(!editOpen);
-              }}
+              onClick={() => setEditOpen(!editOpen)}
               className="bg-orange-500 hover:opacity-90 text-white px-4 py-2 rounded-md mt-5 h-fit">
               {editOpen ? "Cancel" : "Edit"}
             </button>
           </div>
         </div>
-      )}
-      {showAlert && (
-        <PopUpAlert
-          type="alert"
-          message={showAlert.message}
-          handleConfirm={() => {
-            setShowAlert(null);
-          }}
-        />
       )}
     </div>
   );

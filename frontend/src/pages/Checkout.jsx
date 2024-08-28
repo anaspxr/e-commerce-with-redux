@@ -18,19 +18,12 @@ export default function Checkout() {
     }
   });
   const axiosPrivate = useAxiosPrivate();
-  const { currentUser } = useSelector((state) => state.user);
   const { buyItems } = useSelector((state) => state.cart);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [progress, setProgress] = useState("items");
-  const address = {
-    name: currentUser.name,
-    city: "manjeri",
-    flatName: "mows",
-    state: "kerala",
-    pincode: "766521",
-    phone: "9876543210",
-  };
+  const [address, setAddress] = useState(null);
+
   const totalAmount = buyItems.reduce(
     (acc, product) => acc + product.productID?.price * product.quantity,
     0
@@ -54,7 +47,7 @@ export default function Checkout() {
           productID: product.productID._id,
           quantity: product.quantity,
         })),
-        address,
+        address, // comes from the address component
       };
 
       const { data } = await axiosPrivate.post("user/checkout", body);
@@ -62,7 +55,6 @@ export default function Checkout() {
       const results = await stripe.redirectToCheckout({
         sessionId: data.id,
       });
-      console.log(results);
 
       if (results.error) {
         alert("Payment Failed, Error:" + results.error.message);
@@ -101,7 +93,7 @@ export default function Checkout() {
           />
         </div>
         {progress === "items" && <CheckOutItems buyItems={buyItems} />}
-        {progress === "address" && <Address />}
+        {progress === "address" && <Address setAddress={setAddress} />}
         {progress === "payment" && <CheckOutPayment buyItems={buyItems} />}
         <hr className="border-2 mx-16" />
         <div className="m-auto flex justify-between gap-5 p-10 max-w-3xl items-center">
@@ -128,6 +120,7 @@ export default function Checkout() {
             )}
             {progress === "address" && (
               <button
+                disabled={!address}
                 onClick={() => {
                   setProgress("payment");
                 }}
