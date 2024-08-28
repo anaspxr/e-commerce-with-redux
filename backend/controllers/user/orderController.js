@@ -44,7 +44,7 @@ const checkout = async (req, res, next) => {
     payment_method_types: ["card"],
     line_items: lineData,
     mode: "payment",
-    success_url: `${process.env.FRONTEND_URL}/orders/success`,
+    success_url: `${process.env.FRONTEND_URL}/orders`,
     cancel_url: `${process.env.FRONTEND_URL}/orders/cancel`,
   });
 
