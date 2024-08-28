@@ -10,7 +10,7 @@ import {
 export default function Footer() {
   return (
     <div className="mt-auto">
-      <footer className="bg-orange-100 text-orange-800 p-3 py-10 font-serif">
+      <footer className="bg-stone-100 text-orange-800 p-3 py-10 font-serif border">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="flex items-start flex-col">
             <Link to="/">

@@ -69,7 +69,7 @@ export default function Address({ setAddress }) {
 
   return (
     <div>
-      <h1 className="text-xl text-center text-orange-900">Address</h1>
+      <h1 className="text-xl text-center text-orange-900">Address details</h1>
       <LoadingAndError loading={loading} error={error} />
       {data && (
         <div className="m-auto max-w-3xl p-2">
