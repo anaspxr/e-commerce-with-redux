@@ -1,21 +1,41 @@
 import Item from "../components/Item";
 import { useParams } from "react-router-dom";
-import getSearchResults from "../utils/getSearchResults";
-import { useContext } from "react";
-import { ProductContext } from "../contexts/ProductContext";
+import { useEffect, useState } from "react";
+import axios from "../utils/axios";
+import { toast } from "react-toastify";
+import axiosErrorCatch from "../utils/axiosErrorCatch";
+import LoadingAndError from "../components/LoadingAndError";
 
 export default function SearchResults() {
-  const { products, loading, error } = useContext(ProductContext);
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState([]);
+  const [error, setError] = useState(null);
   const { query } = useParams();
-  const results = getSearchResults(products || [], query, ["name", "category"]);
+
+  useEffect(() => {
+    const asyncSearch = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const { data } = await axios.get(`/public/search?query=${query}`);
+        if (data) setResults(data);
+      } catch (error) {
+        setError(axiosErrorCatch(error));
+        toast.error("Something went wrong, please try again later..");
+      } finally {
+        setLoading(false);
+      }
+    };
+    asyncSearch();
+  }, [query]);
+
   return (
     <div>
-      <h2 className="md:text-4xl text-3xl text-orange-900 py-5 text-center">
-        Search Results
+      <h2 className="text-2xl text-orange-900 py-5 text-center">
+        Search Results for &quot;{query}&quot;
       </h2>
-      {loading && <p>Loading...</p>}
-      {error && <p>{error.message}</p>}
-      {products && (
+      <LoadingAndError loading={loading} error={error} />
+      {!loading && results && (
         <div className="p-2 sm:p-3 lg:p-5 pb-10 ">
           {results.length === 0 && (
             <h1 className="text-xl text-orange-900 my-5 text-center">
@@ -24,7 +44,7 @@ export default function SearchResults() {
           )}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4">
             {results.map((item) => (
-              <Item key={item.id} product={item} />
+              <Item key={item._id} product={item} />
             ))}
           </div>
         </div>

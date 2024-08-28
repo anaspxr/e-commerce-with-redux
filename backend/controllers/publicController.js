@@ -101,10 +101,23 @@ const getReviewsOfProduct = async (req, res, next) => {
   res.status(200).json(reviews);
 };
 
+const getSearchResults = async (req, res, next) => {
+  const { query } = req.query;
+  if (!query) return next(new CustomError("No search query provided", 400));
+  const products = await Product.find(
+    { $text: { $search: query } },
+    { score: { $meta: "textScore" } }
+  )
+    .sort({ score: { $meta: "textScore" } })
+    .limit(10);
+  res.status(200).json(products);
+};
+
 export {
   getProducts,
   getProductById,
   getReviewsOfProduct,
   getPopular,
   getRelatedProducts,
+  getSearchResults,
 };
