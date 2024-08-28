@@ -8,6 +8,7 @@ import { SyncLoader } from "react-spinners";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { IoMdHeart, IoMdHeartEmpty, IoMdShareAlt } from "react-icons/io";
 import { toast } from "react-toastify";
+import { BsCartPlus, BsCartX } from "react-icons/bs";
 
 export default function Item({ product }) {
   const dispatch = useDispatch();
@@ -82,7 +83,7 @@ export default function Item({ product }) {
   }
 
   return (
-    <div className="flex flex-col  bg-white shadow-2xl overflow-hidden rounded-md border">
+    <div className="flex flex-col justify-between  bg-white shadow-2xl overflow-hidden rounded-md border">
       <Link to={`/products/${product._id}`}>
         <img
           className="top-0 left-0 transition-transform duration-500 hover:scale-105 w-full h-32 lg:h-60 object-cover"
@@ -110,37 +111,6 @@ export default function Item({ product }) {
               {calculateDiscountPrice(product.oldPrice, product.price)}% off
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={handleBuyNow}
-              className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm">
-              Buy Now
-            </button>
-            <button
-              onClick={handleAddToCart}
-              className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm w-24">
-              {loading ? (
-                <SyncLoader color="white" size={5} />
-              ) : added ? (
-                "Go to Cart"
-              ) : (
-                "Add to Cart"
-              )}
-            </button>
-            {added && (
-              <button
-                onClick={() => {
-                  removeFromCart({ productID: product._id });
-                }}
-                className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 text-xs sm:text-sm">
-                {loadingRemove ? (
-                  <SyncLoader color="white" size={5} />
-                ) : (
-                  "Remove from Cart"
-                )}
-              </button>
-            )}
-          </div>
         </div>
         <div className="flex flex-col gap-2 m-3">
           {!inWishList ? (
@@ -163,6 +133,42 @@ export default function Item({ product }) {
             <IoMdShareAlt className="text-2xl md:text-3xl text-orange-700 z-20 hover:text-orange-500" />
           </button>
         </div>
+      </div>
+      <div className="flex gap-2 p-2">
+        <button
+          onClick={handleBuyNow}
+          className="text-orange-900 w-full px-2 py-1 h-12 border-2 border-orange-900 rounded-md  hover:bg-stone-200 transition duration-300 ">
+          Buy Now
+        </button>
+        <button
+          onClick={handleAddToCart}
+          className="text-orange-900 w-full px-2 py-1 h-12 border-2 border-orange-900 rounded-md  hover:bg-stone-200 transition duration-300 ">
+          {loading ? (
+            <SyncLoader color="brown" size={5} />
+          ) : added ? (
+            "Go to Cart"
+          ) : (
+            <div className="flex justify-around">
+              <span>Add to cart</span>
+              <BsCartPlus className="text-xl" />
+            </div>
+          )}
+        </button>
+        {added && (
+          <button
+            onClick={() => {
+              removeFromCart({ productID: product._id });
+            }}
+            className="text-orange-900 w-fit px-3 py-1 h-12 border-2 border-orange-900 rounded-md  hover:bg-stone-200 transition duration-300 ">
+            {loadingRemove ? (
+              <SyncLoader color="brown" size={5} />
+            ) : (
+              <div className="flex justify-around items-center">
+                <BsCartX className="text-xl" />
+              </div>
+            )}
+          </button>
+        )}
       </div>
     </div>
   );
