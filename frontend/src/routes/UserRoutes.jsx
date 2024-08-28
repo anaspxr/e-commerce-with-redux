@@ -11,6 +11,7 @@ import PrivateRoutes from "./PrivateRoutes";
 import Orders from "../pages/Orders";
 import Wishlist from "../pages/Wishlist";
 import NotFoundPage from "../pages/NotFoundPage";
+import OrderSuccess from "../pages/OrderSuccess";
 
 export default function UserRoutes() {
   return (
@@ -38,7 +39,10 @@ export default function UserRoutes() {
         <Route element={<PrivateRoutes />}>
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout">
+            <Route index element={<Checkout />} />
+            <Route path="success/:session_id" element={<OrderSuccess />} />
+          </Route>
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/orders" element={<Orders />} />
         </Route>

@@ -1,42 +1,42 @@
-import { useSelector } from "react-redux";
+import {
+  EmbeddedCheckout,
+  EmbeddedCheckoutProvider,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-export default function CheckOutPayment({ buyItems }) {
-  const currentUser = useSelector((state) => state.user.currentUser);
-  const address = {
-    name: currentUser.name,
-    city: "manjeri",
-    flatName: "mows",
-    state: "kerala",
-    pincode: "766521",
-    phone: "9876543210",
+const stripePromise = loadStripe(
+  "pk_test_51PqTjg2KqNuB5bGxCB5yBjHnBJ9KgoKCDs6MLYOzL9a4x0DEjsxoMZiQp5fR222KFS4cwwxRBCDjlrnL7IHAIlPj00ICeQqUlR"
+);
+
+export default function CheckOutPayment({ buyItems, address }) {
+  const axiosPrivate = useAxiosPrivate();
+  const totalAmount = buyItems.reduce(
+    (acc, product) => acc + product.productID?.price * product.quantity,
+    0
+  );
+
+  const fetchClientSecret = async () => {
+    const body = {
+      amount: totalAmount,
+      products: buyItems.map((product) => ({
+        productID: product.productID._id,
+        quantity: product.quantity,
+      })),
+      address, // comes from the address component
+    };
+    const { data } = await axiosPrivate.post("/user/checkout", body);
+    return data.clientSecret;
   };
+
+  const options = { fetchClientSecret };
 
   return (
     <div className="m-auto max-w-3xl p-5 text-orange-900">
-      <h1 className="text-2xl py-3">Payment</h1>
-
-      <p className="text-xl">Your address</p>
-      <p>{address.name}</p>
-      <p>
-        {address.flatName},{address.city},{address.state},{address.pincode}
-      </p>
-      <p>{address.phone}</p>
-      <h3 className="text-xl py-5">Items</h3>
-      <div className="flex flex-col gap-2">
-        {buyItems.map((product) => {
-          const productDetails = product.productID;
-          return (
-            <>
-              {product && (
-                <div key={productDetails._id} className="flex justify-between">
-                  <p>{productDetails.name}</p>
-                  <p>Quantity: {product.quantity}</p>
-                </div>
-              )}
-            </>
-          );
-        })}
-      </div>
+      <h1 className="text-2xl py-3 text-center">Payment</h1>
+      <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
+        <EmbeddedCheckout />
+      </EmbeddedCheckoutProvider>
     </div>
   );
 }

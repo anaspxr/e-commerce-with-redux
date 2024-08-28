@@ -23,7 +23,7 @@ const cartSlice = createSlice({
       delete state.cartItems[action.payload.cartID];
     },
     clearCart: (state) => {
-      state.cartItems = {};
+      state.cartItems = [];
     },
     addToBuy: (state, action) => {
       state.buyItems = action.payload;
@@ -53,7 +53,7 @@ const cartSlice = createSlice({
     },
 
     clearBuy: (state) => {
-      state.buyItems = {};
+      state.buyItems = [];
     },
     setWishlist: (state, action) => {
       state.wishlist = action.payload;

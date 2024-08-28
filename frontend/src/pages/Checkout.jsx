@@ -5,10 +5,7 @@ import Address from "../components/Address";
 import { useSelector } from "react-redux";
 import CheckOutItems from "../components/private/CheckOutItems.jsx";
 import CheckOutPayment from "../components/private/CheckOutPayment.jsx";
-import { loadStripe } from "@stripe/stripe-js";
-import axiosErrorCatch from "../utils/axiosErrorCatch.js";
 import { toast } from "react-toastify";
-import useAxiosPrivate from "../hooks/useAxiosPrivate.js";
 
 export default function Checkout() {
   useEffect(() => {
@@ -17,9 +14,7 @@ export default function Checkout() {
       navigate("/cart");
     }
   });
-  const axiosPrivate = useAxiosPrivate();
   const { buyItems } = useSelector((state) => state.cart);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [progress, setProgress] = useState("items");
   const [address, setAddress] = useState(null);
@@ -34,49 +29,9 @@ export default function Checkout() {
     0
   );
 
-  const handlePayment = async () => {
-    setLoading(true);
-    try {
-      const stripe = await loadStripe(
-        "pk_test_51PqTjg2KqNuB5bGxCB5yBjHnBJ9KgoKCDs6MLYOzL9a4x0DEjsxoMZiQp5fR222KFS4cwwxRBCDjlrnL7IHAIlPj00ICeQqUlR"
-      );
-
-      const body = {
-        amount: totalAmount,
-        products: buyItems.map((product) => ({
-          productID: product.productID._id,
-          quantity: product.quantity,
-        })),
-        address, // comes from the address component
-      };
-
-      const { data } = await axiosPrivate.post("user/checkout", body);
-
-      const results = await stripe.redirectToCheckout({
-        sessionId: data.id,
-      });
-
-      if (results.error) {
-        alert("Payment Failed, Error:" + results.error.message);
-        setLoading(false);
-      } else {
-        alert("Payment Successful, Order placed successfully!!");
-        setLoading(false);
-        // dispatch(clearCart());
-        // dispatch(clearBuy());
-        // navigate("/");
-      }
-    } catch (error) {
-      setLoading(false);
-      const msg = axiosErrorCatch(error);
-      alert("Payment Failed, " + msg);
-    }
-  };
-
   return (
     <div className="text-orange-800 p-5">
       <h1 className="text-2xl text-center text-orange-900 my-5">Checkout</h1>
-
       <>
         <div className="max-w-3xl m-auto">
           <IoMdArrowRoundBack
@@ -94,7 +49,9 @@ export default function Checkout() {
         </div>
         {progress === "items" && <CheckOutItems buyItems={buyItems} />}
         {progress === "address" && <Address setAddress={setAddress} />}
-        {progress === "payment" && <CheckOutPayment buyItems={buyItems} />}
+        {progress === "payment" && (
+          <CheckOutPayment buyItems={buyItems} address={address} />
+        )}
         <hr className="border-2 mx-16" />
         <div className="m-auto flex justify-between gap-5 p-10 max-w-3xl items-center">
           <div className="text-gray-600">
@@ -126,14 +83,6 @@ export default function Checkout() {
                 }}
                 className="disabled:bg-opacity-50 bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit md:text-base text-xs disabled:cursor-not-allowed">
                 Proceed to Payment
-              </button>
-            )}
-            {progress === "payment" && (
-              <button
-                disabled={loading}
-                onClick={handlePayment}
-                className="disabled:bg-opacity-50 bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit md:text-base text-xs disabled:cursor-not-allowed">
-                {loading ? "redirecting.." : `Pay ₹${totalAmount}`}
               </button>
             )}
           </div>

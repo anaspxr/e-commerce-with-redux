@@ -13,7 +13,7 @@ export default function Orders() {
           {data.map((order) => (
             <table
               key={order._id}
-              className="border shadow-md border-collapse w-full text-sm text-left rtl:text-right">
+              className="border shadow-md border-collapse w-full text-sm text-left rtl:text-right mb-5">
               <thead className="border">
                 <tr className="border-b-2">
                   <th className="px-6 py-3">Items</th>
