@@ -1,7 +1,9 @@
-export default function Button(props) {
+export default function Button({ onClick, children, className }) {
   return (
-    <button className="bg-orange-700 flex justify-around items-center gap-2 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300">
-      {props.children}
+    <button
+      onClick={onClick || (() => {})}
+      className={` border-2 border-orange-900  w-full flex justify-between items-center gap-2 text-orange-950 px-4 py-2 rounded-md hover:bg-yellow-100 transition duration-300 ${className}`}>
+      {children}
     </button>
   );
 }
