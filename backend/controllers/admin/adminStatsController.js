@@ -101,7 +101,8 @@ const getTotalRevenue = async (req, res, next) => {
     },
   ]);
   if (!stats) return next(new CustomError("No data found", 404));
-  res.status(200).json({ stats });
+  const totalRevenue = stats[0].revenue;
+  res.status(200).json({ stats: { totalRevenue } });
 };
 
 const getMostSold = async (req, res, next) => {
@@ -120,6 +121,24 @@ const getMostSold = async (req, res, next) => {
     },
     {
       $limit: 5,
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "_id",
+        foreignField: "_id",
+        as: "productDetails",
+      },
+    },
+    {
+      $unwind: "$productDetails", // Unwind to get a single product object instead of an array
+    },
+    {
+      $project: {
+        _id: 1,
+        total: 1,
+        "productDetails.name": 1,
+      },
     },
   ]);
   if (!stats) return next(new CustomError("No data found", 404));

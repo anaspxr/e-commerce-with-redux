@@ -1,9 +1,14 @@
 import useGetPrivateData from "../../hooks/useGetPrivateData";
 import { Link } from "react-router-dom";
+import MostSold from "../components/MostSold";
 
 export default function Admin() {
   const { data, loading, error } = useGetPrivateData("admin/stats/count");
-
+  const {
+    data: revenueData,
+    loading: revenueLoading,
+    error: revenueError,
+  } = useGetPrivateData("admin/stats/totalrevenue");
   return (
     <div>
       <div className="grid grid-cols-3 gap-2">
@@ -38,8 +43,18 @@ export default function Admin() {
           {error && <p>Error: {error}</p>}
         </Link>
       </div>
-      <div className="bg-slate-200 px-2 py-5 rounded-md text-slate-500 my-2">
-        <p className="text-xl">Monthly Users</p>
+      <div className="flex gap-2 flex-wrap md:flex-nowrap">
+        <div className="bg-slate-200 px-2 py-5 rounded-md w-full text-slate-500 my-2">
+          <p className="text-xl">Total Revenue</p>
+          <p className="text-2xl">₹{revenueData?.stats.totalRevenue}</p>
+          {revenueLoading && <p>Loading...</p>}
+          {revenueError && <p>Error: {revenueError}</p>}
+        </div>
+
+        <div className="bg-slate-200 px-2 py-5 rounded-md w-full text-slate-500 my-2">
+          <p className="text-xl">Most Sold Products</p>
+          <MostSold />
+        </div>
       </div>
     </div>
   );
