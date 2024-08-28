@@ -39,7 +39,7 @@ export default function AdminContainer({ children }) {
     };
   });
   return (
-    <>
+    <div className="bg-slate-50">
       <div className="flex items-center bg-slate-300 justify-between fixed top-0 z-50 w-full  border-b border-slate-400 px-3 py-3 lg:px-5 lg:pl-3 shadow-md">
         <div className="flex items-center justify-start rtl:justify-end">
           <button
@@ -125,6 +125,6 @@ export default function AdminContainer({ children }) {
         </div>
       </div>
       <div className="sm:ml-64 mt-20 m-5 p-4">{children}</div>
-    </>
+    </div>
   );
 }

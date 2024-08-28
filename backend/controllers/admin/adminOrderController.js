@@ -4,7 +4,7 @@ import CustomError from "../../utils/CustomError.js";
 const getAllOrders = async (req, res) => {
   const orders = await Order.find()
     .populate({ path: "userID", select: "name email" })
-    .populate({ path: "products.productID", select: "name" });
+    .populate({ path: "products.productID", select: "name price" });
   res.status(200).json(orders);
 };
 

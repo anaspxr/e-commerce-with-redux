@@ -6,32 +6,40 @@ export default function Admin() {
 
   return (
     <div>
-      <div className="grid  md:grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         <Link
           to="/admin/users"
           className="bg-slate-200 px-2 py-5 rounded-md text-slate-500 hover:bg-slate-300">
-          <p className="text-3xl mb-5">Users</p>
+          <div className="flex justify-between items-center flex-wrap">
+            <p className="text-2xl">Users</p>
+            <p className="text-2xl">{data?.users}</p>
+          </div>
           {loading && <p>Loading...</p>}
           {error && <p>Error: {error}</p>}
-          <p className="text-2xl">{data?.users}</p>
         </Link>
         <Link
           to="/admin/products"
           className="bg-slate-200 px-2 py-5 rounded-md text-slate-500 hover:bg-slate-300">
-          <p className="text-3xl mb-5">Products</p>
+          <div className="flex justify-between items-center flex-wrap">
+            <p className="text-2xl">Products</p>
+            <p className="text-2xl">{data?.products}</p>
+          </div>
           {loading && <p>Loading...</p>}
           {error && <p>Error: {error}</p>}
-          <p className="text-2xl">{data?.products}</p>
         </Link>
-        <div className="bg-slate-200 px-2 py-5 rounded-md text-slate-500">
-          <p className="text-3xl mb-5">Orders</p>
+        <Link
+          to="/admin/orders"
+          className="bg-slate-200 px-2 py-5 rounded-md text-slate-500 hover:bg-slate-300">
+          <div className="flex justify-between items-center flex-wrap">
+            <p className="text-2xl">Orders</p>
+            <p className="text-2xl">{data?.orders}</p>
+          </div>
           {loading && <p>Loading...</p>}
           {error && <p>Error: {error}</p>}
-          <p className="text-2xl">{data?.orders}</p>
-        </div>
+        </Link>
       </div>
-      <div className="bg-slate-200 px-2 py-5 rounded-md text-slate-500 hover:bg-slate-300 my-2">
-        <p className="text-slate-900 text-2xl ">Stats</p>
+      <div className="bg-slate-200 px-2 py-5 rounded-md text-slate-500 my-2">
+        <p className="text-xl">Monthly Users</p>
       </div>
     </div>
   );
