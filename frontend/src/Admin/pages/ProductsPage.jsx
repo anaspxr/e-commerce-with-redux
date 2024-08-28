@@ -1,24 +1,15 @@
-import { useEffect, useState } from "react";
 import useFetch from "../../utils/useFetch.js";
-import { Link, useNavigate } from "react-router-dom";
-import SearchField from "../../components/SearchField.jsx";
-import getSearchResults from "../../utils/getSearchResults.js";
-import ProductsList from "../components/ProductsList.jsx";
+import { Link } from "react-router-dom";
+import CategoriesFilter from "../components/CategoriesFilter.jsx";
+import { useState } from "react";
+import ProductDetails from "../components/ProductDetails.jsx";
+
 export default function ProductsPage() {
-  const { data, loading, error } = useFetch("/public/products");
+  const [url, setUrl] = useState("/public/products");
+
+  const { data, loading, error } = useFetch(url);
 
   const products = data?.products;
-
-  const navigate = useNavigate();
-  const [displayProducts, setDisplayProducts] = useState(products);
-
-  function handleSearch(value) {
-    setDisplayProducts(getSearchResults(products, value, ["name", "category"]));
-  }
-
-  useEffect(() => {
-    setDisplayProducts(products || []);
-  }, [products]);
 
   return (
     <div>
@@ -29,6 +20,7 @@ export default function ProductsPage() {
           </h1>
           {loading && <p>Loading...</p>}
           {error && <p>Error: {error.message}</p>}
+
           {products && (
             <Link
               to="/admin/products/addproduct"
@@ -37,24 +29,15 @@ export default function ProductsPage() {
             </Link>
           )}
         </div>
-        {products && (
-          <div className="flex items-end justify-end flex-wrap">
-            <SearchField
-              searchData={products}
-              searchItems={["name", "category"]}
-              handleSearch={handleSearch}
-              handleClick={(product) => {
-                navigate(`/admin/products/${product.id}`);
-              }}
-            />
-            {/* <Filter
-              setDisplayProducts={setDisplayProducts}
-              products={products}
-            /> */}
-          </div>
-        )}
+        <CategoriesFilter setUrl={setUrl} />
       </div>
-      {displayProducts && <ProductsList products={displayProducts} />}
+      {products && (
+        <div className="mt-5 grid lg:grid-cols-2 gap-2">
+          {products.map((product) => (
+            <ProductDetails key={product._id} product={product} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

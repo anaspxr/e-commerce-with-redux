@@ -1,45 +1,62 @@
 import { useParams } from "react-router-dom";
-import { useFormik } from "formik";
-import { productSchema } from "../../schemas/validationSchemas.js";
-import { handleAdd, handleEdit } from "../../utils/serverUtils.js";
-import useFetch from "../../utils/useFetch.js";
 import { useEffect, useState } from "react";
+import ProductForm from "../components/ProductForm.jsx";
+import axios from "../../utils/axios.js";
+import {
+  addNewProduct,
+  updateProduct,
+} from "../adminUtils/productOperations.js";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate.js";
+
 export default function ProductEditPage() {
   const { id } = useParams();
-  const {
-    data: products,
-    loading,
-    error,
-  } = useFetch("http://localhost:3000/products");
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const [preview, setPreview] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     if (id === "addproduct") {
       setShowForm(true);
-    } else if (products) {
-      const productFound = products.find((product) => product.id === id);
-      if (productFound) {
-        setPreview(productFound);
-        setShowForm(true);
-      }
-    }
-  }, [id, products]);
-
-  function handleFinalSubmit() {
-    if (id === "addproduct") {
-      const newProduct = { ...preview, id: Date.now().toString() };
-      handleAdd(newProduct, "products");
-      setPreview(null);
     } else {
-      if (
-        JSON.stringify(preview) !==
-        JSON.stringify(products.find((product) => product.id === preview.id))
-      ) {
-        handleEdit(preview, "products", preview.id);
+      setLoading(true);
+      const fetchProduct = async () => {
+        try {
+          const { data } = await axios.get(`/public/products/${id}`);
+          setPreview({
+            ...data.product,
+            category: data.product.category.join(", "),
+          });
+          setShowForm(true);
+        } catch (error) {
+          setError(true);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchProduct();
+    }
+  }, [id]);
+
+  async function handleFinalSubmit() {
+    if (id === "addproduct") {
+      const result = await addNewProduct(preview, axiosPrivate);
+      if (result) {
+        setPreview(null);
+        alert("Product added successfully");
       } else {
-        alert("You have not made any changes");
+        alert("Failed to add product");
+      }
+    } else {
+      const result = await updateProduct(id, preview, axiosPrivate);
+      if (result) {
+        setPreview(null);
+        alert("Product updated successfully");
+      } else {
+        alert("Failed to update product");
       }
     }
   }
@@ -90,76 +107,5 @@ export default function ProductEditPage() {
         <p className="text-center">Not found!!</p>
       )}
     </div>
-  );
-}
-
-function ProductForm({ preview, setPreview }) {
-  const initialValues = preview || {
-    name: "",
-    oldPrice: "",
-    price: "",
-    category: "",
-    image: "",
-    description: "",
-  };
-  const {
-    handleChange,
-    handleSubmit,
-    errors,
-    touched,
-    handleBlur,
-    values,
-    setValues,
-  } = useFormik({
-    initialValues: initialValues,
-    validationSchema: productSchema,
-    onSubmit: (values) => {
-      setPreview(values);
-      window.scrollTo(0, document.body.scrollHeight);
-    },
-  });
-  const formInputs = [
-    { name: "name", title: "Product Name", type: "text" },
-    { name: "oldPrice", title: "Old Price", type: "number" },
-    { name: "price", title: "Discount Price", type: "number" },
-    { name: "category", title: "Category", type: "text" },
-    { name: "image", title: "Image Url", type: "text" },
-    { name: "description", title: "Description", type: "text" },
-  ];
-
-  useEffect(() => {
-    if (preview) {
-      setValues(preview);
-    }
-  }, [preview, setValues]);
-  return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-lg m-auto flex flex-col bg-slate-200 text-slate-900 shadow-md p-5 rounded-md">
-      {formInputs.map((field) => {
-        return (
-          <div className="flex flex-col" key={field.name}>
-            <label htmlFor={field.name}>{field.title}</label>
-            <input
-              id={field.name}
-              name={field.name}
-              onBlur={handleBlur}
-              value={values[field.name]}
-              onChange={handleChange}
-              type={field.type}
-              className="p-2 border border-slate-400 rounded-md"
-            />
-            <p className="text-red-600 text-sm">
-              {errors[field.name] && touched[field.name] && errors[field.name]}
-            </p>
-          </div>
-        );
-      })}
-      <button
-        type="submit"
-        className="bg-slate-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit">
-        Show Preview
-      </button>
-    </form>
   );
 }
