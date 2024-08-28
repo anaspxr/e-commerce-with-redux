@@ -44,9 +44,11 @@ export default function Orders() {
               <tfoot>
                 <tr>
                   <td className="px-6 py-3">
-                    Order Date: {order.createdAt.substring(0, 10)}
+                    <p>Order Date: {order.createdAt.substring(0, 10)}</p>
+                    <p>Payment Status: {order.paymentStatus}</p>
+                    <p>Order status: {order.shippingStatus}</p>
                   </td>
-                  <td className="px-6 py-3">Order status: {order.status}</td>
+                  <td className="px-6 py-3"></td>
                   <th>Total Amount:</th>
                   <td className="px-6 py-3 text-lg">{order.amount}</td>
                 </tr>
