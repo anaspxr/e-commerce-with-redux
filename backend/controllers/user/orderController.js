@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import Order from "../../schema/orderSchema.js";
 import CustomError from "../../utils/CustomError.js";
+import Cart from "../../schema/cartSchema.js";
 
 const checkout = async (req, res, next) => {
   const { products } = req.body;
@@ -59,15 +60,35 @@ const checkout = async (req, res, next) => {
 const checkoutSuccess = async (req, res, next) => {
   const { session_id } = req.body;
   const order = await Order.findOne({ sessionID: session_id });
+
   if (!order) return next(new CustomError("Order not found", 404));
+
   if (order.paymentStatus === "paid")
     return next(new CustomError("Status already updated", 400));
+
   order.paymentStatus = "paid";
   order.shippingStatus = "processing";
+
+  const cartOfTheUser = await Cart.findOne({ userID: req.user.id });
+  let updatedCart = cartOfTheUser;
+
+  if (cartOfTheUser && cartOfTheUser.products?.length > 0) {
+    cartOfTheUser.products = cartOfTheUser.products.filter(
+      (product) =>
+        !order.products.some(
+          (orderProduct) =>
+            orderProduct.productID.toString() === product.productID.toString()
+        )
+    );
+    updatedCart = await (
+      await cartOfTheUser.save()
+    ).populate("products.productID");
+  }
+
   const updatedOrder = await (
     await order.save()
   ).populate("products.productID");
-  res.status(200).json(updatedOrder);
+  res.status(200).json({ updatedOrder, updatedCart });
 };
 
 const createOrder = async (req, res, next) => {

@@ -4,6 +4,8 @@ import axiosErrorCatch from "../utils/axiosErrorCatch";
 import { toast } from "react-toastify";
 import LoadingAndError from "../components/LoadingAndError";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { useDispatch } from "react-redux";
+import { setWholeCart } from "../Store/cartSlice";
 
 export default function OrderSuccess() {
   const [loading, setLoading] = useState(true);
@@ -11,6 +13,7 @@ export default function OrderSuccess() {
   const [error, setError] = useState(null);
   const { session_id } = useParams();
   const axiosPrivate = useAxiosPrivate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (session_id) {
@@ -22,9 +25,10 @@ export default function OrderSuccess() {
             session_id,
           });
           toast.success("Order placed successfully");
-          setOrder(data);
+          setOrder(data.updatedOrder);
+          data?.updatedCart &&
+            dispatch(setWholeCart(data.updatedCart.products));
         } catch (err) {
-          console.log(axiosErrorCatch(err));
           toast.error(axiosErrorCatch(err));
         } finally {
           setLoading(false);
@@ -32,7 +36,7 @@ export default function OrderSuccess() {
       };
       updateOrder();
     }
-  }, [axiosPrivate, session_id]);
+  }, [axiosPrivate, dispatch, session_id]);
 
   return (
     <div className="p-5">
