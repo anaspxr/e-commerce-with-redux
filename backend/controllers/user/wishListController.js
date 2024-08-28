@@ -1,19 +1,17 @@
 import WishList from "../../schema/wishListSchema.js";
 import CustomError from "../../utils/CustomError.js";
 
-const getUserWishlist = async (req, res, next) => {
+const getUserWishlist = async (req, res) => {
   const wishList = await WishList.findOne({ userID: req.user.id });
-  if (!wishList)
-    return next(new CustomError("No wishlist found for the user", 404));
+  if (!wishList) return res.status(200).json({ products: [] });
   res.status(200).json(wishList);
 };
 
-const getPopulatedUserWishlist = async (req, res, next) => {
+const getPopulatedUserWishlist = async (req, res) => {
   const wishList = await WishList.findOne({ userID: req.user.id }).populate(
     "products"
   );
-  if (!wishList)
-    return next(new CustomError("No wishlist found for the user", 404));
+  if (!wishList) return res.status(200).json({ products: [] });
   res.status(200).json(wishList);
 };
 

@@ -12,7 +12,9 @@ export default function Wishlist() {
 
   return (
     <div className="p-5">
-      <h1 className="text-3xl text-orange-900 text-center mb-10">Cart</h1>
+      <h1 className="text-3xl text-orange-900 text-center mb-10">
+        My Wishlist
+      </h1>
       <LoadingAndError loading={loading} error={error} />
       {!loading && !error && wishlist?.length === 0 ? (
         <div className="flex justify-center flex-col items-center">

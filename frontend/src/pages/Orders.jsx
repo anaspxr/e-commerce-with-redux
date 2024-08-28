@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import LoadingAndError from "../components/LoadingAndError";
 import useGetPrivateData from "../hooks/useGetPrivateData";
 
@@ -8,6 +9,18 @@ export default function Orders() {
     <div className="p-5">
       <h1 className="text-3xl text-orange-900 text-center mb-10">Orders</h1>
       <LoadingAndError loading={loading} error={error} />
+      {!loading && !error && data?.length === 0 && (
+        <div className="flex justify-center flex-col items-center">
+          <h1 className="text-xl text-orange-900 text-center mb-10">
+            Your Have not ordered anything yet!!
+          </h1>
+          <Link
+            to="/products"
+            className="bg-orange-600 text-white p-2 rounded-md hover:opacity-90">
+            Explore Products
+          </Link>
+        </div>
+      )}
       {data && (
         <div className="flex flex-col">
           {data.map((order) => (

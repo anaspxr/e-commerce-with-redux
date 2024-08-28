@@ -115,12 +115,10 @@ const createOrder = async (req, res, next) => {
   res.status(200).json(savedOrder);
 };
 
-const getAllOrdersOfUser = async (req, res, next) => {
+const getAllOrdersOfUser = async (req, res) => {
   const orders = await Order.find({ userID: req.user.id }).populate(
     "products.productID"
   );
-  if (!orders || orders.length === 0)
-    return next(new CustomError("No orders found", 404));
   res.status(200).json(orders);
 };
 
