@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Categories from "../components/Categories";
 import Item from "../components/Item";
 import LoadingAndError from "../components/LoadingAndError";
@@ -5,6 +6,32 @@ import useFetch from "../utils/useFetch";
 export default function Products({ category }) {
   const url = `public/products${category ? `?category=${category}` : ""}`;
   const { data, loading, error } = useFetch(url);
+  const [pageTitle, setPageTitle] = useState("Explore");
+
+  useEffect(() => {
+    switch (category) {
+      case "homedecor":
+        setPageTitle("Home & office decors");
+        break;
+      case "sofa":
+        setPageTitle("Sofas & Seatings");
+        break;
+      case "dining":
+        setPageTitle("Kitchen & Dining");
+        break;
+      case "furnishings":
+        setPageTitle("Furnishings");
+        break;
+      case "lightings":
+        setPageTitle("Lamps & Lightings");
+        break;
+      case "mattresses":
+        setPageTitle("Mattresses");
+        break;
+      default:
+        setPageTitle("Explore");
+    }
+  }, [category]);
 
   const products = data?.products;
 
@@ -12,13 +39,7 @@ export default function Products({ category }) {
     <div>
       {!category && <Categories />}
       <h2 className="md:text-4xl text-3xl text-orange-900 my-5 text-center">
-        {!category && "Explore"}
-        {category === "homedecor" && "Home & office decors"}
-        {category === "sofas" && "Sofas & Seatings"}
-        {category === "dining" && "Kitchen & Dining"}
-        {category === "furnishings" && "Furnishings"}
-        {category === "lightings" && "Lamps & Lightings"}
-        {category === "mattresses" && "Mattresses"}
+        {pageTitle}
       </h2>
       <LoadingAndError loading={loading} error={error} />
       {products && (
