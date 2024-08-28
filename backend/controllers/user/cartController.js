@@ -1,7 +1,7 @@
 import Cart from "../../schema/cartSchema.js";
 import CustomError from "../../utils/CustomError.js";
 
-const getCartOfUser = async (req, res, next) => {
+const getCartOfUser = async (req, res) => {
   const data = await Cart.findOne({ userID: req.user.id }).populate({
     path: "products.productID",
     select: "name price image oldPrice", // fields to get from populate
@@ -10,7 +10,7 @@ const getCartOfUser = async (req, res, next) => {
   if (data) {
     res.status(200).json(data);
   } else {
-    next(new CustomError("No cart found for the user", 404));
+    res.status(200).json({ products: [] }); // if there is no cart, return empty array
   }
 };
 
