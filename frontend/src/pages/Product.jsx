@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { RelatedProducts, Recommend } from "../components/Recommend";
+import { Recommend } from "../components/Recommend";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToBuy, setWishlist } from "../Store/cartSlice";
@@ -12,6 +12,7 @@ import { IoMdHeart, IoMdHeartEmpty, IoMdShareAlt } from "react-icons/io";
 import { axiosPrivate } from "../utils/axios";
 import { toast } from "react-toastify";
 import LoadingAndError from "../components/LoadingAndError";
+import { BsCartPlus, BsCartX } from "react-icons/bs";
 
 export default function Product() {
   const dispatch = useDispatch();
@@ -143,21 +144,24 @@ export default function Product() {
                 {product.description}
               </p>
             </div>
-            <div className="flex justify-center gap-10 mt-5">
+            <div className="flex gap-2 p-2 max-w-96 m-auto">
               <button
                 onClick={handleBuyNow}
-                className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300">
+                className="text-orange-900 w-full px-2 py-1 h-12 border-2 border-orange-900 rounded-md  hover:bg-stone-200 transition duration-300 ">
                 Buy Now
               </button>
               <button
                 onClick={handleAddToCart}
-                className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300 w-28">
+                className="text-orange-900 w-full px-2 py-1 h-12 border-2 border-orange-900 rounded-md  hover:bg-stone-200 transition duration-300 ">
                 {cartLoading ? (
-                  <SyncLoader color="white" size={5} />
+                  <SyncLoader color="brown" size={5} />
                 ) : added ? (
                   "Go to Cart"
                 ) : (
-                  "Add to Cart"
+                  <div className="flex justify-around">
+                    <span>Add to cart</span>
+                    <BsCartPlus className="text-xl" />
+                  </div>
                 )}
               </button>
               {added && (
@@ -165,22 +169,24 @@ export default function Product() {
                   onClick={() => {
                     removeFromCart({ productID: product._id });
                   }}
-                  className="bg-orange-700 text-white px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300">
+                  className="text-orange-900 w-fit px-3 py-1 h-12 border-2 border-orange-900 rounded-md  hover:bg-stone-200 transition duration-300 ">
                   {cartLoadingRemove ? (
-                    <SyncLoader color="white" size={5} />
+                    <SyncLoader color="brown" size={5} />
                   ) : (
-                    "Remove from Cart"
+                    <div className="flex justify-around items-center">
+                      <BsCartX className="text-xl" />
+                    </div>
                   )}
                 </button>
               )}
             </div>
           </div>
-          <div className="bg-orange-100 p-2 sm:p-4">
+          {/* <div className="bg-orange-100 p-2 sm:p-4">
             <h1 className="text-2xl text-orange-950 font-semibold mt-10">
               Related Products
             </h1>
             <RelatedProducts product={product} />
-          </div>
+          </div> */}
           <div className="p-2 sm:p-4">
             <h1 className="text-2xl text-orange-950 font-semibold mt-10">
               You may also like..
