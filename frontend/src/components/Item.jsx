@@ -126,7 +126,7 @@ export default function Item({ product }) {
             onClick={() => {
               toast.success("Link copied to clipboard!");
               navigator.clipboard.writeText(
-                `http://localhost:5173/products/${product._id}`
+                `${window.location.origin}/products/${product._id}`
               );
             }}
             title="Share">

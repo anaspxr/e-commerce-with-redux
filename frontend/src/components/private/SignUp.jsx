@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import { signUpSchema } from "../../schemas/validationSchemas";
-import axios from "axios";
+import axios from "../../utils/axios";
 import axiosErrorCatch from "../../utils/axiosErrorCatch";
 
 export default function SignUp({ setAlert, setNewUser }) {
@@ -29,7 +29,7 @@ export default function SignUp({ setAlert, setNewUser }) {
           password: values.password,
         };
 
-        await axios.post("http://localhost:3000/api/auth/register", newUser);
+        await axios.post("/auth/register", newUser);
 
         actions.resetForm();
         setAlert({

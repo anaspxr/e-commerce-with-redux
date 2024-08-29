@@ -3,13 +3,10 @@ import axiosErrorCatch from "./axiosErrorCatch";
 
 export const addToCartUtil = async ({ productID }, axiosPrivate) => {
   try {
-    const { data } = await axiosPrivate.post(
-      "http://localhost:3000/api/user/cart",
-      {
-        productID,
-        quantity: 1,
-      }
-    );
+    const { data } = await axiosPrivate.post("/user/cart", {
+      productID,
+      quantity: 1,
+    });
     return { newCart: data.products, error: null };
   } catch (err) {
     toast.error("Something went wrong, please try again later");
@@ -22,13 +19,10 @@ export const quantityPlusUtil = async (
   axiosPrivate
 ) => {
   try {
-    const { data } = await axiosPrivate.post(
-      "http://localhost:3000/api/user/cart",
-      {
-        productID,
-        quantity: quantity + 1,
-      }
-    );
+    const { data } = await axiosPrivate.post("/user/cart", {
+      productID,
+      quantity: quantity + 1,
+    });
     return { newCart: data.products, error: null };
   } catch (err) {
     toast.error("Something went wrong, please try again later");
@@ -41,13 +35,10 @@ export const quantityMinusUtil = async (
   axiosPrivate
 ) => {
   try {
-    const { data } = await axiosPrivate.post(
-      "http://localhost:3000/api/user/cart",
-      {
-        productID,
-        quantity: quantity - 1,
-      }
-    );
+    const { data } = await axiosPrivate.post("/user/cart", {
+      productID,
+      quantity: quantity - 1,
+    });
     return { newCart: data.products, error: null };
   } catch (err) {
     toast.error("Something went wrong, please try again later");
@@ -60,13 +51,10 @@ export const setQuantityUtil = async (
   axiosPrivate
 ) => {
   try {
-    const { data } = await axiosPrivate.post(
-      "http://localhost:3000/api/user/cart",
-      {
-        productID,
-        quantity,
-      }
-    );
+    const { data } = await axiosPrivate.post("/user/cart", {
+      productID,
+      quantity,
+    });
     return { newCart: data.products, error: null };
   } catch (err) {
     toast.error("Something went wrong, please try again later");
@@ -76,10 +64,9 @@ export const setQuantityUtil = async (
 
 export const removeFromCartUtil = async ({ productID }, axiosPrivate) => {
   try {
-    const { data } = await axiosPrivate.delete(
-      "http://localhost:3000/api/user/cart",
-      { data: { productID } }
-    );
+    const { data } = await axiosPrivate.delete("/user/cart", {
+      data: { productID },
+    });
     return { newCart: data.products, error: null };
   } catch (err) {
     toast.error("Something went wrong, please try again later");

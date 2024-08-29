@@ -63,13 +63,9 @@ export const login = createAsyncThunk(
   "user/login",
   async (values, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        values,
-        {
-          withCredentials: true,
-        }
-      );
+      const { data } = await axios.post("/auth/login", values, {
+        withCredentials: true,
+      });
       toast.success("Logged in successfully!");
       return data; //data contains user (user details) and accessToken
     } catch (error) {
@@ -86,7 +82,7 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await axios.post(
-        "http://localhost:3000/api/auth/logout",
+        "/auth/logout",
         {},
         {
           withCredentials: true,
