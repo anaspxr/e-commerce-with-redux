@@ -11,7 +11,10 @@ import {
   deleteProduct,
   updateProduct,
 } from "../controllers/admin/adminProductController.js";
-import { getAllCarts, getCartOfUser } from "../controllers/admin/adminCartController.js";
+import {
+  getAllCarts,
+  getCartOfUser,
+} from "../controllers/admin/adminCartController.js";
 import {
   deleteOrder,
   getAllOrders,
@@ -19,8 +22,11 @@ import {
   getOrder,
   updateOrder,
 } from "../controllers/admin/adminOrderController.js";
-import { getAllWishlists, getUserWishlist } from "../controllers/admin/adminWishlistController.js";
-import tryCatch from "../utils/trycatch.js";
+import {
+  getAllWishlists,
+  getUserWishlist,
+} from "../controllers/admin/adminWishlistController.js";
+import tryCatch from "../utils/tryCatch.js";
 import {
   getCount,
   getMonthlyRevenue,
@@ -55,10 +61,26 @@ router.get("/wishlists/:id", verifyTokenAndAdmin, tryCatch(getUserWishlist)); //
 
 //stats
 router.get("/stats/count", verifyTokenAndAdmin, tryCatch(getCount)); // get count of users/products/orders
-router.get("/stats/monthlyusers", verifyTokenAndAdmin, tryCatch(getMonthlyUsers)); // get monthly registered users stats
-router.get("/stats/monthlyrevenue", verifyTokenAndAdmin, tryCatch(getMonthlyRevenue)); // get total revenue in each month of a year
-router.get("/stats/yearlyrevenue", verifyTokenAndAdmin, tryCatch(getYearlyRevenue)); // get total revenue of a year
-router.get("/stats/totalrevenue", verifyTokenAndAdmin, tryCatch(getTotalRevenue)); // get total revenue of all time
+router.get(
+  "/stats/monthlyusers",
+  verifyTokenAndAdmin,
+  tryCatch(getMonthlyUsers)
+); // get monthly registered users stats
+router.get(
+  "/stats/monthlyrevenue",
+  verifyTokenAndAdmin,
+  tryCatch(getMonthlyRevenue)
+); // get total revenue in each month of a year
+router.get(
+  "/stats/yearlyrevenue",
+  verifyTokenAndAdmin,
+  tryCatch(getYearlyRevenue)
+); // get total revenue of a year
+router.get(
+  "/stats/totalrevenue",
+  verifyTokenAndAdmin,
+  tryCatch(getTotalRevenue)
+); // get total revenue of all time
 router.get("/stats/mostsold", verifyTokenAndAdmin, tryCatch(getMostSold)); // get 5 most sold products
 
 export default router;

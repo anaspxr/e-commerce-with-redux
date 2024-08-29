@@ -5,7 +5,7 @@ import {
   logout,
   refreshToken,
 } from "../controllers/authController.js";
-import tryCatch from "../utils/trycatch.js";
+import tryCatch from "../utils/tryCatch.js";
 
 const router = express.Router();
 

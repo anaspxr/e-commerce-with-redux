@@ -20,7 +20,7 @@ import {
   removeFromCart,
   updateCart,
 } from "../controllers/user/cartController.js";
-import tryCatch from "../utils/trycatch.js";
+import tryCatch from "../utils/tryCatch.js";
 import {
   createReview,
   deleteReview,
