@@ -1,50 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToBuy } from "../Store/cartSlice";
-import useCartUtil from "../hooks/useCartUtil";
-import {
-  quantityMinusUtil,
-  quantityPlusUtil,
-  removeFromCartUtil,
-} from "../utils/cartUtils";
-import NoItem from "../components/NoItem";
-import { FaTrash } from "react-icons/fa";
 import LoadingAndError from "../components/LoadingAndError";
+import CartItem from "../components/private/CartItem";
 
 export default function Cart() {
   const { cartItems, fetching, error } = useSelector((state) => state.cart);
-  return (
-    <div className="p-5">
-      <h1 className="text-3xl text-orange-900 text-center mb-10">Cart</h1>
-      {<LoadingAndError loading={fetching} error={error} />}
-      {!fetching && !error && cartItems?.length === 0 ? (
-        <div className="flex justify-center flex-col items-center">
-          <h1 className="text-xl text-orange-900 text-center mb-10">
-            Your cart is empty..!!
-          </h1>
-          <Link
-            to="/products"
-            className="bg-orange-600 text-white p-2 rounded-md hover:opacity-90">
-            Explore Products
-          </Link>
-        </div>
-      ) : (
-        cartItems && <CartDetails cartItems={cartItems} />
-      )}
-    </div>
-  );
-}
 
-function CartDetails({ cartItems }) {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
-  const { utilFunction: quantityPlus, loading: plusLoading } =
-    useCartUtil(quantityPlusUtil);
-  const { utilFunction: quantityMinus, loading: minusLoading } =
-    useCartUtil(quantityMinusUtil);
-  const { utilFunction: removeFromCart, loading: removeLoading } =
-    useCartUtil(removeFromCartUtil);
 
   const totalAmount = cartItems.reduce(
     (acc, product) => acc + product.productID.price * product.quantity,
@@ -64,133 +29,67 @@ function CartDetails({ cartItems }) {
     dispatch(addToBuy(cartItems));
     navigate("/checkout");
   }
+
   return (
-    <>
-      <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-5">
-        {cartItems.map((product) => {
-          const productDetails = product?.productID; //get populated product details in productID field
-          const total = productDetails.price * product.quantity;
-          const oldTotal = productDetails.oldPrice * product.quantity;
-          return (
-            <div key={product._id}>
-              {!product ? (
-                <NoItem productID={productDetails._id} />
-              ) : (
-                <div className="flex flex-col justify-between bg-white overflow-hidden ">
-                  <img
-                    className=" w-full h-60 object-cover"
-                    src={productDetails.image}
-                    alt={productDetails.name}
-                  />
-
-                  <div className="flex justify-between">
-                    <div>
-                      <h1 className="text-xl">{productDetails.name}</h1>
-                      <div className=" flex flex-wrap gap-5">
-                        <span className="text-orange-500">
-                          ₹{productDetails.price}
-                        </span>
-                        <span className="text-gray-400 line-through">
-                          ₹{productDetails.oldPrice}
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex gap-2 mt-2">
-                        <p>Quantity: {product.quantity} </p>
-                        <button
-                          disabled={
-                            plusLoading || minusLoading || removeLoading
-                          }
-                          onClick={() => {
-                            quantityPlus({
-                              productID: productDetails._id,
-                              quantity: product.quantity,
-                            });
-                          }}
-                          className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300">
-                          +
-                        </button>
-                        <button
-                          disabled={
-                            product.quantity === 1 ||
-                            minusLoading ||
-                            removeLoading ||
-                            plusLoading
-                          }
-                          onClick={() => {
-                            if (product.quantity === 1) {
-                              confirm(
-                                "Do you want to remove this item from cart?"
-                              ) &&
-                                removeFromCart({
-                                  productID: productDetails._id,
-                                  quantity: product.quantity,
-                                });
-                            } else {
-                              quantityMinus({
-                                productID: productDetails._id,
-                                quantity: product.quantity,
-                              });
-                            }
-                          }}
-                          className="bg-orange-200 h-6 w-6 rounded-md hover:bg-orange-300">
-                          -
-                        </button>
-                        <button
-                          disabled={
-                            removeLoading || plusLoading || minusLoading
-                          }
-                          onClick={() => {
-                            confirm(
-                              "Do you want to remove this item from cart?"
-                            ) &&
-                              removeFromCart({
-                                productID: productDetails._id,
-                                quantity: product.quantity,
-                              });
-                          }}
-                          className="bg-orange-200 h-6 w-6 rounded-md text-gray-700 flex justify-center items-center hover:bg-orange-300">
-                          <FaTrash />
-                        </button>
-                      </div>
-                      <div className=" flex flex-wrap gap-5">
-                        <span className="text-green-500">Total: ₹{total}</span>
-                        <span className="text-gray-400 line-through">
-                          ₹{oldTotal}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+    <div className="p-5">
+      <h1 className="text-3xl text-orange-900 text-center mb-10">Cart</h1>
+      {<LoadingAndError loading={fetching} error={error} />}
+      {!fetching && !error && cartItems?.length === 0 ? (
+        <div className="flex justify-center flex-col items-center">
+          <h1 className="text-xl text-orange-900 text-center mb-10">
+            Your cart is empty..!!
+          </h1>
+          <Link
+            to="/products"
+            className="bg-orange-600 text-white p-2 rounded-md hover:opacity-90">
+            Explore Products
+          </Link>
+        </div>
+      ) : (
+        cartItems && (
+          <div className="flex flex-wrap md:flex-nowrap gap-5 justify-between">
+            <div className="flex flex-col w-full md:w-3/5 gap-3">
+              {cartItems.map((product) => (
+                <CartItem product={product} key={product._id} />
+              ))}
             </div>
-          );
-        })}
-      </div>
-      <hr className="border-2" />
-      <div className="flex justify-between items-center">
-        <div className="text-gray-600">
-          <p>Retail Total:{oldAmount}</p>
-          <p>Discount:{oldAmount - totalAmount}</p>
-          <p>Delivery Charges: ₹200</p>
-          <p className="text-green-500">Total:{totalAmount + 200} </p>
-        </div>
-
-        <div className="flex flex-col">
-          <div className="mt-5">
-            <p className="text-green-500 text-xl">
-              Total: ₹{totalAmount + 200}
-            </p>
-            <p className="text-gray-400 line-through">₹{oldAmount + 200} </p>
+            <div className="flex flex-col w-full md:w-2/5 border-2 h-fit p-5 gap-3 md:sticky top-20 ">
+              <div className=" py-2">
+                <p className="border-b-2 font-semibold">
+                  Total items : {cartItems.length}
+                </p>
+                {cartItems.map((product) => (
+                  <p key={product._id}>
+                    {product.productID.name} x {product.quantity}
+                  </p>
+                ))}
+              </div>
+              <p className="text-2xl text-orange-900 font-semibold border-b-2">
+                Amount
+              </p>
+              <div className="text-gray-600">
+                <p>Total Price:{oldAmount}</p>
+                <p>Discount:{oldAmount - totalAmount}</p>
+              </div>
+              <div className="flex flex-col">
+                <div className="mt-5">
+                  <p className="text-green-500 text-xl">
+                    Total: ₹{totalAmount}{" "}
+                    <span className="text-gray-400 text-base line-through">
+                      ₹{oldAmount}
+                    </span>
+                  </p>
+                </div>
+                <button
+                  onClick={handleCheckout}
+                  className="bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5">
+                  {currentUser ? "Checkout" : "Login to Checkout"}
+                </button>
+              </div>
+            </div>
           </div>
-          <button
-            onClick={handleCheckout}
-            className="bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5">
-            {currentUser ? "Checkout" : "Login to Checkout"}
-          </button>
-        </div>
-      </div>
-    </>
+        )
+      )}
+    </div>
   );
 }
