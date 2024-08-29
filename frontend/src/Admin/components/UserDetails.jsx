@@ -5,8 +5,8 @@ export default function UserDetails({ user }) {
       <p>{user.email}</p>
       <p>
         Address:
-        {user.address?.address
-          ? `${user.address.address}, ${user.address.city}, ${user.address.pincode}`
+        {user.address?.flatName && user.address?.city && user.address?.pincode
+          ? `${user.address.flatName}, ${user.address.city}, ${user.address.pincode}`
           : "User has not updated their address"}
       </p>
       <p>
@@ -15,7 +15,7 @@ export default function UserDetails({ user }) {
           ? user.address.phone
           : "User has not updated their phone number"}
       </p>
-      <p>Orders: {user.orders?.length}</p>
+      {/* <p>Orders: {user.orders?.length}</p> */}
       <div className="flex gap-1 flex-wrap">
         <button className="bg-slate-500 text-white py-1 px-2 rounded-md hover:bg-opacity-90">
           Edit
