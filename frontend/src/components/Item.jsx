@@ -134,22 +134,22 @@ export default function Item({ product }) {
           </button>
         </div>
       </div>
-      <div className="flex gap-2 p-2">
+      <div className="flex gap-1 lg:gap-2 lg:p-2 sm:p-1 p-0.5">
         <button
           onClick={handleBuyNow}
-          className="text-orange-900 w-full px-2 py-1 h-12 border-2 border-orange-900 rounded-md  hover:bg-stone-200 transition duration-300 ">
+          className="text-orange-900 w-full px-2 py-1 sm:h-12 h-10 border-2 border-orange-900 rounded-md  hover:bg-stone-200 transition duration-300 lg:text-base sm:text-xs text-[10px] ">
           Buy Now
         </button>
         <button
           onClick={handleAddToCart}
-          className="text-orange-900 w-full px-2 py-1 h-12 border-2 border-orange-900 rounded-md  hover:bg-stone-200 transition duration-300 ">
+          className="text-orange-900 w-full px-2 py-1 sm:h-12 h-10 border-2 border-orange-900 rounded-md  hover:bg-stone-200 transition duration-300 lg:text-base sm:text-xs text-[10px] ">
           {loading ? (
             <SyncLoader color="brown" size={5} />
           ) : added ? (
             "Go to Cart"
           ) : (
             <div className="flex justify-around">
-              <span>Add to cart</span>
+              <span className="sm:inline hidden">Add to cart</span>
               <BsCartPlus className="text-xl" />
             </div>
           )}
@@ -159,7 +159,7 @@ export default function Item({ product }) {
             onClick={() => {
               removeFromCart({ productID: product._id });
             }}
-            className="text-orange-900 w-fit px-3 py-1 h-12 border-2 border-orange-900 rounded-md  hover:bg-stone-200 transition duration-300 ">
+            className="text-orange-900 w-full px-2 py-1 sm:h-12 h-10 border-2 border-orange-900 rounded-md  hover:bg-stone-200 transition duration-300 lg:text-base sm:text-xs text-[10px]  ">
             {loadingRemove ? (
               <SyncLoader color="brown" size={5} />
             ) : (
