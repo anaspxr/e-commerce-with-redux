@@ -4,21 +4,20 @@ import LoadingAndError from "./LoadingAndError";
 
 export default function Popular() {
   const {
-    data: popularProducts,
+    data: newProducts,
     loading,
     error,
-  } = useFetch("public/products/popular");
-
+  } = useFetch("public/products?new=true&limit=6");
   return (
     <div className="p-2 sm:p-3 lg:p-5 pb-10 bg-amber-100">
       <h2 className="md:text-4xl text-3xl text-orange-900 py-5 text-center">
-        Popular Products
+        New Arrivals
       </h2>
       <LoadingAndError loading={loading} error={error} />
-      {popularProducts && (
+      {newProducts?.products && (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4">
-          {popularProducts.map((item) => (
-            <Item key={item.product._id} product={item.product} />
+          {newProducts.products.map((item) => (
+            <Item key={item._id} product={item} />
           ))}
         </div>
       )}
