@@ -55,9 +55,8 @@ export default function Checkout() {
         <hr className="border-2 mx-16" />
         <div className="m-auto flex justify-between gap-5 p-10 max-w-3xl items-center">
           <div className="text-gray-600">
-            <p>Retail Total:{oldAmount}</p>
+            <p>Total Price:{oldAmount}</p>
             <p>Discount:{oldAmount - totalAmount}</p>
-            {/* <p>Delivery Charges: ₹200</p> */}
             <p className="text-green-500">Total:{totalAmount} </p>
           </div>
 
