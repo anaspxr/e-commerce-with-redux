@@ -50,7 +50,7 @@ const checkout = async (req, res, next) => {
   });
 
   newOrder.sessionID = session.id;
-  await newOrder.save(); // save the order to the database after successful payment
+  await newOrder.save(); // save the order with pending payment to the database after successful payment
 
   res
     .status(200)
@@ -91,7 +91,7 @@ const checkoutSuccess = async (req, res, next) => {
   res.status(200).json({ updatedOrder, updatedCart });
 };
 
-const createOrder = async (req, res, next) => {
+const createOrderWithCOD = async (req, res, next) => {
   const newOrder = await new Order({
     ...req.body,
     userID: req.user.id,
@@ -110,9 +110,32 @@ const createOrder = async (req, res, next) => {
       new CustomError("Some products are unavailable or incomplete", 400)
     );
   }
-  const savedOrder = await newOrder.save();
-  console.log(savedOrder);
-  res.status(200).json(savedOrder);
+
+  newOrder.paymentStatus = "Cash On Delivery";
+  newOrder.shippingStatus = "processing";
+
+  const cartOfTheUser = await Cart.findOne({ userID: req.user.id });
+  let updatedCart = cartOfTheUser;
+
+  if (cartOfTheUser && cartOfTheUser.products?.length > 0) {
+    cartOfTheUser.products = cartOfTheUser.products.filter(
+      (product) =>
+        !newOrder.products.some(
+          (orderProduct) =>
+            orderProduct.productID.id.toString() ===
+            product.productID.toString()
+        )
+    );
+    updatedCart = await (
+      await cartOfTheUser.save()
+    ).populate("products.productID");
+  }
+
+  const savedOrder = await (
+    await newOrder.save()
+  ).populate("products.productID", "name price image");
+
+  res.status(200).json({ order: savedOrder, cart: updatedCart });
 };
 
 const getAllOrdersOfUser = async (req, res) => {
@@ -144,7 +167,7 @@ const cancelOrder = async (req, res, next) => {
 };
 
 export {
-  createOrder,
+  createOrderWithCOD,
   getAllOrdersOfUser,
   getOrder,
   checkout,

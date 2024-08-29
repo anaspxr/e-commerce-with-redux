@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Address from "../components/Address";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CheckOutItems from "../components/private/CheckOutItems.jsx";
 import CheckOutPayment from "../components/private/CheckOutPayment.jsx";
 import { toast } from "react-toastify";
+import useAxiosPrivate from "../hooks/useAxiosPrivate.js";
+import { setWholeCart } from "../Store/cartSlice.js";
 
 export default function Checkout() {
   useEffect(() => {
@@ -18,6 +20,33 @@ export default function Checkout() {
   const navigate = useNavigate();
   const [progress, setProgress] = useState("items");
   const [address, setAddress] = useState(null);
+  const [codSelected, setCodSelected] = useState(false);
+  const axiosPrivate = useAxiosPrivate();
+  const dispatch = useDispatch();
+  const [orderPlacing, setOrderPlacing] = useState(false);
+
+  const handleCodPayment = async () => {
+    setOrderPlacing(true);
+    const body = {
+      amount: totalAmount,
+      products: buyItems.map((product) => ({
+        productID: product.productID._id,
+        quantity: product.quantity,
+      })),
+      address,
+    };
+    try {
+      const { data } = await axiosPrivate.post("/user/orders/cod", body);
+      data.cart && dispatch(setWholeCart(data.cart.products));
+      toast.success("Order placed successfully");
+      navigate("/orders");
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong, please try again");
+    } finally {
+      setOrderPlacing(false);
+    }
+  };
 
   const totalAmount = buyItems.reduce(
     (acc, product) => acc + product.productID?.price * product.quantity,
@@ -75,14 +104,32 @@ export default function Checkout() {
               </button>
             )}
             {progress === "address" && (
-              <button
-                disabled={!address}
-                onClick={() => {
-                  setProgress("payment");
-                }}
-                className="disabled:bg-opacity-50 bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit md:text-base text-xs disabled:cursor-not-allowed">
-                Proceed to Payment
-              </button>
+              <>
+                <span className="flex gap-4 items-center">
+                  Pay on Delivery
+                  <input
+                    type="checkbox"
+                    readOnly
+                    className="bg-orange-700 accent-orange-800 cursor-pointer scale-125"
+                    checked={codSelected}
+                    onClick={() => {
+                      setCodSelected(!codSelected);
+                    }}
+                  />
+                </span>
+                <button
+                  disabled={!address}
+                  onClick={() => {
+                    codSelected ? handleCodPayment() : setProgress("payment");
+                  }}
+                  className="disabled:bg-opacity-50 bg-orange-500 hover:opacity-90 text-white p-2 rounded-md mt-5 h-fit md:text-base text-xs disabled:cursor-not-allowed">
+                  {codSelected
+                    ? orderPlacing
+                      ? "Placing Order.."
+                      : "Place Order"
+                    : "Proceed to Payment"}
+                </button>
+              </>
             )}
           </div>
         </div>

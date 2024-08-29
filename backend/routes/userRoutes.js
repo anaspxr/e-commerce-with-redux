@@ -11,7 +11,7 @@ import {
   cancelOrder,
   checkout,
   checkoutSuccess,
-  createOrder,
+  createOrderWithCOD,
   getAllOrdersOfUser,
   getOrder,
 } from "../controllers/user/orderController.js";
@@ -40,7 +40,7 @@ router.post("/checkout", verifyToken, tryCatch(checkout)); // start payment proc
 router.post("/checkout/success", verifyToken, tryCatch(checkoutSuccess)); // complete payment process
 
 router.get("/orders", verifyToken, tryCatch(getAllOrdersOfUser)); //get user's orders
-router.post("/orders", verifyToken, tryCatch(createOrder)); // create new orders
+router.post("/orders/cod", verifyToken, tryCatch(createOrderWithCOD)); // create new order with payment status as cod
 router.get("/orders/:orderID", verifyToken, tryCatch(getOrder)); //get single order
 router.patch("/orders/cancel/:orderID", verifyToken, tryCatch(cancelOrder)); // cancel order
 
