@@ -47,8 +47,7 @@ const login = async (req, res, next) => {
   // send refresh token as an HTTP-only cookie for better security
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: false, //todo change to true in production
-    sameSite: "strict",
+    secure: process.env.SECURE_COOKIE || true, // set to true in production and false in development
   });
 
   // Send only necessary user details and the access token
