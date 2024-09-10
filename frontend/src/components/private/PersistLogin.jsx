@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useRefreshToken from "../../hooks/useRefreshToken";
 import { getServerCart } from "../../Store/cartSlice";
@@ -11,9 +11,21 @@ const PersistLogin = ({ children }) => {
   const axiosPrivate = useAxiosPrivate();
   const refresh = useRefreshToken();
   const accessToken = useSelector((state) => state.user.accessToken);
+  const [showWaitMessage, setShowWaitMessage] = useState(false);
+  const [waitingTime, setWaitingTime] = useState(60);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
     let isMounted = true;
+    const timeout = setTimeout(() => {
+      setShowWaitMessage(true);
+      intervalRef.current = setInterval(() => {
+        setWaitingTime((prev) => prev - 1);
+        if (waitingTime <= 0) {
+          clearInterval(intervalRef.current);
+        }
+      }, 1000);
+    }, 3000);
 
     const verifyRefreshToken = async () => {
       try {
@@ -21,25 +33,45 @@ const PersistLogin = ({ children }) => {
       } catch (err) {
         console.error(err);
       } finally {
-        isMounted && setIsLoading(false);
+        if (isMounted) {
+          clearTimeout(timeout);
+          clearInterval(intervalRef.current);
+          setShowWaitMessage(false);
+          setIsLoading(false);
+        }
       }
     };
 
     !accessToken ? verifyRefreshToken() : setIsLoading(false);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeout);
+      clearInterval(intervalRef.current);
+    };
   }, []);
 
   useEffect(() => {
-    // Fetch cart from server if user is logged in
     if (accessToken) {
       dispatch(getServerCart(axiosPrivate));
     }
-  }, [accessToken, axiosPrivate, dispatch]);
+  }, [accessToken]);
 
   return (
     <>
       {isLoading ? (
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex flex-col justify-center items-center h-screen">
           <BeatLoader color="brown" />
+          {showWaitMessage && (
+            <>
+              <p className="text-center text-gray-500">
+                The server must be sleeping.. Please wait while we wake it up!
+              </p>
+              <p className="text-center text-gray-500">
+                Expected time: {waitingTime} seconds..
+              </p>
+            </>
+          )}
         </div>
       ) : (
         <> {children}</>
