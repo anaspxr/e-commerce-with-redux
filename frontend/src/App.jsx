@@ -12,7 +12,8 @@ import { Zoom } from "react-toastify";
 
 function App() {
   const location = useLocation();
-  const isAdminPage = location.pathname.startsWith("/admin");
+  const isAdminPage = /^\/admin(\/[a-zA-Z0-9_-]+)?$/.test(location.pathname);
+  // to check if the current page is an admin page and render the admin navbar
 
   return (
     <PersistLogin>
