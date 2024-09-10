@@ -139,9 +139,9 @@ const createOrderWithCOD = async (req, res, next) => {
 };
 
 const getAllOrdersOfUser = async (req, res) => {
-  const orders = await Order.find({ userID: req.user.id }).populate(
-    "products.productID"
-  );
+  const orders = await Order.find({ userID: req.user.id })
+    .populate("products.productID")
+    .sort({ createdAt: -1 });
   res.status(200).json(orders);
 };
 

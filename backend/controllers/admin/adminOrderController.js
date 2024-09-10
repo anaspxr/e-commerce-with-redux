@@ -4,14 +4,17 @@ import CustomError from "../../utils/CustomError.js";
 const getAllOrders = async (req, res) => {
   const orders = await Order.find()
     .populate({ path: "userID", select: "name email" })
-    .populate({ path: "products.productID", select: "name price" });
+    .populate({ path: "products.productID", select: "name price" })
+    .sort({ createdAt: -1 });
   res.status(200).json(orders);
 };
 
 const getAllOrdersOfUser = async (req, res, next) => {
   const orders = await Order.find({ userID: req.params.id })
     .populate({ path: "userID", select: "name email" })
-    .populate({ path: "products.productID", select: "name" });
+    .populate({ path: "products.productID", select: "name" })
+    .sort({ createdAt: -1 });
+
   if (!orders || orders.length === 0)
     return next(new CustomError("No orders found", 404));
   res.status(200).json(orders);

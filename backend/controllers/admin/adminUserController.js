@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import CustomError from "../../utils/CustomError.js";
 
 const getAllUsers = async (req, res) => {
-  const users = await User.find();
+  const users = await User.find().sort({ createdAt: -1 });
   res.status(200).json({ users });
 };
 

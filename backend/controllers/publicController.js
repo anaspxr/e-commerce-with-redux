@@ -37,7 +37,9 @@ const getProducts = async (req, res) => {
     aggregationPipeline.push({ $limit: 100 });
   }
 
-  const products = await Product.aggregate(aggregationPipeline);
+  const products = await Product.aggregate(aggregationPipeline).sort({
+    createdAt: -1,
+  });
 
   // calculate total documents for pagination metadata
   const total = await Product.countDocuments(matchStage);
