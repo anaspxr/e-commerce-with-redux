@@ -1,34 +1,30 @@
 import { useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { HiChevronDown } from "react-icons/hi";
-import { MdOutlineDelete } from "react-icons/md";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 export default function OrderDetails({ order }) {
   const [showDetails, setShowDetails] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false);
   const axiosPrivate = useAxiosPrivate();
-  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [orderStatus, setOrderStatus] = useState(order.shippingStatus);
 
-  const deleteOrder = async () => {
-    setDeleteLoading(true);
+  const handleStatusChange = async () => {
     try {
-      await axiosPrivate.delete(`/admin/orders/${order._id}`);
-      setIsDeleted(true);
+      const { data } = await axiosPrivate.patch(`/admin/orders/${order._id}`, {
+        shippingStatus: orderStatus,
+      });
+      console.log(data.shippingStatus);
+
+      setOrderStatus(data.shippingStatus);
+      setEditOpen(false);
     } catch (error) {
-      console.error(error);
-    } finally {
-      setDeleteLoading(false);
+      console.log(error);
     }
   };
 
   return (
-    <div className={`border-2 my-2 ${isDeleted ? "bg-red-100" : "bg-white"}`}>
-      {isDeleted && (
-        <p className="bg-red-500 text-white text-center p-2">
-          Order Deleted Successfully
-        </p>
-      )}
+    <div className="border-2 my-2 ">
       <div className="px-5 flex justify-between mt-5">
         <div>
           <p className="text-md font-semibold text-slate-700 mb-3">
@@ -37,28 +33,47 @@ export default function OrderDetails({ order }) {
           <p className="text-md font-semibold text-slate-700 mb-3">
             Order ID: {order._id}
           </p>
-          <p>Order Date: {order.createdAt.substring(0, 10)}</p>
           {order.info && <p>Info: {order.info}</p>}
         </div>
         <div className="flex flex-col gap-1 justify-center">
           <p>Payment Status: {order.paymentStatus}</p>
-          <p>Shipping status: {order.shippingStatus}</p>
-          <button className="bg-slate-500 text-white max-w-40 px-4 py-1 rounded-md flex items-center justify-between gap-1 hover:bg-opacity-85">
-            Edit Order <FaRegEdit />
-          </button>
-          <button
-            onClick={() =>
-              confirm("Are you sure you want to delete this order?") &&
-              deleteOrder()
-            }
-            className="bg-red-700 text-white max-w-40 px-4 py-1 rounded-md flex justify-between items-center gap-1 hover:bg-opacity-85">
-            {deleteLoading
-              ? "Deleting.."
-              : !isDeleted
-              ? "Delete Order"
-              : "Deleted"}{" "}
-            <MdOutlineDelete />
-          </button>
+          <p>
+            Shipping status:{"   "}
+            {editOpen ? (
+              <select
+                className="border-2 border-slate-500 rounded-md cursor-pointer"
+                value={orderStatus}
+                onChange={(e) => setOrderStatus(e.target.value)}>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            ) : (
+              orderStatus
+            )}
+          </p>
+          {editOpen ? (
+            <div className="flex gap-2">
+              <button
+                onClick={handleStatusChange}
+                className="bg-yellow-500 text-white max-w-40 px-4 py-1 mb-2 rounded-md flex items-center justify-between gap-1 hover:bg-opacity-85 ">
+                Update Status
+              </button>
+              <button
+                onClick={() => setEditOpen(!editOpen)}
+                className="bg-red-500 text-white max-w-40 px-4 py-1 mb-2 rounded-md flex items-center justify-between gap-1 hover:bg-opacity-85 ">
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setEditOpen(!editOpen)}
+              className="bg-blue-800 text-white max-w-40 px-4 py-1 mb-2 rounded-md flex items-center justify-between gap-1 hover:bg-opacity-85 ">
+              Edit Status <FaRegEdit />
+            </button>
+          )}
         </div>
       </div>
       <table className="border shadow-md  border-collapse w-full text-sm text-left rtl:text-right">
@@ -104,9 +119,9 @@ export default function OrderDetails({ order }) {
         <tfoot>
           <tr>
             <td className="px-6 py-3">
-              <p>Order Date: {order.createdAt.substring(0, 10)}</p>
-              <p>Payment Status: {order.paymentStatus}</p>
-              <p>Order status: {order.shippingStatus}</p>
+              <p className="text-nowrap">
+                Order Date: {order.createdAt.substring(0, 10)}
+              </p>
             </td>
             <td className="px-6 py-3"></td>
             <th>Total Amount:</th>
