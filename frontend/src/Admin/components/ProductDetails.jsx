@@ -29,7 +29,7 @@ export default function ProductDetails({ product }) {
       )}
       <div
         key={product._id}
-        className="bg-slate-200 flex items-center border-b justify-between p-1 px-10 rounded-sm shadow-md">
+        className="bg-white flex items-center border m-2 justify-between p-1 px-10 rounded-sm shadow-md">
         <div>
           <p className="text-xl font-semibold">{product.name}</p>
           <img
@@ -46,7 +46,7 @@ export default function ProductDetails({ product }) {
         <div className="flex flex-col gap-1">
           <Link
             to={`/admin/products/${product._id}`}
-            className="bg-slate-500 text-white px-2 py-1 rounded-md flex items-center gap-1 hover:bg-opacity-85">
+            className="bg-blue-700 text-white px-2 py-1 rounded-md flex items-center gap-1 hover:bg-opacity-85">
             Edit <FaRegEdit />
           </Link>
           <button

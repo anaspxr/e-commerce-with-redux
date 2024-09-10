@@ -3,7 +3,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { HiChevronDown } from "react-icons/hi";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-export default function OrderDetails({ order }) {
+export default function OrderDetails({ order, showName = true }) {
   const [showDetails, setShowDetails] = useState(false);
   const axiosPrivate = useAxiosPrivate();
   const [editOpen, setEditOpen] = useState(false);
@@ -24,12 +24,14 @@ export default function OrderDetails({ order }) {
   };
 
   return (
-    <div className="border-2 my-2 ">
+    <div className="border-2 my-2 bg-white">
       <div className="px-5 flex justify-between mt-5">
         <div>
-          <p className="text-md font-semibold text-slate-700 mb-3">
-            User Name: {order.userID?.name}
-          </p>
+          {showName && (
+            <p className="text-md font-semibold text-slate-700 mb-3">
+              User Name: {order.userID?.name}
+            </p>
+          )}
           <p className="text-md font-semibold text-slate-700 mb-3">
             Order ID: {order._id}
           </p>
