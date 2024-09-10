@@ -1,14 +1,51 @@
 import useGetPrivateData from "../../hooks/useGetPrivateData";
 import { Link } from "react-router-dom";
 import MostSold from "../components/MostSold";
+import BarChart from "../components/BarChart";
 
 export default function Admin() {
   const { data, loading, error } = useGetPrivateData("admin/stats/count");
+
   const {
     data: revenueData,
     loading: revenueLoading,
     error: revenueError,
   } = useGetPrivateData("admin/stats/totalrevenue");
+
+  const graphData = {
+    labels: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+    ],
+    datasets: [
+      {
+        label: "Users",
+        data: [50, 100, 75, 200, 150, 300, 250, 400, 30],
+        backgroundColor: "rgba(54, 162, 235, 0.6)",
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Monthly User Signups",
+      },
+    },
+  };
+
   return (
     <div>
       <div className="grid grid-cols-3 gap-2 ">
@@ -55,6 +92,9 @@ export default function Admin() {
           <p className="text-xl">Most Sold Products</p>
           <MostSold />
         </div>
+      </div>
+      <div className="flex flex-col gap-5 border shadow-lg rounded-md ">
+        <BarChart data={graphData} options={options} />
       </div>
     </div>
   );
