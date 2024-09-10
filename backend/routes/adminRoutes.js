@@ -51,7 +51,7 @@ router.get("/carts", verifyTokenAndAdmin, tryCatch(getAllCarts)); // get carts o
 router.get("/carts/:id", verifyTokenAndAdmin, tryCatch(getCartOfUser)); //get cart of one user
 
 router.get("/orders", verifyTokenAndAdmin, tryCatch(getAllOrders)); //get all orders of every users
-router.get("/orders/:id", verifyTokenAndAdmin, tryCatch(getAllOrdersOfUser)); //get a user's all orders
+router.get("/orders/userID/:id", verifyTokenAndAdmin, tryCatch(getAllOrdersOfUser)); //get a user's all orders
 router.get("/orders/:orderID", verifyTokenAndAdmin, tryCatch(getOrder)); // get single order using orderID
 router.patch("/orders/:orderID", verifyTokenAndAdmin, tryCatch(updateOrder)); //update one order using orderID
 router.delete("/orders/:orderID", verifyTokenAndAdmin, tryCatch(deleteOrder)); // delete order using orderID

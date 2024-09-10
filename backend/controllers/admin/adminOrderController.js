@@ -11,8 +11,7 @@ const getAllOrders = async (req, res) => {
 
 const getAllOrdersOfUser = async (req, res, next) => {
   const orders = await Order.find({ userID: req.params.id })
-    .populate({ path: "userID", select: "name email" })
-    .populate({ path: "products.productID", select: "name" })
+    .populate({ path: "products.productID", select: "name price" })
     .sort({ createdAt: -1 });
 
   if (!orders || orders.length === 0)
@@ -21,7 +20,7 @@ const getAllOrdersOfUser = async (req, res, next) => {
 };
 
 const getOrder = async (req, res, next) => {
-  const order = await Order.findById(req.params.id)
+  const order = await Order.findById(req.params.orderID)
     .populate({ path: "userID", select: "name email" })
     .populate({ path: "products.productID", select: "name" });
   if (!order) return next(new CustomError("Order not found", 404));
