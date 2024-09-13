@@ -4,9 +4,12 @@ import {
   buyQuantityPlus,
   removeFromBuy,
 } from "../../Store/cartSlice";
+import { useState } from "react";
+import ConfirmPopUp from "../ConfirmPopUp";
 
 export default function CheckOutItems({ buyItems }) {
   const dispatch = useDispatch();
+  const [confirmRemove, setConfirmRemove] = useState(null);
 
   return (
     <div className="m-auto max-w-3xl flex flex-col gap-3 p-2 ">
@@ -37,14 +40,7 @@ export default function CheckOutItems({ buyItems }) {
                     -
                   </button>
                   <button
-                    onClick={() => {
-                      confirm(
-                        "Do you want to remove this item from checkout?"
-                      ) &&
-                        dispatch(
-                          removeFromBuy({ cartID: product.productID._id })
-                        );
-                    }}
+                    onClick={() => setConfirmRemove(product.productID._id)}
                     className="border text-sm border-orange-900  px-2 py-1 rounded-md text-gray-700  hover:bg-orange-100">
                     Remove
                   </button>
@@ -55,6 +51,16 @@ export default function CheckOutItems({ buyItems }) {
           </div>
         );
       })}
+      {confirmRemove && (
+        <ConfirmPopUp
+          message="Are you sure you want to remove this item?"
+          onConfirm={() => {
+            dispatch(removeFromBuy({ cartID: confirmRemove }));
+            setConfirmRemove(null);
+          }}
+          onCancel={() => setConfirmRemove(null)}
+        />
+      )}
     </div>
   );
 }

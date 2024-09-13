@@ -7,6 +7,7 @@ import {
   updateProduct,
 } from "../adminUtils/productOperations.js";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate.js";
+import { toast } from "react-toastify";
 
 export default function ProductEditPage() {
   const { id } = useParams();
@@ -46,17 +47,17 @@ export default function ProductEditPage() {
       const result = await addNewProduct(preview, axiosPrivate);
       if (result) {
         setPreview(null);
-        alert("Product added successfully");
+        toast.success("Product added successfully");
       } else {
-        alert("Failed to add product");
+        toast.error("Failed to add product");
       }
     } else {
       const result = await updateProduct(id, preview, axiosPrivate);
       if (result) {
         setPreview(null);
-        alert("Product updated successfully");
+        toast.success("Product updated successfully");
       } else {
-        alert("Failed to update product");
+        toast.error("Failed to update product");
       }
     }
   }

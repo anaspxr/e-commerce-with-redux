@@ -7,11 +7,14 @@ import {
 } from "../../utils/cartUtils";
 import NoItem from "../NoItem";
 import Button from "../Button";
+import { useState } from "react";
+import ConfirmPopUp from "../ConfirmPopUp";
 
 export default function CartItem({ product }) {
   const productDetails = product.productID;
   const total = productDetails.price * product.quantity;
   const oldTotal = productDetails.oldPrice * product.quantity;
+  const [confirmRemove, setConfirmRemove] = useState(null);
 
   const { utilFunction: quantityPlus, loading: plusLoading } =
     useCartUtil(quantityPlusUtil);
@@ -67,13 +70,7 @@ export default function CartItem({ product }) {
                 </Button>
                 <Button
                   disabled={removeLoading || plusLoading || minusLoading}
-                  onClick={() => {
-                    confirm("Do you want to remove this item from cart?") &&
-                      removeFromCart({
-                        productID: productDetails._id,
-                        quantity: product.quantity,
-                      });
-                  }}>
+                  onClick={() => setConfirmRemove(productDetails._id)}>
                   <BsCartX />
                 </Button>
               </div>
@@ -95,6 +92,19 @@ export default function CartItem({ product }) {
             </div>
           </div>
         </div>
+      )}
+      {confirmRemove && (
+        <ConfirmPopUp
+          message="Are you sure you want to remove this item?"
+          onConfirm={() => {
+            removeFromCart({
+              productID: productDetails._id,
+              quantity: product.quantity,
+            });
+            setConfirmRemove(null);
+          }}
+          onCancel={() => setConfirmRemove(null)}
+        />
       )}
     </div>
   );

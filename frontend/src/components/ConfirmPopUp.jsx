@@ -1,21 +1,19 @@
-export default function ConfirmPopUp({ message, handleConfirm, handleCancel }) {
+export default function ConfirmPopUp({ message, onConfirm, onCancel }) {
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-20">
-      <div className="bg-white p-2 rounded-md min-h-40 min-w-80 flex text-center justify-around flex-col">
-        <p>{message}</p>
-        <div className="flex justify-end">
-          <div>
-            <button
-              onClick={handleConfirm}
-              className="bg-slate-600 text-slate-200 p-1 rounded-md mr-1 hover:bg-slate-500">
-              Confirm
-            </button>
-            <button
-              onClick={handleCancel}
-              className="bg-slate-600 text-slate-200 p-1 rounded-md mr-1 hover:bg-slate-500">
-              Cancel
-            </button>
-          </div>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="flex items-center justify-around flex-col bg-orange-50 p-6 rounded-sm min-h-40  shadow-lg text-center m-5">
+        <p className="mb-4 text-lg text-slate-800">{message}</p>
+        <div className="flex justify-end w-full space-x-4">
+          <button
+            className="px-6 py-2 bg-slate-700 text-white rounded-sm hover:bg-slate-600"
+            onClick={onCancel}>
+            No
+          </button>
+          <button
+            className="px-8 py-2 bg-slate-700 text-white rounded-sm hover:bg-slate-600"
+            onClick={onConfirm}>
+            Yes
+          </button>
         </div>
       </div>
     </div>
