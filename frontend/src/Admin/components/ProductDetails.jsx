@@ -3,13 +3,16 @@ import { MdOutlineDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useState } from "react";
+import ConfirmPopUp from "../../components/ConfirmPopUp";
 
 export default function ProductDetails({ product }) {
   const [isDeleted, setIsDeleted] = useState(false);
   const axiosPrivate = useAxiosPrivate();
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [confirmRemove, setConfirmRemove] = useState(false);
 
   const deleteProduct = async () => {
+    setConfirmRemove(false);
     setDeleteLoading(true);
     try {
       await axiosPrivate.delete(`/admin/product/${product._id}`);
@@ -20,6 +23,7 @@ export default function ProductDetails({ product }) {
       setDeleteLoading(false);
     }
   };
+
   return (
     <div>
       {isDeleted && (
@@ -50,14 +54,19 @@ export default function ProductDetails({ product }) {
             Edit <FaRegEdit />
           </Link>
           <button
-            onClick={() =>
-              confirm("Are you sure to delete this product?") && deleteProduct()
-            }
+            onClick={() => setConfirmRemove(true)}
             className="bg-red-700 text-white px-2 py-1 rounded-md flex items-center gap-1 hover:bg-opacity-85">
             {deleteLoading ? "Deleting" : "Delete"} <MdOutlineDelete />
           </button>
         </div>
       </div>
+      {confirmRemove && (
+        <ConfirmPopUp
+          message="Are you sure to delete this product?"
+          onConfirm={deleteProduct}
+          onCancel={() => setConfirmRemove(false)}
+        />
+      )}
     </div>
   );
 }

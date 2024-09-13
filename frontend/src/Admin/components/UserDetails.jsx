@@ -3,11 +3,14 @@ import useGetPrivateData from "../../hooks/useGetPrivateData";
 import OrderDetails from "./OrderDetails";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { toast } from "react-toastify";
+import { useState } from "react";
+import ConfirmPopUp from "../../components/ConfirmPopUp";
 
 export default function UserDetails() {
   const { id } = useParams();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const {
     data,
@@ -23,14 +26,13 @@ export default function UserDetails() {
   const user = data?.user;
 
   const handleDeleteUser = async () => {
-    if (confirm("Are you sure you want to delete this user?")) {
-      try {
-        await axiosPrivate.delete(`/admin/users/${id}`);
-        toast.success("User deleted successfully!!");
-        navigate("/admin/users");
-      } catch (error) {
-        toast.error("Failed to delete user");
-      }
+    setConfirmDelete(false);
+    try {
+      await axiosPrivate.delete(`/admin/users/${id}`);
+      toast.success("User deleted successfully!!");
+      navigate("/admin/users");
+    } catch (error) {
+      toast.error("Failed to delete user");
     }
   };
 
@@ -61,7 +63,7 @@ export default function UserDetails() {
           {/* <p>Orders: {user.orders?.length}</p> */}
           <div className="flex gap-1 flex-wrap">
             <button
-              onClick={handleDeleteUser}
+              onClick={() => setConfirmDelete(true)}
               className="bg-red-700 text-white py-1 px-2 rounded-md hover:bg-opacity-90">
               Delete User!
             </button>
@@ -81,6 +83,13 @@ export default function UserDetails() {
             ))
           ))}
       </div>
+      {confirmDelete && (
+        <ConfirmPopUp
+          message="Are you sure you want to delete this user?"
+          onConfirm={handleDeleteUser}
+          onCancel={() => setConfirmDelete(false)}
+        />
+      )}
     </div>
   );
 }
