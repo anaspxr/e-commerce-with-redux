@@ -1,5 +1,6 @@
 import useFetch from "../utils/useFetch";
 import Item from "./Item";
+import ItemSkeleton from "./ItemSkeleton";
 import LoadingAndError from "./LoadingAndError";
 
 export default function Popular() {
@@ -14,11 +15,19 @@ export default function Popular() {
         New Arrivals
       </h2>
       <LoadingAndError loading={loading} error={error} />
-      {newProducts?.products && (
+      {newProducts?.products ? (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4">
           {newProducts.products.map((item) => (
             <Item key={item._id} product={item} />
           ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4">
+          {Array(3)
+            .fill()
+            .map((_, i) => (
+              <ItemSkeleton key={i} />
+            ))}
         </div>
       )}
     </div>

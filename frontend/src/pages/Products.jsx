@@ -3,6 +3,7 @@ import Categories from "../components/Categories";
 import Item from "../components/Item";
 import LoadingAndError from "../components/LoadingAndError";
 import useFetch from "../utils/useFetch";
+import ItemSkeleton from "../components/ItemSkeleton";
 export default function Products({ category }) {
   const url = `public/products${category ? `?category=${category}` : ""}`;
   const { data, loading, error } = useFetch(url);
@@ -42,11 +43,19 @@ export default function Products({ category }) {
         {pageTitle}
       </h2>
       <LoadingAndError loading={loading} error={error} />
-      {products && (
+      {products ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-3 p-2 sm:p-3 lg:p-5">
           {products.map((item) => (
             <Item key={item._id} product={item} />
           ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-3 p-2 sm:p-3 lg:p-5">
+          {Array(8)
+            .fill()
+            .map((_, i) => (
+              <ItemSkeleton key={i} />
+            ))}
         </div>
       )}
     </div>
