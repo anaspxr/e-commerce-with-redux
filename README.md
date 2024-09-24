@@ -1,16 +1,16 @@
 # Furniture E-commerce Website 🛋️
 
 A comprehensive e-commerce website for furniture.
-[Visit my site!!](https://github.com/anaspxr/e-commerce-furniture-shop)
+[Visit my site!!](https://comfortcraft.vercel.app/)
 
 ## Overview
 
 This project is an e-commerce platform where users can browse, search, and purchase various furniture items. It features:
 - A modern, responsive design using React and Tailwind CSS.
-- very convenient search functionality
+- Smart search functionality
 - Seamless and secure user registration and login.
-- State management using Redux.
 - Product management and order handling.
+- Secure payment integration with stripe
 
 ## Features
 
@@ -21,8 +21,12 @@ This project is an e-commerce platform where users can browse, search, and purch
 - **Order History**: Users can view their past orders.
 
 ## Admin Page
-
-The project includes an admin page where admins can manage users and products.
+ 
+ The project includes an admin page where admins can manage users and products.
+- Admins can log in to a dedicated dashboard
+- View and manage all users
+- Add new products and edit or remove existing products
+- View and update all orders of users 
 
 ## Tech Stack
 
@@ -32,7 +36,7 @@ The project includes an admin page where admins can manage users and products.
 - **Data Storage**: MongoDB.
 
 ### **Other Frameworks and Libraries used**
- **frontend**: axios, formik, yup, react-router-dom, react-toastify, react-spinners
+ **frontend**: axios, formik, yup, react-router-dom, react-toastify, react-spinners, react-loading-skeleton
  **backend**: bcryptjs, cloudinary, jsonwebtoken, multer, stripe
  
 
